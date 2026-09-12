@@ -6,6 +6,7 @@ const state = {
   works: [],
   activeKind: "all",
   activeStatus: "all",
+  activeCategory: "all",
   query: "",
   messages: [],
   admin: null,
@@ -112,8 +113,8 @@ function renderPublic() {
       <section id="top" class="hero">
         <div class="hero-content">
           <div class="eyebrow">KeyOSX · Master living kiosk</div>
-          <h1>Find any work in the catalog.</h1>
-          <p class="hero-copy">${escapeHtml(state.config.brandTagline)} Brands, platforms, engines, applications, books, documents, and concepts — each with its own status, history, and relationships. Nothing here is reduced to a single local guide; that content model belongs to Almanac, one work among many.</p>
+          <h1>Walk up to the kiosk. Every brand has a stall.</h1>
+          <p class="hero-copy">${escapeHtml(state.config.brandTagline)} Real estate networks, media brands, apps, personal brands, and concepts each get their own stall, arranged into sections like a real street kiosk — browse a section, filter by kind, or search the whole rack. Nothing here is reduced to a single local guide; that content model belongs to Almanac, one stall among many.</p>
           <div class="hero-stats">
             <div class="hero-stat"><strong>${counts.total}</strong><span>Total works</span></div>
             <div class="hero-stat"><strong>${counts.current}</strong><span>Current</span></div>
@@ -124,13 +125,14 @@ function renderPublic() {
       </section>
       <section class="section">
         <div class="page-width">
-          <div class="section-head"><div><div class="eyebrow" style="color:var(--clay)">The catalog</div><h2 class="section-title">Browse works, or search the whole thing.</h2><p class="section-copy">Filter by kind or by Old / Current / Future status, or search across every name, tagline, summary, and tag in the catalog.</p></div></div>
+          <div class="section-head"><div><div class="eyebrow" style="color:var(--clay)">The catalog</div><h2 class="section-title">Browse a section of the kiosk, or search the whole rack.</h2><p class="section-copy">Sections group brands the way a real kiosk groups its racks (Real Estate Network, Media Brands, Apps, Personal Brand, and more). Filter further by kind or by Old / Current / Future status, or search across every name, tagline, summary, and tag in the catalog.</p></div></div>
           <div class="filter-row">
+            <nav class="type-tabs" aria-label="Section"><button class="type-tab ${state.activeCategory === "all" ? "is-active" : ""}" data-category="all">All sections</button>${(state.config.categories || []).map((category) => `<button class="type-tab ${state.activeCategory === category ? "is-active" : ""}" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>`).join("")}</nav>
             <nav class="type-tabs" aria-label="Status"><button class="type-tab ${state.activeStatus === "all" ? "is-active" : ""}" data-status="all">All statuses</button>${state.config.statuses.map((status) => `<button class="type-tab ${state.activeStatus === status ? "is-active" : ""}" data-status="${status}">${STATUS_LABELS[status]}</button>`).join("")}</nav>
             <nav class="type-tabs" aria-label="Kind">${kindTabs.map((kind) => `<button class="type-tab ${state.activeKind === kind ? "is-active" : ""}" data-kind="${kind}">${kind === "all" ? "All kinds" : KIND_LABELS[kind]}</button>`).join("")}</nav>
           </div>
           <form class="search-row" id="search-form"><label class="search-wrap"><span aria-hidden="true">⌕</span><input id="search-input" value="${escapeHtml(state.query)}" placeholder="Search the catalog"></label><button class="button button-secondary" type="submit">Search</button></form>
-          <div class="content-grid" id="content-grid">${state.works.length ? state.works.map(workCard).join("") : `<div class="empty-state"><strong>No published works match this view.</strong><p>Try another kind, status, or a broader search.</p></div>`}</div>
+          <div class="content-grid" id="content-grid">${state.works.length ? state.works.map(workCard).join("") : `<div class="empty-state"><strong>No published works match this view.</strong><p>Try another section, kind, status, or a broader search.</p></div>`}</div>
         </div>
       </section>
       <section class="section section-soft" id="guide">
@@ -146,6 +148,11 @@ function renderPublic() {
 }
 
 function bindPublicEvents() {
+  document.querySelectorAll("[data-category]").forEach((button) => button.addEventListener("click", async () => {
+    state.activeCategory = button.dataset.category;
+    await loadWorks();
+    renderPublic();
+  }));
   document.querySelectorAll("[data-status]").forEach((button) => button.addEventListener("click", async () => {
     state.activeStatus = button.dataset.status;
     await loadWorks();
@@ -180,6 +187,7 @@ async function loadWorks() {
   const params = new URLSearchParams();
   if (state.activeKind !== "all") params.set("kind", state.activeKind);
   if (state.activeStatus !== "all") params.set("status", state.activeStatus);
+  if (state.activeCategory !== "all") params.set("category", state.activeCategory);
   if (state.query) params.set("q", state.query);
   const data = await api(`/api/works?${params}`);
   state.works = data.works;

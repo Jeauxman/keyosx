@@ -14,7 +14,12 @@
       "home_platform": "Hostinger (planned)",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["catalog", "search", "index", "meta"],
+      "tags": [
+        "catalog",
+        "search",
+        "index",
+        "meta"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -32,7 +37,11 @@
       "home_platform": "",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["assistant", "search", "guide"],
+      "tags": [
+        "assistant",
+        "search",
+        "guide"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -45,12 +54,16 @@
       "status_detail": "Naming locked as of spec v10 (July 2026) — do not reopen without a week of live instance data.",
       "tagline": "Made by people, powered by stories.",
       "summary": "The seven-layer AI-powered publishing and business operating system: Identity, Almanac, Website, Social, Digital Workforce, Commerce, CRM, and Community. One owned engine, deployed once per niche, with only the brand skin changing.",
-      "body": "ME•DÍA is the parent, customer-facing brand — not a single website and not an AI wrapper. Almanac and FlintBill are internal engine terms under it, not customer-facing branding. Every current real-estate and lifestyle brand in this catalog (IREFS, GoCarcassonne, Basil Leaf Chronicles, Florida Renter's Guide, American Real Estate) is the same ME•DÍA OS wearing a different skin.",
+      "body": "ME•DÍA is the parent, customer-facing brand — not a single website and not an AI wrapper. Almanac and FlintBill are internal engine terms under it, not customer-facing branding. Every current real-estate and lifestyle brand in this catalog (IREFS, GoCarcassonne, Basil Leaf Chronicles, Florida Renter's Guide, American Real Estate) is the same ME•DÍA OS wearing a different skin. The Joe Central Asset Hub's Brand Registry separately lists 'ME+DÍA' (BR-046) as a high-priority lifestyle Media Brand — the parent OS apparently also operates a same-named flagship magazine, not yet reconciled here.",
       "primary_url": "",
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["operating system", "seven layers", "parent brand"],
+      "tags": [
+        "operating system",
+        "seven layers",
+        "parent brand"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -64,11 +77,15 @@
       "tagline": "The continuously updating knowledge layer — living memory for every brand.",
       "summary": "Not a book, not hand-written articles: a self-updating library of rates, news, patterns, events, and resources that a brand's social posts always have somewhere to route back to, so the site never looks dead.",
       "body": "Three Almanac instances currently run side by side deliberately, as a live comparison of approaches — not three copies of one broken thing. None of the three is ME•DÍA itself. The prior single-location local-information kiosk implementation (locations, listings, businesses, events, news for one city or postal code) is Almanac's content model specifically, reused as KeyOSX's technical foundation but not KeyOSX's actual scope.",
-      "primary_url": "",
+      "primary_url": "joe.business/almanac",
       "home_platform": "Manus",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["knowledge layer", "living memory", "content engine"],
+      "tags": [
+        "knowledge layer",
+        "living memory",
+        "content engine"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -86,7 +103,11 @@
       "home_platform": "Replit",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["logistics", "routing", "FlintAI"],
+      "tags": [
+        "logistics",
+        "routing",
+        "FlintAI"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -104,7 +125,10 @@
       "home_platform": "",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["origin story", "naming"],
+      "tags": [
+        "origin story",
+        "naming"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -122,25 +146,33 @@
       "home_platform": "",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["education", "socratic", "concept"],
+      "tags": [
+        "education",
+        "socratic",
+        "concept"
+      ],
       "visibility": "published",
       "needs_review": true
     },
     {
       "slug": "max",
-      "name": "Max",
+      "name": "Max.OS",
       "kind": "concept",
       "category": "Strategy & Concept",
-      "status": "future",
-      "status_detail": "Designed in the ME•DÍA OS spec; the daily briefing and coordination prompt are still an open build item.",
+      "status": "current",
+      "status_detail": "Three working HTML prototypes built (Dispatch Protocol, Morning Board, Push This Bridge); the full proactive daily-briefing automation described in the July 2026 spec is not yet running.",
       "tagline": "The Chief Operating Officer AI — starts the day instead of waiting to be asked.",
-      "summary": "Max would open each morning with a proactive briefing balancing immediate, strategic, and foundational horizons, then ask 'Would you like me to coordinate the team?' Every other AI tool in the stack reports to Max; Max reports to Joe.",
-      "body": "",
+      "summary": "Max.OS would open each morning with a proactive briefing balancing immediate, strategic, and foundational horizons, then ask 'Would you like me to coordinate the team?' Every other AI tool in the stack reports to Max; Max reports to Joe.",
+      "body": "As of the June 2026 MaxOS Handoff Log, three HTML tools already exist: a Dispatch Protocol reference (the full routing decision tree), a Morning Board (CSV import, 4-column board, export today's plan), and a Push This Bridge (a working 6-step pipeline from 'Push This' to campaign output with CSV/plan download). The July 2026 ME•DÍA OS spec still describes the daily-briefing automation itself as an open build item, so the concept is partially built: real interactive tools exist, but they are not yet wired into an autonomous morning routine.",
       "primary_url": "",
       "home_platform": "",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["agent", "coordination", "briefing"],
+      "tags": [
+        "agent",
+        "coordination",
+        "briefing"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -158,7 +190,10 @@
       "home_platform": "Replit",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["ecosystem", "power of 5"],
+      "tags": [
+        "ecosystem",
+        "power of 5"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -176,7 +211,10 @@
       "home_platform": "Replit",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["core platform", "FlintAI"],
+      "tags": [
+        "core platform",
+        "FlintAI"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -194,7 +232,10 @@
       "home_platform": "Replit",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["education", "GAEM"],
+      "tags": [
+        "education",
+        "GAEM"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -202,17 +243,21 @@
       "slug": "irefs",
       "name": "IREFS (Italian Real Estate For Sale)",
       "kind": "brand",
-      "category": "Real Estate",
+      "category": "Real Estate Network",
       "status": "current",
       "status_detail": "Live — first production instance; pre-sale polish in progress.",
       "tagline": "Italian real estate — the first production ME•DÍA OS instance.",
       "summary": "The proof case for the whole factory model: non-rebate content is live, the rebate mechanism awaits a legal basis, and its Pricing/Transfer/Flippa pages exist because the brand itself is built to be sold.",
       "body": "",
-      "primary_url": "",
+      "primary_url": "italianrealestateforsale.com",
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["real estate", "Italy", "for sale"],
+      "tags": [
+        "real estate",
+        "Italy",
+        "for sale"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -220,17 +265,21 @@
       "slug": "gocarcassonne",
       "name": "GoCarcassonne",
       "kind": "brand",
-      "category": "Real Estate",
+      "category": "Carcassonne Group",
       "status": "current",
       "status_detail": "Live, Instagram launching.",
       "tagline": "Local Carcassonne tourism and lifestyle guide.",
       "summary": "One of the early ME•DÍA OS skins, sharing the Carcassonne region with Basil Leaf Chronicles and Carcassonne Concierge but scoped to tourism and lifestyle content rather than property operations.",
       "body": "",
-      "primary_url": "",
+      "primary_url": "gocarcassonne.com",
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["Carcassonne", "tourism", "lifestyle"],
+      "tags": [
+        "Carcassonne",
+        "tourism",
+        "lifestyle"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -238,17 +287,20 @@
       "slug": "basil-leaf-chronicles",
       "name": "Basil Leaf Chronicles",
       "kind": "brand",
-      "category": "Media & Publishing",
+      "category": "Travel Network",
       "status": "current",
       "status_detail": "Live, Instagram launching.",
       "tagline": "Food and lifestyle brand.",
       "summary": "A ME•DÍA OS skin focused on food and lifestyle content.",
       "body": "",
-      "primary_url": "",
+      "primary_url": "basilleafchronicles.com",
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["food", "lifestyle"],
+      "tags": [
+        "food",
+        "lifestyle"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -256,17 +308,21 @@
       "slug": "carcassonne-concierge",
       "name": "Carcassonne Concierge",
       "kind": "application",
-      "category": "Real Estate",
+      "category": "Carcassonne Group",
       "status": "current",
       "status_detail": "Stabilized — new domain and Hostinger rebuild done.",
       "tagline": "Property management and guest concierge operations for the Carcassonne region.",
       "summary": "Distinct from GoCarcassonne: this is the operational intake app (owner, traveler, service, and partnership workflows) plus its own public business site, deliberately kept separate from the future Automation Foundation backend and Opportunity Engine.",
-      "body": "Public site: carcassonneconcierge.com. Operational app: app.carcassonneconcierge.com. Every submission gets a server-generated lead reference; the private ledger write is the acceptance gate itself.",
+      "body": "Public site: carcassonneconcierge.com. Operational app: app.carcassonneconcierge.com. Note a source discrepancy: the Joe Central Asset Hub's Brand Registry (BR-012) lists this brand's domain as gocarcassonne.com and describes it as 'marketing + content agency for properties' (SIREN 922 067 236), rather than a distinct carcassonneconcierge.com property — not yet reconciled with the app's own documentation. Every submission gets a server-generated lead reference; the private ledger write is the acceptance gate itself.",
       "primary_url": "carcassonneconcierge.com",
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["concierge", "property management", "Carcassonne"],
+      "tags": [
+        "concierge",
+        "property management",
+        "Carcassonne"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -274,7 +330,7 @@
       "slug": "florida-renters-guide",
       "name": "Florida Renter's Guide",
       "kind": "brand",
-      "category": "Real Estate",
+      "category": "Real Estate Network",
       "status": "current",
       "status_detail": "Live, in rotation — rebate funnel active.",
       "tagline": "Florida rentals.",
@@ -284,7 +340,10 @@
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["Florida", "rentals"],
+      "tags": [
+        "Florida",
+        "rentals"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -292,7 +351,7 @@
       "slug": "american-real-estate",
       "name": "American Real Estate",
       "kind": "brand",
-      "category": "Real Estate",
+      "category": "Real Estate Network",
       "status": "current",
       "status_detail": "Live, in rotation — buyer rebate plus freebooks lead magnet.",
       "tagline": "US real estate and mortgage.",
@@ -302,7 +361,10 @@
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["US real estate", "mortgage"],
+      "tags": [
+        "US real estate",
+        "mortgage"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -320,7 +382,11 @@
       "home_platform": "Hostinger",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["AI education", "course", "offer ladder"],
+      "tags": [
+        "AI education",
+        "course",
+        "offer ladder"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -338,7 +404,11 @@
       "home_platform": "",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["SaaS", "report generation", "white label"],
+      "tags": [
+        "SaaS",
+        "report generation",
+        "white label"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -346,17 +416,21 @@
       "slug": "noizeos",
       "name": "NoizeOS (Noize)",
       "kind": "brand",
-      "category": "Media & Publishing",
+      "category": "Media Brands",
       "status": "current",
       "status_detail": "Needs manual review — do not assume any status change.",
       "tagline": "A media/audio brand awaiting a consolidation decision.",
       "summary": "Flagged in the July 2026 Codex Replit audit as needing manual review before any decision about its codebase; traffic and ownership have not yet been documented.",
-      "body": "",
+      "body": "Flagged in the July 2026 Codex Replit audit as needing manual review before any decision about its Replit codebase; traffic and ownership have not yet been documented. The Joe Central Asset Hub's Brand Registry lists NOIZE (BR-045) as a 'Magazine'-format Media Brand, a different framing from the Replit-codebase angle — not yet reconciled.",
       "primary_url": "",
       "home_platform": "Replit",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["media", "audio", "needs review"],
+      "tags": [
+        "media",
+        "audio",
+        "needs review"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -374,7 +448,11 @@
       "home_platform": "Replit",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["social", "lead capture", "E5"],
+      "tags": [
+        "social",
+        "lead capture",
+        "E5"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -392,7 +470,11 @@
       "home_platform": "Replit",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["local search", "real estate", "navigation"],
+      "tags": [
+        "local search",
+        "real estate",
+        "navigation"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -410,7 +492,10 @@
       "home_platform": "",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["business model", "strategy"],
+      "tags": [
+        "business model",
+        "strategy"
+      ],
       "visibility": "published",
       "needs_review": true
     },
@@ -428,7 +513,1195 @@
       "home_platform": "",
       "hero_image_url": "",
       "hero_image_alt": "",
-      "tags": ["future concept", "Almanac"],
+      "tags": [
+        "future concept",
+        "Almanac"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "4thishouse",
+      "name": "4ThisHouse",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "Flat-fee MLS listings, Airbnb management.",
+      "tagline": "Flat-fee real estate service.",
+      "summary": "Flat-fee MLS, listings, and Airbnb management for US properties.",
+      "body": "",
+      "primary_url": "4thishouse.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "real estate",
+        "flat fee",
+        "airbnb"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "homelink-services",
+      "name": "HomeLink Services",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "The intended central hub and mother brand for social posting across the real-estate portfolio.",
+      "tagline": "Real estate portal and directory.",
+      "summary": "Real estate portal / directory / how-to hub. Per the MaxOS handoff log this is the mother brand for Metricool — all other brands post through this one social account.",
+      "body": "",
+      "primary_url": "homelink.services",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "real estate",
+        "directory",
+        "mother brand"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "french-homes-for-sale",
+      "name": "French Homes For Sale",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "Landing page for learning to own property in France.",
+      "tagline": "French real estate landing page.",
+      "summary": "",
+      "body": "",
+      "primary_url": "frenchhomesforsale.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "real estate",
+        "france"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "french-real-estate-for-sale",
+      "name": "French Real Estate For Sale",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "French real estate portal.",
+      "tagline": "French real estate portal.",
+      "summary": "",
+      "body": "",
+      "primary_url": "frenchrealestateforsale.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "real estate",
+        "france"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "spanish-real-estate-for-sale",
+      "name": "Spanish Real Estate For Sale",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "Spanish real estate portal.",
+      "tagline": "Spanish real estate portal.",
+      "summary": "",
+      "body": "",
+      "primary_url": "spanishrealestateforsale.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "real estate",
+        "spain"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "new-construction-jacksonville",
+      "name": "New Construction Jacksonville",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "New home construction with rebate incentives.",
+      "tagline": "New-home construction in Jacksonville, FL.",
+      "summary": "",
+      "body": "",
+      "primary_url": "newconstructionjacksonvilleflorida.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "real estate",
+        "jacksonville",
+        "new construction"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "global-builders-and-supply",
+      "name": "Global Builders and Supply",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "Wholesale supplies and builders directory.",
+      "tagline": "Directory of wholesale building supplies.",
+      "summary": "Kitchens, baths, microhomes, furnishings — a wholesale/builder directory. Powers the Builder Buddy app.",
+      "body": "",
+      "primary_url": "globalbuildersandsupply.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "wholesale",
+        "builders",
+        "supplies"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "american-real-estate-mortgage-llc",
+      "name": "American Real Estate & Mortgage (brokerage)",
+      "kind": "brand",
+      "category": "Real Estate Network",
+      "status": "current",
+      "status_detail": "Joseph's licensed brokerage entity (FL BK3029992).",
+      "tagline": "The licensed brokerage behind American Real Estate.",
+      "summary": "Distinct from the americanrealestateandmortgage.com public site — this is the actual licensed brokerage entity operating behind it.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "real estate",
+        "brokerage",
+        "licensed"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "carcassonne-stays",
+      "name": "Carcassonne Stays",
+      "kind": "brand",
+      "category": "Carcassonne Group",
+      "status": "current",
+      "status_detail": "Accommodations and experiences.",
+      "tagline": "Travel platform for unique Carcassonne stays.",
+      "summary": "",
+      "body": "",
+      "primary_url": "carcassonnestays.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "carcassonne",
+        "travel",
+        "accommodation"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "la-maison-de-lambassadeur",
+      "name": "La Maison de l'Ambassadeur",
+      "kind": "concept",
+      "category": "Carcassonne Group",
+      "status": "current",
+      "status_detail": "Client project — Paul's 450m² property.",
+      "tagline": "A named client project, not a public brand.",
+      "summary": "Marketing and renovation plan for a specific 450m² property, run through the Carcassonne concierge operation.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "client project",
+        "carcassonne"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "hostelles",
+      "name": "Hostelles",
+      "kind": "brand",
+      "category": "Travel Network",
+      "status": "current",
+      "status_detail": "Femme-based hostel network for the Renaissance Women audience.",
+      "tagline": "Global network of femme-based hostels.",
+      "summary": "",
+      "body": "",
+      "primary_url": "hostelles.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "travel",
+        "hostels",
+        "women"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "tefl-growth",
+      "name": "TEFL Growth",
+      "kind": "brand",
+      "category": "Education Network",
+      "status": "current",
+      "status_detail": "English-teaching and certification hub.",
+      "tagline": "TEFL certification and English-teaching hub.",
+      "summary": "",
+      "body": "",
+      "primary_url": "teflgrowth.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "education",
+        "tefl",
+        "certification"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "thyme-for-change",
+      "name": "Thyme for Change",
+      "kind": "brand",
+      "category": "Education Network",
+      "status": "current",
+      "status_detail": "App and courses in development.",
+      "tagline": "Coaching and training brand.",
+      "summary": "Coaching/training site — skills, language, business, motivation. Its Life Buddy companion app is in development.",
+      "body": "",
+      "primary_url": "thymeforchange.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "coaching",
+        "education"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "ai-guru-master",
+      "name": "AI Guru Master",
+      "kind": "brand",
+      "category": "Education Network",
+      "status": "current",
+      "status_detail": "AI industry news, trends, and insights.",
+      "tagline": "AI news and trends hub.",
+      "summary": "",
+      "body": "",
+      "primary_url": "aigurumaster.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "ai",
+        "education"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "ai-design-specialist",
+      "name": "AI Design Specialist",
+      "kind": "brand",
+      "category": "Education Network",
+      "status": "current",
+      "status_detail": "Professional AI-optimized design services.",
+      "tagline": "AI design services brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "aidesignspecialist.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "ai",
+        "design"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "ai-design-guru",
+      "name": "AI Design Guru",
+      "kind": "brand",
+      "category": "Education Network",
+      "status": "current",
+      "status_detail": "Hub connecting AI design specialists with clients.",
+      "tagline": "AI design specialist marketplace/hub.",
+      "summary": "",
+      "body": "",
+      "primary_url": "aidesignguru.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "ai",
+        "design"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "global-connect-enterprise",
+      "name": "Global Connect Enterprise",
+      "kind": "brand",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "Platform to empower micro-businesses and entrepreneurs worldwide.",
+      "tagline": "Micro-business empowerment platform.",
+      "summary": "Similarly named to, and overlapping with, Global Connect Enterprises (plural) — the two have not been reconciled.",
+      "body": "",
+      "primary_url": "globalconnectenterprise.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "micro-business"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "global-connect-enterprises",
+      "name": "Global Connect Enterprises",
+      "kind": "brand",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "Supply chain solutions for businesses worldwide.",
+      "tagline": "Supply-chain solutions brand — confirmed live by Joe.",
+      "summary": "Confirmed directly by Joe as the actual operating asset (as distinct from KeyOSX itself, and from the similarly named Global Connect Enterprise, singular, which overlaps with it and has not been reconciled).",
+      "body": "",
+      "primary_url": "https://globalconnectenterprises.com/",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "supply chain"
+      ],
+      "visibility": "published",
+      "needs_review": false
+    },
+    {
+      "slug": "gaem-network-domain",
+      "name": "GAEM Network (gaem.network)",
+      "kind": "platform",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "Global Asset Exchange & Micro-Hubs — the central GAEM ecosystem hub domain.",
+      "tagline": "The GAEM ecosystem's own hub domain.",
+      "summary": "",
+      "body": "",
+      "primary_url": "gaem.network",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "gaem-fun",
+      "name": "GAEM Fun",
+      "kind": "brand",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "Gamification of micro-business education.",
+      "tagline": "GAEM's gamification layer.",
+      "summary": "",
+      "body": "",
+      "primary_url": "gaem.fun",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "gamification"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "gaem-life",
+      "name": "GAEM Life",
+      "kind": "brand",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "Social-building framework and resource hub.",
+      "tagline": "GAEM's social layer.",
+      "summary": "",
+      "body": "",
+      "primary_url": "gaem.life",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "social"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "gaem-pro",
+      "name": "GAEM Pro",
+      "kind": "brand",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "Professional builder tools.",
+      "tagline": "GAEM's professional tools layer.",
+      "summary": "",
+      "body": "",
+      "primary_url": "gaem.pro",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "professional"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "gaem-store",
+      "name": "GAEM Store",
+      "kind": "brand",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "GAEM-branded marketplace.",
+      "tagline": "GAEM's marketplace layer.",
+      "summary": "",
+      "body": "",
+      "primary_url": "gaem.store",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "marketplace"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "10cents-app",
+      "name": "10cents.app",
+      "kind": "application",
+      "category": "GAEM Network",
+      "status": "current",
+      "status_detail": "Micro-funding / GoFundMe-style platform.",
+      "tagline": "GAEM's crowdfunding tool.",
+      "summary": "",
+      "body": "",
+      "primary_url": "10cents.app",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "crowdfunding"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "global-coop",
+      "name": "Global CoOp",
+      "kind": "concept",
+      "category": "GAEM Network",
+      "status": "future",
+      "status_detail": "Global CoOp Hub / investment plan — appears alongside GAEM content.",
+      "tagline": "An investment/cooperative-ownership concept.",
+      "summary": "",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "gaem",
+        "cooperative"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "world-wide-outlets",
+      "name": "World Wide Outlets",
+      "kind": "brand",
+      "category": "Marketplace",
+      "status": "current",
+      "status_detail": "Direct-to-manufacturer commerce, 1993 origin.",
+      "tagline": "Long-running wholesale/marketplace brand.",
+      "summary": "The oldest asset in the registry — direct-to-manufacturer commerce dating to 1993.",
+      "body": "",
+      "primary_url": "worldwideoutlets.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "marketplace",
+        "wholesale"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "jene-fucking-sais-quoi",
+      "name": "Jene Fucking Sais Quoi",
+      "kind": "brand",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Art, travel, and the bizarre/funny/outrageous.",
+      "tagline": "Art and lifestyle personal brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "jenefuckingsaisquoi.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "art",
+        "lifestyle",
+        "personal brand"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "bombay-troubadours",
+      "name": "Bombay Troubadours",
+      "kind": "brand",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Miami-to-Mumbai idea-matching network.",
+      "tagline": "Digital marketing / nomad community brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "bombaytroubadours.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "digital nomad",
+        "community"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "joe-troubadour",
+      "name": "Joe Troubadour",
+      "kind": "brand",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Music, art, and travel — Joe's personal creative brand.",
+      "tagline": "Joe's personal creative/artistic brand.",
+      "summary": "Distinct from Troubadour Monthly, a media-brand periodical that likely draws on the same creative identity — relationship not yet confirmed by Joe.",
+      "body": "",
+      "primary_url": "joetroubadour.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "music",
+        "art",
+        "personal brand"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "joe-business",
+      "name": "Joe.Business",
+      "kind": "platform",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Business tools, services, and ops training — Almanac lives here.",
+      "tagline": "Joe's business-tools hub.",
+      "summary": "Hosts the joe.business/almanac hub referenced in the ME•DÍA OS spec's Seven Layers table.",
+      "body": "",
+      "primary_url": "joe.business",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "business tools",
+        "almanac host"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "joe-solutions",
+      "name": "Joe.Solutions",
+      "kind": "service",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Consulting and coaching — policy, efficiency, HR.",
+      "tagline": "Joe's consulting/coaching brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "joe.solutions",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "consulting",
+        "coaching"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "joe-3000",
+      "name": "Joe 3000",
+      "kind": "concept",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "A pen name / persona under the master Joe brand.",
+      "tagline": "Personal persona brand.",
+      "summary": "A Joe3000 Game Picker HTML tool already exists as a built artifact under this persona.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "persona"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "living-symphony",
+      "name": "Living Symphony",
+      "kind": "concept",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "A philosophy/brand sub-brand tied to Simultanism.",
+      "tagline": "Sub-brand of the Simultanism philosophy.",
+      "summary": "",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "philosophy",
+        "simultanism"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "ironic-expressions",
+      "name": "Ironic Expressions",
+      "kind": "brand",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Blog plus a clothing line and print-on-demand products.",
+      "tagline": "Blog and apparel brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "ironicexpressions.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "blog",
+        "apparel",
+        "print on demand"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "teambuilder-pro",
+      "name": "TeamBuilder Pro",
+      "kind": "service",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Leadership/coaching — confirmed via YouTube.",
+      "tagline": "Leadership and coaching program.",
+      "summary": "Powered by Joe.Solutions and Joe.Business.",
+      "body": "",
+      "primary_url": "teambuilderpro.joe.solutions",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "leadership",
+        "coaching"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "medclub-pro",
+      "name": "MedClub Pro",
+      "kind": "service",
+      "category": "Personal Brand",
+      "status": "current",
+      "status_detail": "Health/membership — confirmed via YouTube, French and English versions.",
+      "tagline": "Health/wellness membership program.",
+      "summary": "",
+      "body": "",
+      "primary_url": "medclubpro.joe.solutions",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "health",
+        "membership"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "ask-joe",
+      "name": "Ask Joe",
+      "kind": "application",
+      "category": "Apps",
+      "status": "current",
+      "status_detail": "Q&A / lead tool for 4ThisHouse.",
+      "tagline": "Q&A chatbot app.",
+      "summary": "",
+      "body": "",
+      "primary_url": "askjoe.4thishouse.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "app",
+        "chatbot"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "travel-buddy",
+      "name": "Travel Buddy",
+      "kind": "application",
+      "category": "Apps",
+      "status": "current",
+      "status_detail": "Travel companion tool for Basil Leaf Chronicles.",
+      "tagline": "Travel companion app.",
+      "summary": "",
+      "body": "",
+      "primary_url": "travelbuddy.basilleafchronicles.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "app",
+        "travel"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "chef-buddy",
+      "name": "Chef Buddy",
+      "kind": "application",
+      "category": "Apps",
+      "status": "current",
+      "status_detail": "Culinary companion tool.",
+      "tagline": "Culinary companion app.",
+      "summary": "",
+      "body": "",
+      "primary_url": "chefbuddy.basilleafchronicles.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "app",
+        "culinary"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "builder-buddy",
+      "name": "Builder Buddy",
+      "kind": "application",
+      "category": "Apps",
+      "status": "current",
+      "status_detail": "Builder tool for Global Builders and Supply.",
+      "tagline": "Builder companion app.",
+      "summary": "",
+      "body": "",
+      "primary_url": "builderbuddy.globalbuildersandsupply.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "app",
+        "builder"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "life-buddy",
+      "name": "Life Buddy",
+      "kind": "application",
+      "category": "Apps",
+      "status": "current",
+      "status_detail": "Coaching companion app for Thyme for Change.",
+      "tagline": "Coaching companion app.",
+      "summary": "",
+      "body": "",
+      "primary_url": "lifebuddy.thymeforchange.com",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "app",
+        "coaching"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "snapbrat",
+      "name": "SnapBrat",
+      "kind": "application",
+      "category": "Apps",
+      "status": "current",
+      "status_detail": "Joe.Business tool.",
+      "tagline": "A Joe.Business utility app.",
+      "summary": "",
+      "body": "",
+      "primary_url": "snapbrat.joe.business",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "app"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "mediterraneano",
+      "name": "Mediterraneano",
+      "kind": "brand",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "Primary media brand — Mediterranean lifestyle magazine.",
+      "tagline": "Mediterranean lifestyle magazine brand.",
+      "summary": "An email-capture landing page ('Start Your Mediterranean List') already exists (copy written, page not yet live).",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "magazine",
+        "mediterranean",
+        "lifestyle"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "the-honest-liar",
+      "name": "The Honest Liar",
+      "kind": "brand",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "Primary media brand; also a Crow's Quill book title.",
+      "tagline": "Magazine brand, doubles as a book title.",
+      "summary": "",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "magazine",
+        "crows quill"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "the-libertine",
+      "name": "The Libertine",
+      "kind": "brand",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "Primary media brand.",
+      "tagline": "Magazine brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "magazine"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "au-contraire",
+      "name": "Au Contraire",
+      "kind": "brand",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "Media brand.",
+      "tagline": "Media brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "media"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "simultanism",
+      "name": "Simultanism",
+      "kind": "concept",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "A named philosophical movement — Joe's core IP.",
+      "tagline": "Joe's core philosophical movement.",
+      "summary": "Documented via the OpenArms Simultanism Manifesto. Living Symphony is a sub-brand tied to this philosophy.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "philosophy",
+        "movement",
+        "core IP"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "black-mountain-productions",
+      "name": "Black Mountain Productions",
+      "kind": "brand",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "A studio banner sitting above all content brands.",
+      "tagline": "Umbrella production studio banner.",
+      "summary": "",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "studio",
+        "production"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "carcassonne-studios",
+      "name": "Carcassonne Studios",
+      "kind": "brand",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "Film/content production.",
+      "tagline": "Carcassonne-based production brand.",
+      "summary": "",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "carcassonne",
+        "production",
+        "film"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "life-cycle",
+      "name": "Life Cycle",
+      "kind": "concept",
+      "category": "Needs Review",
+      "status": "future",
+      "status_detail": "Needs Detail — confirm domain, category, and purpose.",
+      "tagline": "Trilogy-related brand/title, unconfirmed.",
+      "summary": "Possibly related to a separate 'When the Sky Is the Ocean' project — the Central Asset Hub itself flags this as an open decision: same project, parent/child, or separate?",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "needs detail"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "pride-mediteraneo",
+      "name": "PRIDE Mediteraneo",
+      "kind": "concept",
+      "category": "Needs Review",
+      "status": "future",
+      "status_detail": "Needs Detail — confirm domain, category, and purpose.",
+      "tagline": "Related to Mediterraneano, unconfirmed.",
+      "summary": "Likely the same as 'Mediterraneano Pride' from the Master Asset Register's Media Brands sheet.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "needs detail",
+        "mediterraneano"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "openarms",
+      "name": "OpenArms",
+      "kind": "brand",
+      "category": "Strategy & Concept",
+      "status": "old",
+      "status_detail": "Predates the July 2026 ME•DÍA naming lock as the front-door brand identity.",
+      "tagline": "The Carcassonne-based parent identity used before the ME•DÍA naming lock.",
+      "summary": "Letterhead identity ('OpenArms · Joe Fansler · Carcassonne, France') behind the June 2026 Max.OS Handoff Log, the Simultanism Manifesto, the Ecosystem Map 2026, and the Global Concierge tool. Superseded as the front-door name once the ME•DÍA OS spec locked naming in July 2026, though its Simultanism philosophy and tooling continue.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "parent brand",
+        "predecessor"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "joe-central-asset-hub",
+      "name": "Joe Central Asset Hub",
+      "kind": "document",
+      "category": "Infrastructure",
+      "status": "current",
+      "status_detail": "The canonical Brand ID registry KeyOSX's brand catalog was imported from.",
+      "tagline": "The single permanent home for every asset and brand name — one Brand ID, everywhere.",
+      "summary": "A 14-tab workbook: Brand Registry (56 Brand IDs), Brand Alias Map, Asset Library, Pipeline Roles, YouTube Videos, Books, FlintBill Job Map, Message-to-Money Flow, Weekly Factory, Asset Routing Rules, Product Ladder, Question Bank, and Open Decisions. Most of KeyOSX's brand-level works were imported directly from its Brand Registry tab.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "registry",
+        "source of truth"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "joseph-fansler-book-catalog",
+      "name": "Joseph Fansler Book Catalog",
+      "kind": "book",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "154 published titles across many series and pen names.",
+      "tagline": "The full published-book corpus.",
+      "summary": "Spans pen names Joseph Fansler, Joe Fansler, Joe Allen, Jane Marlowe, and Jois Phine, and named series/imprints including Crow's Quill, Tapestry of Being (6 volumes), HerStory (2 volumes), The 24-Hour Paradox, The Poetic Cure, the Why-Not Era trilogy, and Nomad Navigators. All titles are live on Amazon KDP with real ASINs.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "books",
+        "kdp",
+        "bibliography"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "product-ladder",
+      "name": "Product Ladder",
+      "kind": "concept",
+      "category": "Strategy & Concept",
+      "status": "current",
+      "status_detail": "Free discovery → guide → book → magazine → course → product → community.",
+      "tagline": "The monetization ladder one answer can climb through.",
+      "summary": "A single answer can become free discovery content, a $0.99 quick guide, a $4.99 book, a $2.99-9.99 periodical, a $19-99 course, a physical product, or a community — in that order, across almost any brand in the catalog.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "monetization",
+        "framework"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "crows-quill",
+      "name": "Crow's Quill",
+      "kind": "brand",
+      "category": "Media Brands",
+      "status": "current",
+      "status_detail": "A book imprint used across several of Joseph Fansler's titles.",
+      "tagline": "Publishing imprint for a cluster of philosophy/lifestyle titles.",
+      "summary": "Titles include The Empty Glass, Winners Are Just Better Losers, I Am What I Am, and The Honest Liar — the last of which doubles as the name of a separate media-brand magazine.",
+      "body": "",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "imprint",
+        "books"
+      ],
       "visibility": "published",
       "needs_review": true
     }
@@ -513,47 +1786,502 @@
       "reference_label": "APP_POSITIONING.md",
       "status": "published",
       "needs_review": true
+    },
+    {
+      "workSlug": "joe-central-asset-hub",
+      "artifact_type": "spec",
+      "title": "Joe Central Asset Hub workbook",
+      "description": "The 14-tab canonical brand/asset registry.",
+      "url": "",
+      "reference_label": "Joe_Central_Asset_Hub_FlintBill_Flows.xlsx",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "openarms",
+      "artifact_type": "document",
+      "title": "Max.OS Handoff Log",
+      "description": "Multi-AI role assignments, brand registry, and priority queue, versions 1.0 and 1.2.",
+      "url": "",
+      "reference_label": "June 25, 2026",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "openarms",
+      "artifact_type": "document",
+      "title": "OpenArms Simultanism Manifesto",
+      "description": "The founding philosophical manifesto.",
+      "url": "",
+      "reference_label": "Claude, June 25, 2026",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "flintbill-engine",
+      "artifact_type": "spec",
+      "title": "FlintBill Operations Board v2",
+      "description": "11-sheet operations board: KNOW/MAKE/ROUTE/PUBLISH/CONVERSE/COLLECT pipeline stages.",
+      "url": "",
+      "reference_label": "Codex, June 25, 2026",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "flintbill-engine",
+      "artifact_type": "dataset",
+      "title": "Cloudinary Asset Register (485 images)",
+      "description": "485 image URLs tagged with brand, revenue objective, CTA, and destination.",
+      "url": "",
+      "reference_label": "Claude, June 25, 2026",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "joseph-fansler-book-catalog",
+      "artifact_type": "dataset",
+      "title": "Book catalog workbook",
+      "description": "Title, pen name, series, first-submitted date, and ASIN for all 154 titles.",
+      "url": "",
+      "reference_label": "Joe_Master_Asset_Register.xlsx / Joe_Asset_Register_Clean.xlsx",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "max",
+      "artifact_type": "document",
+      "title": "Max.OS Dispatch Protocol",
+      "description": "Interactive HTML reference for the routing decision tree.",
+      "url": "",
+      "reference_label": "Claude + Codex, June 25, 2026",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "max",
+      "artifact_type": "document",
+      "title": "Max.OS Morning Board",
+      "description": "Working HTML prototype: CSV import, 4-column board, export today's plan.",
+      "url": "",
+      "reference_label": "Codex, June 25, 2026",
+      "status": "published",
+      "needs_review": true
+    },
+    {
+      "workSlug": "max",
+      "artifact_type": "document",
+      "title": "Max.OS Push This Bridge",
+      "description": "Working HTML prototype: 6-step pipeline from Push This to campaign output.",
+      "url": "",
+      "reference_label": "Codex, June 25, 2026",
+      "status": "published",
+      "needs_review": true
     }
   ],
   "relationships": [
-    { "fromSlug": "jack-rabbit", "toSlug": "keyosx", "relationType": "module_of", "note": "Jack Rabbit is KeyOSX's built-in search guide." },
-    { "fromSlug": "almanac-2", "toSlug": "keyosx", "relationType": "module_of", "note": "Earmarked for the keyosx.com domain." },
-    { "fromSlug": "almanac-2", "toSlug": "almanac", "relationType": "successor_of", "note": "A future, unspecified next generation of the Almanac concept." },
-    { "fromSlug": "almanac", "toSlug": "me-dia-os", "relationType": "module_of", "note": "One of the seven ME•DÍA OS layers." },
-    { "fromSlug": "max", "toSlug": "me-dia-os", "relationType": "module_of", "note": "Max is the Digital Workforce / AI Director function under a single name." },
-    { "fromSlug": "flintbill-engine", "toSlug": "gaem-os", "relationType": "module_of", "note": "Confirmed by file evidence: mounted at /flintbill, /flintbill-v2, /classic-flintbill inside FlintAI." },
-    { "fromSlug": "flintbill-engine", "toSlug": "flintbill-origin", "relationType": "predecessor_of", "note": "The origin manuscript preceded the shipped engine — listed in reverse as this engine's predecessor." },
-    { "fromSlug": "flintbill-socratic", "toSlug": "flintbill-origin", "relationType": "inspired", "note": "Traces back to the same origin idea as the FlintBill engine, but diverged into an education-only direction." },
-    { "fromSlug": "flintbill-socratic", "toSlug": "flintbill-engine", "relationType": "distinct_from", "note": "Same name origin, two different live statuses: one is a shipped marketing/lead-gen module, the other an unbuilt education concept." },
-    { "fromSlug": "gaem-os", "toSlug": "gaem", "relationType": "part_of_catalog", "note": "Core platform of the GAEM ecosystem." },
-    { "fromSlug": "gaem-university", "toSlug": "gaem", "relationType": "part_of_catalog", "note": "Education arm of the GAEM ecosystem." },
-    { "fromSlug": "big-fish-social-e5", "toSlug": "gaem", "relationType": "part_of_catalog", "note": "Social/mobile presentation module preserved from Grid Cosmos." },
-    { "fromSlug": "cityview-navigator", "toSlug": "gaem", "relationType": "part_of_catalog", "note": "Real-estate group application, needs traffic review before any archive decision." },
-    { "fromSlug": "irefs", "toSlug": "me-dia-os", "relationType": "powered_by", "note": "First production ME•DÍA OS instance." },
-    { "fromSlug": "gocarcassonne", "toSlug": "me-dia-os", "relationType": "powered_by", "note": "" },
-    { "fromSlug": "basil-leaf-chronicles", "toSlug": "me-dia-os", "relationType": "powered_by", "note": "" },
-    { "fromSlug": "florida-renters-guide", "toSlug": "me-dia-os", "relationType": "powered_by", "note": "" },
-    { "fromSlug": "american-real-estate", "toSlug": "me-dia-os", "relationType": "powered_by", "note": "" },
-    { "fromSlug": "carcassonne-concierge", "toSlug": "gocarcassonne", "relationType": "sibling_of", "note": "Same Carcassonne region, deliberately separate product boundary (operations vs. tourism/lifestyle)." },
-    { "fromSlug": "carcassonne-concierge", "toSlug": "story-engine", "relationType": "depends_on", "note": "Its Personal Intelligence Report Engine (Plan My Visit / Help Me Buy / Improve My Property) is a live implementation of the Story Engine pattern." },
-    { "fromSlug": "flintbill-socratic", "toSlug": "ai-masterclass", "relationType": "part_of_catalog", "note": "Being considered as a direction inside AI Masterclass rather than a standalone product." },
-    { "fromSlug": "three-division-model", "toSlug": "ai-masterclass", "relationType": "inspired", "note": "Structural framing behind decoupling the LMS shell from AI Masterclass's content." }
+    {
+      "fromSlug": "jack-rabbit",
+      "toSlug": "keyosx",
+      "relationType": "module_of",
+      "note": "Jack Rabbit is KeyOSX's built-in search guide."
+    },
+    {
+      "fromSlug": "almanac-2",
+      "toSlug": "keyosx",
+      "relationType": "module_of",
+      "note": "Earmarked for the keyosx.com domain."
+    },
+    {
+      "fromSlug": "almanac-2",
+      "toSlug": "almanac",
+      "relationType": "successor_of",
+      "note": "A future, unspecified next generation of the Almanac concept."
+    },
+    {
+      "fromSlug": "almanac",
+      "toSlug": "me-dia-os",
+      "relationType": "module_of",
+      "note": "One of the seven ME•DÍA OS layers."
+    },
+    {
+      "fromSlug": "max",
+      "toSlug": "me-dia-os",
+      "relationType": "module_of",
+      "note": "Max is the Digital Workforce / AI Director function under a single name."
+    },
+    {
+      "fromSlug": "flintbill-engine",
+      "toSlug": "gaem-os",
+      "relationType": "module_of",
+      "note": "Confirmed by file evidence: mounted at /flintbill, /flintbill-v2, /classic-flintbill inside FlintAI."
+    },
+    {
+      "fromSlug": "flintbill-engine",
+      "toSlug": "flintbill-origin",
+      "relationType": "predecessor_of",
+      "note": "The origin manuscript preceded the shipped engine — listed in reverse as this engine's predecessor."
+    },
+    {
+      "fromSlug": "flintbill-socratic",
+      "toSlug": "flintbill-origin",
+      "relationType": "inspired",
+      "note": "Traces back to the same origin idea as the FlintBill engine, but diverged into an education-only direction."
+    },
+    {
+      "fromSlug": "flintbill-socratic",
+      "toSlug": "flintbill-engine",
+      "relationType": "distinct_from",
+      "note": "Same name origin, two different live statuses: one is a shipped marketing/lead-gen module, the other an unbuilt education concept."
+    },
+    {
+      "fromSlug": "gaem-os",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": "Core platform of the GAEM ecosystem."
+    },
+    {
+      "fromSlug": "gaem-university",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": "Education arm of the GAEM ecosystem."
+    },
+    {
+      "fromSlug": "big-fish-social-e5",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": "Social/mobile presentation module preserved from Grid Cosmos."
+    },
+    {
+      "fromSlug": "cityview-navigator",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": "Real-estate group application, needs traffic review before any archive decision."
+    },
+    {
+      "fromSlug": "irefs",
+      "toSlug": "me-dia-os",
+      "relationType": "powered_by",
+      "note": "First production ME•DÍA OS instance."
+    },
+    {
+      "fromSlug": "gocarcassonne",
+      "toSlug": "me-dia-os",
+      "relationType": "powered_by",
+      "note": ""
+    },
+    {
+      "fromSlug": "basil-leaf-chronicles",
+      "toSlug": "me-dia-os",
+      "relationType": "powered_by",
+      "note": ""
+    },
+    {
+      "fromSlug": "florida-renters-guide",
+      "toSlug": "me-dia-os",
+      "relationType": "powered_by",
+      "note": ""
+    },
+    {
+      "fromSlug": "american-real-estate",
+      "toSlug": "me-dia-os",
+      "relationType": "powered_by",
+      "note": ""
+    },
+    {
+      "fromSlug": "carcassonne-concierge",
+      "toSlug": "gocarcassonne",
+      "relationType": "sibling_of",
+      "note": "Same Carcassonne region, deliberately separate product boundary (operations vs. tourism/lifestyle)."
+    },
+    {
+      "fromSlug": "carcassonne-concierge",
+      "toSlug": "story-engine",
+      "relationType": "depends_on",
+      "note": "Its Personal Intelligence Report Engine (Plan My Visit / Help Me Buy / Improve My Property) is a live implementation of the Story Engine pattern."
+    },
+    {
+      "fromSlug": "flintbill-socratic",
+      "toSlug": "ai-masterclass",
+      "relationType": "part_of_catalog",
+      "note": "Being considered as a direction inside AI Masterclass rather than a standalone product."
+    },
+    {
+      "fromSlug": "three-division-model",
+      "toSlug": "ai-masterclass",
+      "relationType": "inspired",
+      "note": "Structural framing behind decoupling the LMS shell from AI Masterclass's content."
+    },
+    {
+      "fromSlug": "gaem-network-domain",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "gaem-fun",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "gaem-life",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "gaem-pro",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "gaem-store",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "10cents-app",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "global-connect-enterprise",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "global-connect-enterprises",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "global-coop",
+      "toSlug": "gaem",
+      "relationType": "part_of_catalog",
+      "note": ""
+    },
+    {
+      "fromSlug": "american-real-estate-mortgage-llc",
+      "toSlug": "american-real-estate",
+      "relationType": "sibling_of",
+      "note": "The licensed brokerage entity behind the public American Real Estate site."
+    },
+    {
+      "fromSlug": "carcassonne-stays",
+      "toSlug": "gocarcassonne",
+      "relationType": "sibling_of",
+      "note": "Same Carcassonne Group."
+    },
+    {
+      "fromSlug": "la-maison-de-lambassadeur",
+      "toSlug": "carcassonne-concierge",
+      "relationType": "depends_on",
+      "note": "A named client project run through the concierge operation."
+    },
+    {
+      "fromSlug": "ai-guru-master",
+      "toSlug": "ai-masterclass",
+      "relationType": "sibling_of",
+      "note": "Same AI-education family of domains."
+    },
+    {
+      "fromSlug": "ai-design-specialist",
+      "toSlug": "ai-masterclass",
+      "relationType": "sibling_of",
+      "note": "Same AI-education family of domains."
+    },
+    {
+      "fromSlug": "ai-design-guru",
+      "toSlug": "ai-masterclass",
+      "relationType": "sibling_of",
+      "note": "Same AI-education family of domains."
+    },
+    {
+      "fromSlug": "global-connect-enterprise",
+      "toSlug": "global-connect-enterprises",
+      "relationType": "distinct_from",
+      "note": "Two similarly named domains that overlap and have not been reconciled."
+    },
+    {
+      "fromSlug": "crows-quill",
+      "toSlug": "joseph-fansler-book-catalog",
+      "relationType": "part_of_catalog",
+      "note": "An imprint within the full book catalog."
+    },
+    {
+      "fromSlug": "the-honest-liar",
+      "toSlug": "crows-quill",
+      "relationType": "distinct_from",
+      "note": "Shares a name with a Crow's Quill book title but is the separate magazine brand."
+    },
+    {
+      "fromSlug": "living-symphony",
+      "toSlug": "simultanism",
+      "relationType": "module_of",
+      "note": "A sub-brand tied to the Simultanism philosophy."
+    },
+    {
+      "fromSlug": "simultanism",
+      "toSlug": "openarms",
+      "relationType": "part_of_catalog",
+      "note": "Documented under the OpenArms identity."
+    },
+    {
+      "fromSlug": "openarms",
+      "toSlug": "me-dia-os",
+      "relationType": "predecessor_of",
+      "note": "Front-door brand identity superseded by the ME•DÍA naming lock."
+    },
+    {
+      "fromSlug": "joe-central-asset-hub",
+      "toSlug": "keyosx",
+      "relationType": "powered_by",
+      "note": "KeyOSX's brand catalog was imported from this registry's Brand Registry tab."
+    },
+    {
+      "fromSlug": "joseph-fansler-book-catalog",
+      "toSlug": "product-ladder",
+      "relationType": "part_of_catalog",
+      "note": "The 'Book' rung of the product ladder."
+    },
+    {
+      "fromSlug": "almanac",
+      "toSlug": "joe-business",
+      "relationType": "module_of",
+      "note": "The Almanac hub lives at joe.business/almanac."
+    }
   ],
   "timeline": [
-    { "workSlug": "keyosx", "event_date": "2026-08-05", "title": "keyosx.com registered", "detail": "Domain registered; no site existed yet at this point.", "event_type": "created" },
-    { "workSlug": "keyosx", "event_date": "2026-08-19", "title": "Living Kiosk technical export produced", "detail": "Delivered as the first operational KeyOSX module — a single-location local-information kiosk.", "event_type": "milestone" },
-    { "workSlug": "keyosx", "event_date": "2026-08-25", "title": "Pre-Phase 1 snapshot compiled", "detail": "Operational audit, technical inventory, and source archives for KeyOSX, IREFS, and Almanac bundled together.", "event_type": "milestone" },
-    { "workSlug": "keyosx", "event_date": "2026-09-12", "title": "Refactored into the works/brands/artifacts/relationships/timeline model", "detail": "The single-location kiosk model was generalized into KeyOSX's master catalog, with Jack Rabbit repointed at the whole catalog instead of one location's listings.", "event_type": "rebuilt" },
-    { "workSlug": "flintbill-origin", "event_date": "2025-07", "title": "Origin manuscript written", "detail": "Approximate, based on document date. The founding 'Flint Bill' concept, developed while manually relaying output between Codex and Claude.", "event_type": "created" },
-    { "workSlug": "flintbill-engine", "event_date": "2026-07", "title": "Confirmed as a FlintAI module", "detail": "A Codex file-evidence audit confirmed FlintBill is mounted inside FlintAI with no standalone FlintBill project anywhere in the Replit account.", "event_type": "status_change" },
-    { "workSlug": "flintbill-socratic", "event_date": "2026-08", "title": "Socratic-tutor direction proposed", "detail": "Approximate. After a debate-one-topic model tested weak, direction shifted toward a bounded AI-as-inquisitor lesson ending in a student-owned artifact.", "event_type": "planned" },
-    { "workSlug": "me-dia-os", "event_date": "2026-07", "title": "Naming locked (v1/v2)", "detail": "'Joe OS' retired; ME•DÍA promoted from single-instance front door to parent brand. Almanac and FlintBill confirmed as internal-only engine terms.", "event_type": "renamed" },
-    { "workSlug": "almanac", "event_date": "2026-07", "title": "Three Almanac instances confirmed running side by side", "detail": "A deliberate live comparison of approaches, not three copies of one broken thing.", "event_type": "note" },
-    { "workSlug": "gaem-os", "event_date": "2026-06", "title": "Rebuilt and relaunched at app.gaem.pro", "detail": "Approximate. Relaunched as 'GAEM.OS v2.0 — Enterprise AI Platform' alongside GAEM University.", "event_type": "rebuilt" },
-    { "workSlug": "irefs", "event_date": "2026-07", "title": "Confirmed as first production ME•DÍA OS instance", "detail": "Approximate. Non-rebate content went live; Pricing/Transfer/Flippa pages confirmed as the intended business model, not scope creep.", "event_type": "status_change" },
-    { "workSlug": "carcassonne-concierge", "event_date": "2026-09-08", "title": "Gmail-integrated candidate prepared", "detail": "Local candidate based on accepted GitHub main, pending a private Gmail App Password before it can accept submissions.", "event_type": "milestone" },
-    { "workSlug": "carcassonne-concierge", "event_date": "2026-09-11", "title": "All three Personal Intelligence Report templates launched", "detail": "Plan My Visit, Help Me Buy, and Improve My Property all publicly launched.", "event_type": "launched" },
-    { "workSlug": "ai-masterclass", "event_date": "2026-09", "title": "Pricing, guarantee, thank-you, and Day 1 pages live", "detail": "Approximate. Days 2 through 10 and the full delivery system are the next build phase.", "event_type": "launched" },
-    { "workSlug": "cityview-navigator", "event_date": "2026-07", "title": "Flagged for traffic review, not archived", "detail": "Approximate. Nine months old at time of audit, predating the FlintBill merge into FlintAI; PayPal integration defaults to sandbox mode.", "event_type": "note" }
+    {
+      "workSlug": "keyosx",
+      "event_date": "2026-08-05",
+      "title": "keyosx.com registered",
+      "detail": "Domain registered; no site existed yet at this point.",
+      "event_type": "created"
+    },
+    {
+      "workSlug": "keyosx",
+      "event_date": "2026-08-19",
+      "title": "Living Kiosk technical export produced",
+      "detail": "Delivered as the first operational KeyOSX module — a single-location local-information kiosk.",
+      "event_type": "milestone"
+    },
+    {
+      "workSlug": "keyosx",
+      "event_date": "2026-08-25",
+      "title": "Pre-Phase 1 snapshot compiled",
+      "detail": "Operational audit, technical inventory, and source archives for KeyOSX, IREFS, and Almanac bundled together.",
+      "event_type": "milestone"
+    },
+    {
+      "workSlug": "keyosx",
+      "event_date": "2026-09-12",
+      "title": "Refactored into the works/brands/artifacts/relationships/timeline model",
+      "detail": "The single-location kiosk model was generalized into KeyOSX's master catalog, with Jack Rabbit repointed at the whole catalog instead of one location's listings.",
+      "event_type": "rebuilt"
+    },
+    {
+      "workSlug": "flintbill-origin",
+      "event_date": "2025-07",
+      "title": "Origin manuscript written",
+      "detail": "Approximate, based on document date. The founding 'Flint Bill' concept, developed while manually relaying output between Codex and Claude.",
+      "event_type": "created"
+    },
+    {
+      "workSlug": "flintbill-engine",
+      "event_date": "2026-07",
+      "title": "Confirmed as a FlintAI module",
+      "detail": "A Codex file-evidence audit confirmed FlintBill is mounted inside FlintAI with no standalone FlintBill project anywhere in the Replit account.",
+      "event_type": "status_change"
+    },
+    {
+      "workSlug": "flintbill-socratic",
+      "event_date": "2026-08",
+      "title": "Socratic-tutor direction proposed",
+      "detail": "Approximate. After a debate-one-topic model tested weak, direction shifted toward a bounded AI-as-inquisitor lesson ending in a student-owned artifact.",
+      "event_type": "planned"
+    },
+    {
+      "workSlug": "me-dia-os",
+      "event_date": "2026-07",
+      "title": "Naming locked (v1/v2)",
+      "detail": "'Joe OS' retired; ME•DÍA promoted from single-instance front door to parent brand. Almanac and FlintBill confirmed as internal-only engine terms.",
+      "event_type": "renamed"
+    },
+    {
+      "workSlug": "almanac",
+      "event_date": "2026-07",
+      "title": "Three Almanac instances confirmed running side by side",
+      "detail": "A deliberate live comparison of approaches, not three copies of one broken thing.",
+      "event_type": "note"
+    },
+    {
+      "workSlug": "gaem-os",
+      "event_date": "2026-06",
+      "title": "Rebuilt and relaunched at app.gaem.pro",
+      "detail": "Approximate. Relaunched as 'GAEM.OS v2.0 — Enterprise AI Platform' alongside GAEM University.",
+      "event_type": "rebuilt"
+    },
+    {
+      "workSlug": "irefs",
+      "event_date": "2026-07",
+      "title": "Confirmed as first production ME•DÍA OS instance",
+      "detail": "Approximate. Non-rebate content went live; Pricing/Transfer/Flippa pages confirmed as the intended business model, not scope creep.",
+      "event_type": "status_change"
+    },
+    {
+      "workSlug": "carcassonne-concierge",
+      "event_date": "2026-09-08",
+      "title": "Gmail-integrated candidate prepared",
+      "detail": "Local candidate based on accepted GitHub main, pending a private Gmail App Password before it can accept submissions.",
+      "event_type": "milestone"
+    },
+    {
+      "workSlug": "carcassonne-concierge",
+      "event_date": "2026-09-11",
+      "title": "All three Personal Intelligence Report templates launched",
+      "detail": "Plan My Visit, Help Me Buy, and Improve My Property all publicly launched.",
+      "event_type": "launched"
+    },
+    {
+      "workSlug": "ai-masterclass",
+      "event_date": "2026-09",
+      "title": "Pricing, guarantee, thank-you, and Day 1 pages live",
+      "detail": "Approximate. Days 2 through 10 and the full delivery system are the next build phase.",
+      "event_type": "launched"
+    },
+    {
+      "workSlug": "cityview-navigator",
+      "event_date": "2026-07",
+      "title": "Flagged for traffic review, not archived",
+      "detail": "Approximate. Nine months old at time of audit, predating the FlintBill merge into FlintAI; PayPal integration defaults to sandbox mode.",
+      "event_type": "note"
+    },
+    {
+      "workSlug": "openarms",
+      "event_date": "2026-06-25",
+      "title": "Handoff Log and core documents built",
+      "detail": "OpenArms Simultanism Manifesto, Ecosystem Map 2026, and the Max.OS Handoff Log (v1.0, then v1.2) all built the same day.",
+      "event_type": "created"
+    },
+    {
+      "workSlug": "flintbill-engine",
+      "event_date": "2026-06-25",
+      "title": "FlintBill Asset Engine Database V2 and Operations Board v2 built",
+      "detail": "13 brands, revenue objectives, destination registry, and an 11-sheet operations board tracking 208 assets at PUBLISH, 76 at COLLECT, and 418 at KNOW.",
+      "event_type": "milestone"
+    },
+    {
+      "workSlug": "max",
+      "event_date": "2026-06-25",
+      "title": "Three working HTML prototypes built",
+      "detail": "Dispatch Protocol reference, Morning Board, and Push This Bridge — the first concrete Max.OS tools, though the full proactive daily-briefing vision described in the July 2026 spec is not yet automated.",
+      "event_type": "milestone"
+    }
   ]
 }

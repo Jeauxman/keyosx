@@ -123,12 +123,14 @@ async function main() {
   app.get("/api/config", asyncRoute(async (_req, res) => {
     const settings = await getSettings(db);
     const all = await listWorks(db, { includeUnpublished: false, limit: 1000 });
+    const categories = [...new Set(all.map((work) => work.category).filter(Boolean))].sort();
     res.json({
       brandName: settings.brandName || "KeyOSX",
       brandTagline: settings.brandTagline || "The master living kiosk for every work Joe has built, is building, or is planning.",
       guideName: settings.guideName || "Jack Rabbit",
       kinds: WORK_KINDS,
       statuses: WORK_STATUSES,
+      categories,
       counts: {
         total: all.length,
         old: all.filter((work) => work.status === "old").length,
@@ -141,8 +143,9 @@ async function main() {
   app.get("/api/works", asyncRoute(async (req, res) => {
     const kind = WORK_KINDS.includes(String(req.query.kind)) ? String(req.query.kind) : undefined;
     const status = WORK_STATUSES.includes(String(req.query.status)) ? String(req.query.status) : undefined;
+    const category = String(req.query.category || "").trim() || undefined;
     const search = String(req.query.q || "").trim() || undefined;
-    res.json({ works: await listWorks(db, { kind, status, search, includeUnpublished: false, limit: 500 }) });
+    res.json({ works: await listWorks(db, { kind, status, category, search, includeUnpublished: false, limit: 500 }) });
   }));
 
   app.get("/api/works/:id", asyncRoute(async (req, res) => {
