@@ -2102,10 +2102,10 @@
       "note": "Confirmed by file evidence: mounted at /flintbill, /flintbill-v2, /classic-flintbill inside FlintAI."
     },
     {
-      "fromSlug": "flintbill-engine",
-      "toSlug": "flintbill-origin",
+      "fromSlug": "flintbill-origin",
+      "toSlug": "flintbill-engine",
       "relationType": "predecessor_of",
-      "note": "The origin manuscript preceded the shipped engine — listed in reverse as this engine's predecessor."
+      "note": "The origin manuscript preceded, and directly led to, the shipped engine."
     },
     {
       "fromSlug": "flintbill-socratic",
@@ -2324,9 +2324,9 @@
       "note": "Front-door brand identity superseded by the ME•DÍA naming lock."
     },
     {
-      "fromSlug": "joe-central-asset-hub",
-      "toSlug": "keyosx",
-      "relationType": "powered_by",
+      "fromSlug": "keyosx",
+      "toSlug": "joe-central-asset-hub",
+      "relationType": "depends_on",
       "note": "KeyOSX's brand catalog was imported from this registry's Brand Registry tab."
     },
     {
