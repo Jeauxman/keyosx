@@ -1704,6 +1704,72 @@
       ],
       "visibility": "published",
       "needs_review": true
+    },
+    {
+      "slug": "opportunity-engine",
+      "name": "Opportunity Engine",
+      "kind": "application",
+      "category": "Infrastructure",
+      "status": "current",
+      "status_detail": "MVP built — real-estate signal intelligence layer; the broader lawful asset-discovery vision is proposed, not yet built.",
+      "tagline": "The intelligence layer before a CRM.",
+      "summary": "Turns lawful public or commercial real-estate signals into explainable, scored opportunity records: a searchable pipeline, source evidence with freshness and confidence, risk and recommended-action fields, a durable action queue, CSV export, and a geography view. Built with race-safe and retry-safe mutations and owner-scoped audit history.",
+      "body": "Qualified, approved opportunities hand off to Automation Foundation rather than writing directly into any shared system. Joe and Codex discussed expanding it well beyond real estate on 2026-09-12: a lawful asset-discovery engine spanning government/public assets (tax sales, surplus property, zoning, permits, tenders, court/probate records, open datasets, pre-Google archives), private/commercial assets (distressed owners, unused domains, businesses for sale, underused local operators), public-digital assets (public-domain books/images/maps/archives, open government data), and private-digital assets (KeyOSX's own catalog, Cloudinary, codebases, brand material). See the Lawful Asset Discovery Engine concept work for that direction.",
+      "primary_url": "",
+      "home_platform": "Local (Cloudflare D1 planned for hosted persistence)",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "opportunity discovery",
+        "real estate intelligence",
+        "pre-CRM"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "automation-foundation",
+      "name": "Automation Foundation",
+      "kind": "platform",
+      "category": "Infrastructure",
+      "status": "current",
+      "status_detail": "Built and tested; production runbook exists. No live external delivery until Joe approves credentials/endpoints/rules.",
+      "tagline": "The reusable backend/CRM-style operating layer other apps hand qualified leads to.",
+      "summary": "A tenant-scoped backend for contacts, inquiries, notes, tasks, pipeline stages, tags, activity history, and audit logs, with idempotent JSON ingestion, CSV import/export, outbound webhooks with HMAC signing, and a repository boundary ready for PostgreSQL. Deliberately scoped to shared infrastructure — not campaigns, page building, telephony, billing, or a GoHighLevel clone.",
+      "body": "Receives qualified handoffs from apps like Opportunity Engine and Carcassonne Concierge and turns them into operational records. Designed with explicit guardrails: no invented contacts, no direct shared-table writes, no live external delivery until Joe approves credentials, endpoints, and rules — handoffs are queued and tested, not fired blindly into production.",
+      "primary_url": "",
+      "home_platform": "Local (Node.js, atomic file persistence; PostgreSQL-ready)",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "crm backend",
+        "lead intake",
+        "automation"
+      ],
+      "visibility": "published",
+      "needs_review": true
+    },
+    {
+      "slug": "lawful-asset-discovery-engine",
+      "name": "Lawful Asset Discovery Engine",
+      "kind": "concept",
+      "category": "Strategy & Concept",
+      "status": "future",
+      "status_detail": "Proposed direction, discussed 2026-09-12 — not yet built.",
+      "tagline": "A rabbit-hole discovery system that looks outside your own files for hard, public, forgotten, and digital assets.",
+      "summary": "Extends Opportunity Engine past 'find real estate deals' into a lawful asset-discovery engine across four divisions: (1) Government/Public — tax sales, surplus property, zoning/permits, tenders, court and probate records, open datasets, pre-Google archives; (2) Private/Commercial — distressed owners, unused domains, businesses for sale, underused local operators, collectibles; (3) Public-Digital — public-domain books, images, maps, and archives, open government data, Library-of-Congress/Internet-Archive-style material; (4) Private-Digital — Joe's own KeyOSX/Cloudinary/codebase/brand material.",
+      "body": "Proposed pipeline: Jack Rabbit asks the question, Opportunity Engine goes fishing, Automation Foundation turns approved finds into follow-up work, and KeyOSX remembers and displays the useful artifacts. Every find gets classified: hard or digital asset; public/government or private/commercial; usable now, needs verification, or blocked; which brand/project it belongs to; and what action should happen next. Hard rule, stated explicitly by Joe: discovery first, action only after approval — no contacting people, no submitting forms, no claiming assets, and no importing public records into live systems until reviewed.",
+      "primary_url": "",
+      "home_platform": "",
+      "hero_image_url": "",
+      "hero_image_alt": "",
+      "tags": [
+        "asset discovery",
+        "rabbit hole",
+        "governance rule"
+      ],
+      "visibility": "published",
+      "needs_review": true
     }
   ],
   "artifacts": [
@@ -2274,6 +2340,36 @@
       "toSlug": "joe-business",
       "relationType": "module_of",
       "note": "The Almanac hub lives at joe.business/almanac."
+    },
+    {
+      "fromSlug": "opportunity-engine",
+      "toSlug": "automation-foundation",
+      "relationType": "depends_on",
+      "note": "Opportunity Engine's approved handoffs feed Automation Foundation; qualification and action stay separate systems."
+    },
+    {
+      "fromSlug": "carcassonne-concierge",
+      "toSlug": "automation-foundation",
+      "relationType": "depends_on",
+      "note": "Carcassonne Concierge's own documentation names Automation Foundation as its backend operating system."
+    },
+    {
+      "fromSlug": "lawful-asset-discovery-engine",
+      "toSlug": "opportunity-engine",
+      "relationType": "inspired",
+      "note": "Proposed as an expansion of Opportunity Engine beyond real-estate signals."
+    },
+    {
+      "fromSlug": "lawful-asset-discovery-engine",
+      "toSlug": "jack-rabbit",
+      "relationType": "depends_on",
+      "note": "Jack Rabbit would be the question-asking interface into the pipeline."
+    },
+    {
+      "fromSlug": "lawful-asset-discovery-engine",
+      "toSlug": "automation-foundation",
+      "relationType": "depends_on",
+      "note": "Approved finds would still hand off through Automation Foundation, not a new bespoke backend."
     }
   ],
   "timeline": [
@@ -2402,6 +2498,13 @@
       "title": "Three working HTML prototypes built",
       "detail": "Dispatch Protocol reference, Morning Board, and Push This Bridge — the first concrete Max.OS tools, though the full proactive daily-briefing vision described in the July 2026 spec is not yet automated.",
       "event_type": "milestone"
+    },
+    {
+      "workSlug": "opportunity-engine",
+      "event_date": "2026-09-12",
+      "title": "Lawful asset-discovery expansion proposed",
+      "detail": "Discussed with Codex: extending past real-estate signals into government/public, private/commercial, public-digital, and private-digital asset discovery.",
+      "event_type": "planned"
     }
   ]
 }
