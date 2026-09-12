@@ -52,7 +52,11 @@ app.use(express.json({ limit: "1mb" }));
 // browsers/CDNs holding a stale app.js or styles.css after a deploy has caused confusing
 // "the site didn't update" moments. Revisit once the public/ files carry a cache-busting
 // version in their names or query string.
-app.use(express.static(path.join(__dirname, "public"), { index: "index.html", maxAge: 0 }));
+app.use(express.static(path.join(__dirname, "public"), {
+  index: "index.html",
+  maxAge: 0,
+  setHeaders: (res) => res.setHeader("Cache-Control", "no-store"),
+}));
 
 function parseCookies(header = "") {
   return Object.fromEntries(header.split(";").map((pair) => {
