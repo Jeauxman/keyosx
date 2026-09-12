@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node server.mjs",
+    "build": "echo \"KeyOSX is a plain Express app — no build step needed.\"",
     "dev": "node --watch server.mjs",
     "seed": "node scripts/seed.mjs",
     "test": "node --test test/*.test.mjs",
