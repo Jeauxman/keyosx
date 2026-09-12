@@ -259,6 +259,13 @@ async function main() {
     res.json({ deleted: true });
   }));
 
+  app.post("/api/admin/reseed", requireAdmin, asyncRoute(async (req, res) => {
+    if (req.body?.confirm !== "REPLACE CATALOG") {
+      return res.status(400).json({ error: 'Send { "confirm": "REPLACE CATALOG" } to confirm — this deletes every work, artifact, relationship, and timeline entry and replaces them with data/seed-data.json.' });
+    }
+    res.json(await seedDatabase(db, { force: true }));
+  }));
+
   app.get("/api/admin/meta", requireAdmin, (_req, res) => {
     res.json({ artifactTypes: ARTIFACT_TYPES, relationTypes: RELATION_TYPES, timelineEventTypes: TIMELINE_EVENT_TYPES, kinds: WORK_KINDS, statuses: WORK_STATUSES });
   });
