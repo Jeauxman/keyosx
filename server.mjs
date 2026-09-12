@@ -48,7 +48,11 @@ if (!process.env.ADMIN_PASSWORD) {
 
 app.disable("x-powered-by");
 app.use(express.json({ limit: "1mb" }));
-app.use(express.static(path.join(__dirname, "public"), { index: "index.html", maxAge: isProduction ? "1h" : 0 }));
+// No long-lived cache on static assets yet: the site is still in active development and
+// browsers/CDNs holding a stale app.js or styles.css after a deploy has caused confusing
+// "the site didn't update" moments. Revisit once the public/ files carry a cache-busting
+// version in their names or query string.
+app.use(express.static(path.join(__dirname, "public"), { index: "index.html", maxAge: 0 }));
 
 function parseCookies(header = "") {
   return Object.fromEntries(header.split(";").map((pair) => {
