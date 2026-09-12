@@ -1,4 +1,4 @@
-import Database from "better-sqlite3";
+import mysql from "mysql2/promise";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -54,90 +54,113 @@ export const TIMELINE_EVENT_TYPES = [
   "note",
 ];
 
-export function openDatabase(databaseFile = process.env.DATA_FILE || path.join(__dirname, "data", "keyosx.db")) {
-  fs.mkdirSync(path.dirname(databaseFile), { recursive: true });
-  const db = new Database(databaseFile);
-  db.pragma("foreign_keys = ON");
-  db.pragma("journal_mode = WAL");
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS settings (
-      key TEXT PRIMARY KEY,
-      value TEXT NOT NULL,
-      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
+const SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS settings (
+    \`key\` VARCHAR(120) PRIMARY KEY,
+    value TEXT NOT NULL,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB`,
+  `CREATE TABLE IF NOT EXISTS works (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(160) NOT NULL UNIQUE,
+    name VARCHAR(200) NOT NULL,
+    kind ENUM('brand','platform','engine','ecosystem','application','service','book','document','concept') NOT NULL,
+    category VARCHAR(120) NOT NULL DEFAULT '',
+    status ENUM('old','current','future') NOT NULL DEFAULT 'current',
+    status_detail VARCHAR(500) NOT NULL DEFAULT '',
+    tagline VARCHAR(300) NOT NULL DEFAULT '',
+    summary TEXT,
+    body TEXT,
+    primary_url VARCHAR(500) NOT NULL DEFAULT '',
+    home_platform VARCHAR(200) NOT NULL DEFAULT '',
+    hero_image_url VARCHAR(500) NOT NULL DEFAULT '',
+    hero_image_alt VARCHAR(300) NOT NULL DEFAULT '',
+    tags_json TEXT,
+    visibility ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
+    needs_review TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB`,
+  `CREATE TABLE IF NOT EXISTS artifacts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    work_id INT NOT NULL,
+    artifact_type ENUM('document','codebase','deck','spec','dataset','image','video','book','link','other') NOT NULL,
+    title VARCHAR(300) NOT NULL,
+    description TEXT,
+    url VARCHAR(500) NOT NULL DEFAULT '',
+    reference_label VARCHAR(300) NOT NULL DEFAULT '',
+    status ENUM('draft','published','archived') NOT NULL DEFAULT 'published',
+    needs_review TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_artifacts_work FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE
+  ) ENGINE=InnoDB`,
+  `CREATE TABLE IF NOT EXISTS relationships (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    from_work_id INT NOT NULL,
+    to_work_id INT NOT NULL,
+    relation_type ENUM('module_of','part_of_catalog','powered_by','sibling_of','successor_of','predecessor_of','depends_on','inspired','licenses_to','distinct_from') NOT NULL,
+    note VARCHAR(500) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_relationships_from FOREIGN KEY (from_work_id) REFERENCES works(id) ON DELETE CASCADE,
+    CONSTRAINT fk_relationships_to FOREIGN KEY (to_work_id) REFERENCES works(id) ON DELETE CASCADE
+  ) ENGINE=InnoDB`,
+  `CREATE TABLE IF NOT EXISTS timeline_events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    work_id INT NOT NULL,
+    event_date VARCHAR(10) NOT NULL,
+    title VARCHAR(300) NOT NULL,
+    detail TEXT,
+    event_type ENUM('created','launched','rebuilt','renamed','status_change','retired','planned','milestone','note') NOT NULL DEFAULT 'milestone',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_timeline_work FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE
+  ) ENGINE=InnoDB`,
+];
 
-    CREATE TABLE IF NOT EXISTS works (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      slug TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      kind TEXT NOT NULL CHECK(kind IN ('brand','platform','engine','ecosystem','application','service','book','document','concept')),
-      category TEXT NOT NULL DEFAULT '',
-      status TEXT NOT NULL CHECK(status IN ('old','current','future')) DEFAULT 'current',
-      status_detail TEXT NOT NULL DEFAULT '',
-      tagline TEXT NOT NULL DEFAULT '',
-      summary TEXT NOT NULL DEFAULT '',
-      body TEXT NOT NULL DEFAULT '',
-      primary_url TEXT NOT NULL DEFAULT '',
-      home_platform TEXT NOT NULL DEFAULT '',
-      hero_image_url TEXT NOT NULL DEFAULT '',
-      hero_image_alt TEXT NOT NULL DEFAULT '',
-      tags_json TEXT NOT NULL DEFAULT '[]',
-      visibility TEXT NOT NULL CHECK(visibility IN ('draft','published','archived')) DEFAULT 'draft',
-      needs_review INTEGER NOT NULL DEFAULT 0,
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
+const INDEX_STATEMENTS = [
+  "CREATE INDEX idx_works_status_kind ON works(status, kind)",
+  "CREATE INDEX idx_artifacts_work ON artifacts(work_id)",
+  "CREATE INDEX idx_relationships_from ON relationships(from_work_id)",
+  "CREATE INDEX idx_relationships_to ON relationships(to_work_id)",
+  "CREATE INDEX idx_timeline_work_date ON timeline_events(work_id, event_date)",
+];
 
-    CREATE TABLE IF NOT EXISTS artifacts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      work_id INTEGER NOT NULL,
-      artifact_type TEXT NOT NULL CHECK(artifact_type IN ('document','codebase','deck','spec','dataset','image','video','book','link','other')),
-      title TEXT NOT NULL,
-      description TEXT NOT NULL DEFAULT '',
-      url TEXT NOT NULL DEFAULT '',
-      reference_label TEXT NOT NULL DEFAULT '',
-      status TEXT NOT NULL CHECK(status IN ('draft','published','archived')) DEFAULT 'published',
-      needs_review INTEGER NOT NULL DEFAULT 0,
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(work_id) REFERENCES works(id) ON DELETE CASCADE
-    );
+export async function openDatabase(config = {}) {
+  const pool = mysql.createPool({
+    host: config.host || process.env.DB_HOST || "localhost",
+    port: Number(config.port || process.env.DB_PORT || 3306),
+    user: config.user || process.env.DB_USER,
+    password: config.password || process.env.DB_PASSWORD,
+    database: config.database || process.env.DB_NAME,
+    namedPlaceholders: true,
+    waitForConnections: true,
+    connectionLimit: 10,
+    dateStrings: true,
+  });
+  if (!config.user && !process.env.DB_USER) {
+    throw new Error("DB_USER, DB_PASSWORD, and DB_NAME must be set (see .env.example) — KeyOSX stores its catalog in MySQL.");
+  }
+  for (const statement of SCHEMA_STATEMENTS) {
+    await pool.query(statement);
+  }
+  for (const statement of INDEX_STATEMENTS) {
+    try {
+      await pool.query(statement);
+    } catch (error) {
+      if (error.code !== "ER_DUP_KEYNAME") throw error;
+    }
+  }
+  return pool;
+}
 
-    CREATE TABLE IF NOT EXISTS relationships (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      from_work_id INTEGER NOT NULL,
-      to_work_id INTEGER NOT NULL,
-      relation_type TEXT NOT NULL CHECK(relation_type IN ('module_of','part_of_catalog','powered_by','sibling_of','successor_of','predecessor_of','depends_on','inspired','licenses_to','distinct_from')),
-      note TEXT NOT NULL DEFAULT '',
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(from_work_id) REFERENCES works(id) ON DELETE CASCADE,
-      FOREIGN KEY(to_work_id) REFERENCES works(id) ON DELETE CASCADE
-    );
-
-    CREATE TABLE IF NOT EXISTS timeline_events (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      work_id INTEGER NOT NULL,
-      event_date TEXT NOT NULL,
-      title TEXT NOT NULL,
-      detail TEXT NOT NULL DEFAULT '',
-      event_type TEXT NOT NULL CHECK(event_type IN ('created','launched','rebuilt','renamed','status_change','retired','planned','milestone','note')) DEFAULT 'milestone',
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(work_id) REFERENCES works(id) ON DELETE CASCADE
-    );
-
-    CREATE INDEX IF NOT EXISTS idx_works_status_kind ON works(status, kind);
-    CREATE INDEX IF NOT EXISTS idx_artifacts_work ON artifacts(work_id);
-    CREATE INDEX IF NOT EXISTS idx_relationships_from ON relationships(from_work_id);
-    CREATE INDEX IF NOT EXISTS idx_relationships_to ON relationships(to_work_id);
-    CREATE INDEX IF NOT EXISTS idx_timeline_work_date ON timeline_events(work_id, event_date);
-  `);
-  return db;
+export async function closeDatabase(db) {
+  await db.end();
 }
 
 function now() {
-  return new Date().toISOString();
+  return new Date().toISOString().slice(0, 19).replace("T", " ");
 }
 
 function parseTags(value) {
@@ -163,15 +186,15 @@ function artifactFromRow(row) {
   return { ...row, needs_review: Boolean(row.needs_review) };
 }
 
-export function setSetting(db, key, value) {
-  db.prepare(`
-    INSERT INTO settings (key, value, updated_at) VALUES (?, ?, ?)
-    ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
-  `).run(key, String(value), now());
+export async function setSetting(db, key, value) {
+  await db.execute(
+    "INSERT INTO settings (`key`, value, updated_at) VALUES (:key, :value, :updated_at) ON DUPLICATE KEY UPDATE value = VALUES(value), updated_at = VALUES(updated_at)",
+    { key, value: String(value), updated_at: now() }
+  );
 }
 
-export function getSettings(db) {
-  const rows = db.prepare("SELECT key, value FROM settings").all();
+export async function getSettings(db) {
+  const [rows] = await db.query("SELECT `key`, value FROM settings");
   return Object.fromEntries(rows.map((row) => [row.key, row.value]));
 }
 
@@ -210,73 +233,79 @@ export function normalizeWorkInput(input) {
   };
 }
 
-export function createWork(db, input) {
+export async function createWork(db, input) {
   const work = normalizeWorkInput(input);
-  const result = db.prepare(`
-    INSERT INTO works (slug, name, kind, category, status, status_detail, tagline, summary, body, primary_url, home_platform, hero_image_url, hero_image_alt, tags_json, visibility, needs_review, updated_at)
-    VALUES (@slug, @name, @kind, @category, @status, @status_detail, @tagline, @summary, @body, @primary_url, @home_platform, @hero_image_url, @hero_image_alt, @tags_json, @visibility, @needs_review, @updated_at)
-  `).run({ ...work, updated_at: now() });
-  return getWork(db, result.lastInsertRowid);
+  const [result] = await db.execute(
+    `INSERT INTO works (slug, name, kind, category, status, status_detail, tagline, summary, body, primary_url, home_platform, hero_image_url, hero_image_alt, tags_json, visibility, needs_review, updated_at)
+     VALUES (:slug, :name, :kind, :category, :status, :status_detail, :tagline, :summary, :body, :primary_url, :home_platform, :hero_image_url, :hero_image_alt, :tags_json, :visibility, :needs_review, :updated_at)`,
+    { ...work, updated_at: now() }
+  );
+  return getWork(db, result.insertId);
 }
 
-export function updateWork(db, id, input) {
+export async function updateWork(db, id, input) {
   const work = normalizeWorkInput(input);
-  db.prepare(`
-    UPDATE works SET slug = @slug, name = @name, kind = @kind, category = @category, status = @status, status_detail = @status_detail,
-      tagline = @tagline, summary = @summary, body = @body, primary_url = @primary_url, home_platform = @home_platform,
-      hero_image_url = @hero_image_url, hero_image_alt = @hero_image_alt, tags_json = @tags_json, visibility = @visibility,
-      needs_review = @needs_review, updated_at = @updated_at WHERE id = @id
-  `).run({ ...work, id, updated_at: now() });
+  await db.execute(
+    `UPDATE works SET slug = :slug, name = :name, kind = :kind, category = :category, status = :status, status_detail = :status_detail,
+      tagline = :tagline, summary = :summary, body = :body, primary_url = :primary_url, home_platform = :home_platform,
+      hero_image_url = :hero_image_url, hero_image_alt = :hero_image_alt, tags_json = :tags_json, visibility = :visibility,
+      needs_review = :needs_review, updated_at = :updated_at WHERE id = :id`,
+    { ...work, id, updated_at: now() }
+  );
   return getWork(db, id);
 }
 
-export function deleteWork(db, id) {
-  return db.prepare("DELETE FROM works WHERE id = ?").run(id).changes > 0;
+export async function deleteWork(db, id) {
+  const [result] = await db.execute("DELETE FROM works WHERE id = :id", { id });
+  return result.affectedRows > 0;
 }
 
-export function getWork(db, id) {
-  return workFromRow(db.prepare("SELECT * FROM works WHERE id = ?").get(id));
+export async function getWork(db, id) {
+  const [rows] = await db.execute("SELECT * FROM works WHERE id = :id", { id });
+  return workFromRow(rows[0]);
 }
 
-export function getWorkBySlug(db, slug) {
-  return workFromRow(db.prepare("SELECT * FROM works WHERE slug = ?").get(slug));
+export async function getWorkBySlug(db, slug) {
+  const [rows] = await db.execute("SELECT * FROM works WHERE slug = :slug", { slug });
+  return workFromRow(rows[0]);
 }
 
-export function listWorks(db, options = {}) {
+export async function listWorks(db, options = {}) {
   const { kind, category, status, search, includeUnpublished = false, limit = 250 } = options;
   const clauses = [];
-  const params = [];
+  const params = {};
   if (!includeUnpublished) clauses.push("visibility = 'published'");
-  if (kind && WORK_KINDS.includes(kind)) { clauses.push("kind = ?"); params.push(kind); }
-  if (category) { clauses.push("category = ?"); params.push(category); }
-  if (status && WORK_STATUSES.includes(status)) { clauses.push("status = ?"); params.push(status); }
+  if (kind && WORK_KINDS.includes(kind)) { clauses.push("kind = :kind"); params.kind = kind; }
+  if (category) { clauses.push("category = :category"); params.category = category; }
+  if (status && WORK_STATUSES.includes(status)) { clauses.push("status = :status"); params.status = status; }
   if (search) {
-    clauses.push("(name LIKE ? OR tagline LIKE ? OR summary LIKE ? OR body LIKE ? OR category LIKE ? OR tags_json LIKE ?)");
-    const term = `%${String(search).trim()}%`;
-    params.push(term, term, term, term, term, term);
+    clauses.push("(name LIKE :term OR tagline LIKE :term OR summary LIKE :term OR body LIKE :term OR category LIKE :term OR tags_json LIKE :term)");
+    params.term = `%${String(search).trim()}%`;
   }
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
-  const rows = db.prepare(`
-    SELECT * FROM works ${where}
-    ORDER BY CASE status WHEN 'current' THEN 0 WHEN 'future' THEN 1 ELSE 2 END, name ASC
-    LIMIT ?
-  `).all(...params, Math.min(Math.max(Number(limit) || 250, 1), 1000));
+  params.limit = Math.min(Math.max(Number(limit) || 250, 1), 1000);
+  const [rows] = await db.execute(
+    `SELECT * FROM works ${where}
+     ORDER BY CASE status WHEN 'current' THEN 0 WHEN 'future' THEN 1 ELSE 2 END, name ASC
+     LIMIT :limit`,
+    params
+  );
   return rows.map(workFromRow);
 }
 
-export function contentCounts(db) {
-  const rows = db.prepare("SELECT status, COUNT(*) AS count FROM works WHERE visibility = 'published' GROUP BY status").all();
+export async function contentCounts(db) {
+  const [rows] = await db.query("SELECT status, COUNT(*) AS count FROM works WHERE visibility = 'published' GROUP BY status");
   return Object.fromEntries(WORK_STATUSES.map((status) => [status, rows.find((row) => row.status === status)?.count || 0]));
 }
 
 // ---------- Artifacts ----------
 
-export function normalizeArtifactInput(db, input) {
+export async function normalizeArtifactInput(db, input) {
   const workId = Number(input.work_id || input.workId);
   const artifactType = String(input.artifact_type || input.artifactType || "").trim();
   const title = String(input.title || "").trim();
   const status = String(input.status || "published").trim();
-  if (!Number.isInteger(workId) || workId <= 0 || !getWork(db, workId)) throw new Error("A valid work is required.");
+  if (!Number.isInteger(workId) || workId <= 0 || !(await getWork(db, workId))) throw new Error("A valid work is required.");
   if (!ARTIFACT_TYPES.includes(artifactType)) throw new Error("Select a valid artifact type.");
   if (!title) throw new Error("An artifact title is required.");
   if (!WORK_VISIBILITIES.includes(status)) throw new Error("Select a valid artifact status.");
@@ -292,51 +321,55 @@ export function normalizeArtifactInput(db, input) {
   };
 }
 
-export function createArtifact(db, input) {
-  const artifact = normalizeArtifactInput(db, input);
-  const result = db.prepare(`
-    INSERT INTO artifacts (work_id, artifact_type, title, description, url, reference_label, status, needs_review, updated_at)
-    VALUES (@work_id, @artifact_type, @title, @description, @url, @reference_label, @status, @needs_review, @updated_at)
-  `).run({ ...artifact, updated_at: now() });
-  return getArtifact(db, result.lastInsertRowid);
+export async function createArtifact(db, input) {
+  const artifact = await normalizeArtifactInput(db, input);
+  const [result] = await db.execute(
+    `INSERT INTO artifacts (work_id, artifact_type, title, description, url, reference_label, status, needs_review, updated_at)
+     VALUES (:work_id, :artifact_type, :title, :description, :url, :reference_label, :status, :needs_review, :updated_at)`,
+    { ...artifact, updated_at: now() }
+  );
+  return getArtifact(db, result.insertId);
 }
 
-export function updateArtifact(db, id, input) {
-  const artifact = normalizeArtifactInput(db, input);
-  db.prepare(`
-    UPDATE artifacts SET work_id = @work_id, artifact_type = @artifact_type, title = @title, description = @description,
-      url = @url, reference_label = @reference_label, status = @status, needs_review = @needs_review, updated_at = @updated_at
-    WHERE id = @id
-  `).run({ ...artifact, id, updated_at: now() });
+export async function updateArtifact(db, id, input) {
+  const artifact = await normalizeArtifactInput(db, input);
+  await db.execute(
+    `UPDATE artifacts SET work_id = :work_id, artifact_type = :artifact_type, title = :title, description = :description,
+      url = :url, reference_label = :reference_label, status = :status, needs_review = :needs_review, updated_at = :updated_at
+     WHERE id = :id`,
+    { ...artifact, id, updated_at: now() }
+  );
   return getArtifact(db, id);
 }
 
-export function deleteArtifact(db, id) {
-  return db.prepare("DELETE FROM artifacts WHERE id = ?").run(id).changes > 0;
+export async function deleteArtifact(db, id) {
+  const [result] = await db.execute("DELETE FROM artifacts WHERE id = :id", { id });
+  return result.affectedRows > 0;
 }
 
-export function getArtifact(db, id) {
-  return artifactFromRow(db.prepare("SELECT * FROM artifacts WHERE id = ?").get(id));
+export async function getArtifact(db, id) {
+  const [rows] = await db.execute("SELECT * FROM artifacts WHERE id = :id", { id });
+  return artifactFromRow(rows[0]);
 }
 
-export function listArtifacts(db, { workId, includeUnpublished = false } = {}) {
+export async function listArtifacts(db, { workId, includeUnpublished = false } = {}) {
   const clauses = [];
-  const params = [];
-  if (workId) { clauses.push("work_id = ?"); params.push(Number(workId)); }
+  const params = {};
+  if (workId) { clauses.push("work_id = :workId"); params.workId = Number(workId); }
   if (!includeUnpublished) clauses.push("status = 'published'");
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
-  const rows = db.prepare(`SELECT * FROM artifacts ${where} ORDER BY updated_at DESC`).all(...params);
+  const [rows] = await db.execute(`SELECT * FROM artifacts ${where} ORDER BY updated_at DESC`, params);
   return rows.map(artifactFromRow);
 }
 
 // ---------- Relationships ----------
 
-export function normalizeRelationshipInput(db, input) {
+export async function normalizeRelationshipInput(db, input) {
   const fromWorkId = Number(input.from_work_id || input.fromWorkId);
   const toWorkId = Number(input.to_work_id || input.toWorkId);
   const relationType = String(input.relation_type || input.relationType || "").trim();
-  if (!Number.isInteger(fromWorkId) || !getWork(db, fromWorkId)) throw new Error("A valid source work is required.");
-  if (!Number.isInteger(toWorkId) || !getWork(db, toWorkId)) throw new Error("A valid target work is required.");
+  if (!Number.isInteger(fromWorkId) || !(await getWork(db, fromWorkId))) throw new Error("A valid source work is required.");
+  if (!Number.isInteger(toWorkId) || !(await getWork(db, toWorkId))) throw new Error("A valid target work is required.");
   if (fromWorkId === toWorkId) throw new Error("A work cannot relate to itself.");
   if (!RELATION_TYPES.includes(relationType)) throw new Error("Select a valid relationship type.");
   return {
@@ -347,47 +380,53 @@ export function normalizeRelationshipInput(db, input) {
   };
 }
 
-export function createRelationship(db, input) {
-  const relationship = normalizeRelationshipInput(db, input);
-  const result = db.prepare(`
-    INSERT INTO relationships (from_work_id, to_work_id, relation_type, note, updated_at)
-    VALUES (@from_work_id, @to_work_id, @relation_type, @note, @updated_at)
-  `).run({ ...relationship, updated_at: now() });
-  return db.prepare("SELECT * FROM relationships WHERE id = ?").get(result.lastInsertRowid);
+export async function createRelationship(db, input) {
+  const relationship = await normalizeRelationshipInput(db, input);
+  const [result] = await db.execute(
+    `INSERT INTO relationships (from_work_id, to_work_id, relation_type, note, updated_at)
+     VALUES (:from_work_id, :to_work_id, :relation_type, :note, :updated_at)`,
+    { ...relationship, updated_at: now() }
+  );
+  const [rows] = await db.execute("SELECT * FROM relationships WHERE id = :id", { id: result.insertId });
+  return rows[0];
 }
 
-export function deleteRelationship(db, id) {
-  return db.prepare("DELETE FROM relationships WHERE id = ?").run(id).changes > 0;
+export async function deleteRelationship(db, id) {
+  const [result] = await db.execute("DELETE FROM relationships WHERE id = :id", { id });
+  return result.affectedRows > 0;
 }
 
-export function listRelationshipsForWork(db, workId) {
-  const outgoing = db.prepare(`
-    SELECT r.*, w.name AS other_name, w.slug AS other_slug, w.status AS other_status, w.kind AS other_kind, 'outgoing' AS direction
-    FROM relationships r JOIN works w ON w.id = r.to_work_id WHERE r.from_work_id = ?
-  `).all(workId);
-  const incoming = db.prepare(`
-    SELECT r.*, w.name AS other_name, w.slug AS other_slug, w.status AS other_status, w.kind AS other_kind, 'incoming' AS direction
-    FROM relationships r JOIN works w ON w.id = r.from_work_id WHERE r.to_work_id = ?
-  `).all(workId);
+export async function listRelationshipsForWork(db, workId) {
+  const [outgoing] = await db.execute(
+    `SELECT r.*, w.name AS other_name, w.slug AS other_slug, w.status AS other_status, w.kind AS other_kind, 'outgoing' AS direction
+     FROM relationships r JOIN works w ON w.id = r.to_work_id WHERE r.from_work_id = :workId`,
+    { workId }
+  );
+  const [incoming] = await db.execute(
+    `SELECT r.*, w.name AS other_name, w.slug AS other_slug, w.status AS other_status, w.kind AS other_kind, 'incoming' AS direction
+     FROM relationships r JOIN works w ON w.id = r.from_work_id WHERE r.to_work_id = :workId`,
+    { workId }
+  );
   return [...outgoing, ...incoming];
 }
 
-export function listRelationships(db) {
-  return db.prepare(`
-    SELECT r.*, fw.name AS from_name, tw.name AS to_name
-    FROM relationships r JOIN works fw ON fw.id = r.from_work_id JOIN works tw ON tw.id = r.to_work_id
-    ORDER BY fw.name
-  `).all();
+export async function listRelationships(db) {
+  const [rows] = await db.query(
+    `SELECT r.*, fw.name AS from_name, tw.name AS to_name
+     FROM relationships r JOIN works fw ON fw.id = r.from_work_id JOIN works tw ON tw.id = r.to_work_id
+     ORDER BY fw.name`
+  );
+  return rows;
 }
 
 // ---------- Timeline ----------
 
-export function normalizeTimelineInput(db, input) {
+export async function normalizeTimelineInput(db, input) {
   const workId = Number(input.work_id || input.workId);
   const eventDate = String(input.event_date || input.eventDate || "").trim();
   const title = String(input.title || "").trim();
   const eventType = String(input.event_type || input.eventType || "milestone").trim();
-  if (!Number.isInteger(workId) || !getWork(db, workId)) throw new Error("A valid work is required.");
+  if (!Number.isInteger(workId) || !(await getWork(db, workId))) throw new Error("A valid work is required.");
   if (!eventDate) throw new Error("An event date is required (YYYY-MM-DD or YYYY-MM).");
   if (!title) throw new Error("An event title is required.");
   if (!TIMELINE_EVENT_TYPES.includes(eventType)) throw new Error("Select a valid event type.");
@@ -400,88 +439,156 @@ export function normalizeTimelineInput(db, input) {
   };
 }
 
-export function createTimelineEvent(db, input) {
-  const event = normalizeTimelineInput(db, input);
-  const result = db.prepare(`
-    INSERT INTO timeline_events (work_id, event_date, title, detail, event_type, updated_at)
-    VALUES (@work_id, @event_date, @title, @detail, @event_type, @updated_at)
-  `).run({ ...event, updated_at: now() });
-  return db.prepare("SELECT * FROM timeline_events WHERE id = ?").get(result.lastInsertRowid);
+export async function createTimelineEvent(db, input) {
+  const event = await normalizeTimelineInput(db, input);
+  const [result] = await db.execute(
+    `INSERT INTO timeline_events (work_id, event_date, title, detail, event_type, updated_at)
+     VALUES (:work_id, :event_date, :title, :detail, :event_type, :updated_at)`,
+    { ...event, updated_at: now() }
+  );
+  const [rows] = await db.execute("SELECT * FROM timeline_events WHERE id = :id", { id: result.insertId });
+  return rows[0];
 }
 
-export function deleteTimelineEvent(db, id) {
-  return db.prepare("DELETE FROM timeline_events WHERE id = ?").run(id).changes > 0;
+export async function deleteTimelineEvent(db, id) {
+  const [result] = await db.execute("DELETE FROM timeline_events WHERE id = :id", { id });
+  return result.affectedRows > 0;
 }
 
-export function listTimelineForWork(db, workId) {
-  return db.prepare("SELECT * FROM timeline_events WHERE work_id = ? ORDER BY event_date ASC").all(workId);
+export async function listTimelineForWork(db, workId) {
+  const [rows] = await db.execute("SELECT * FROM timeline_events WHERE work_id = :workId ORDER BY event_date ASC", { workId });
+  return rows;
 }
 
-export function listTimeline(db, { limit = 30 } = {}) {
-  return db.prepare(`
-    SELECT t.*, w.name AS work_name, w.slug AS work_slug
-    FROM timeline_events t JOIN works w ON w.id = t.work_id
-    ORDER BY t.event_date DESC LIMIT ?
-  `).all(Math.min(Math.max(Number(limit) || 30, 1), 200));
+export async function listTimeline(db, { limit = 30 } = {}) {
+  const [rows] = await db.execute(
+    `SELECT t.*, w.name AS work_name, w.slug AS work_slug
+     FROM timeline_events t JOIN works w ON w.id = t.work_id
+     ORDER BY t.event_date DESC LIMIT :limit`,
+    { limit: Math.min(Math.max(Number(limit) || 30, 1), 200) }
+  );
+  return rows;
 }
 
 // ---------- Composite ----------
 
-export function getWorkDetail(db, id) {
-  const work = getWork(db, id);
+export async function getWorkDetail(db, id) {
+  const work = await getWork(db, id);
   if (!work) return null;
   return {
     work,
-    artifacts: listArtifacts(db, { workId: id, includeUnpublished: true }),
-    timeline: listTimelineForWork(db, id),
-    relationships: listRelationshipsForWork(db, id),
+    artifacts: await listArtifacts(db, { workId: id, includeUnpublished: true }),
+    timeline: await listTimelineForWork(db, id),
+    relationships: await listRelationshipsForWork(db, id),
   };
 }
 
 // ---------- Seed ----------
 
-export function seedDatabase(db, { force = false } = {}) {
+export async function seedDatabase(db, { force = false } = {}) {
   const seedPath = path.join(__dirname, "data", "seed-data.json");
   const seed = JSON.parse(fs.readFileSync(seedPath, "utf8"));
-  const existing = db.prepare("SELECT COUNT(*) AS count FROM works").get().count;
+  const [[{ count: existing }]] = await db.query("SELECT COUNT(*) AS count FROM works");
   if (existing && !force) return { seeded: false, reason: "Database already contains catalog records." };
-  const transaction = db.transaction(() => {
+
+  const connection = await db.getConnection();
+  try {
+    await connection.beginTransaction();
     if (force) {
-      db.exec("DELETE FROM timeline_events; DELETE FROM relationships; DELETE FROM artifacts; DELETE FROM works; DELETE FROM settings;");
+      await connection.query("DELETE FROM timeline_events");
+      await connection.query("DELETE FROM relationships");
+      await connection.query("DELETE FROM artifacts");
+      await connection.query("DELETE FROM works");
+      await connection.query("DELETE FROM settings");
     }
     const workIds = new Map();
     for (const work of seed.works) {
-      const created = createWork(db, work);
-      workIds.set(work.slug, created.id);
+      const normalized = normalizeWorkInput(work);
+      const [result] = await connection.execute(
+        `INSERT INTO works (slug, name, kind, category, status, status_detail, tagline, summary, body, primary_url, home_platform, hero_image_url, hero_image_alt, tags_json, visibility, needs_review, updated_at)
+         VALUES (:slug, :name, :kind, :category, :status, :status_detail, :tagline, :summary, :body, :primary_url, :home_platform, :hero_image_url, :hero_image_alt, :tags_json, :visibility, :needs_review, :updated_at)`,
+        { ...normalized, updated_at: now() }
+      );
+      workIds.set(work.slug, result.insertId);
     }
     for (const artifact of seed.artifacts || []) {
-      createArtifact(db, { ...artifact, workId: workIds.get(artifact.workSlug) });
+      const workId = workIds.get(artifact.workSlug);
+      const normalized = {
+        work_id: workId,
+        artifact_type: artifact.artifact_type,
+        title: String(artifact.title || "").trim(),
+        description: String(artifact.description || "").trim(),
+        url: String(artifact.url || "").trim(),
+        reference_label: String(artifact.reference_label || "").trim(),
+        status: artifact.status || "published",
+        needs_review: artifact.needs_review ? 1 : 0,
+      };
+      await connection.execute(
+        `INSERT INTO artifacts (work_id, artifact_type, title, description, url, reference_label, status, needs_review, updated_at)
+         VALUES (:work_id, :artifact_type, :title, :description, :url, :reference_label, :status, :needs_review, :updated_at)`,
+        { ...normalized, updated_at: now() }
+      );
     }
     for (const relationship of seed.relationships || []) {
-      createRelationship(db, {
-        fromWorkId: workIds.get(relationship.fromSlug),
-        toWorkId: workIds.get(relationship.toSlug),
-        relationType: relationship.relationType,
-        note: relationship.note,
-      });
+      await connection.execute(
+        `INSERT INTO relationships (from_work_id, to_work_id, relation_type, note, updated_at)
+         VALUES (:from_work_id, :to_work_id, :relation_type, :note, :updated_at)`,
+        {
+          from_work_id: workIds.get(relationship.fromSlug),
+          to_work_id: workIds.get(relationship.toSlug),
+          relation_type: relationship.relationType,
+          note: String(relationship.note || "").trim(),
+          updated_at: now(),
+        }
+      );
     }
     for (const event of seed.timeline || []) {
-      createTimelineEvent(db, { ...event, workId: workIds.get(event.workSlug) });
+      await connection.execute(
+        `INSERT INTO timeline_events (work_id, event_date, title, detail, event_type, updated_at)
+         VALUES (:work_id, :event_date, :title, :detail, :event_type, :updated_at)`,
+        {
+          work_id: workIds.get(event.workSlug),
+          event_date: event.event_date,
+          title: event.title,
+          detail: String(event.detail || "").trim(),
+          event_type: event.event_type || "milestone",
+          updated_at: now(),
+        }
+      );
     }
-    setSetting(db, "brandName", "KeyOSX");
-    setSetting(db, "brandTagline", "The master living kiosk for every work Joe has built, is building, or is planning.");
-    setSetting(db, "guideName", "Jack Rabbit");
-  });
-  transaction();
-  return { seeded: true, works: seed.works.length, artifacts: (seed.artifacts || []).length, relationships: (seed.relationships || []).length, timeline: (seed.timeline || []).length };
+    await connection.execute(
+      "INSERT INTO settings (`key`, value, updated_at) VALUES (:key, :value, :updated_at) ON DUPLICATE KEY UPDATE value = VALUES(value), updated_at = VALUES(updated_at)",
+      { key: "brandName", value: "KeyOSX", updated_at: now() }
+    );
+    await connection.execute(
+      "INSERT INTO settings (`key`, value, updated_at) VALUES (:key, :value, :updated_at) ON DUPLICATE KEY UPDATE value = VALUES(value), updated_at = VALUES(updated_at)",
+      { key: "brandTagline", value: "The master living kiosk for every work Joe has built, is building, or is planning.", updated_at: now() }
+    );
+    await connection.execute(
+      "INSERT INTO settings (`key`, value, updated_at) VALUES (:key, :value, :updated_at) ON DUPLICATE KEY UPDATE value = VALUES(value), updated_at = VALUES(updated_at)",
+      { key: "guideName", value: "Jack Rabbit", updated_at: now() }
+    );
+    await connection.commit();
+    return { seeded: true, works: seed.works.length, artifacts: (seed.artifacts || []).length, relationships: (seed.relationships || []).length, timeline: (seed.timeline || []).length };
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 }
 
-export function getDatabaseSummary(db) {
+export async function getDatabaseSummary(db) {
+  const [[works]] = await db.query("SELECT COUNT(*) AS count FROM works");
+  const [[publishedWorks]] = await db.query("SELECT COUNT(*) AS count FROM works WHERE visibility = 'published'");
+  const [[artifacts]] = await db.query("SELECT COUNT(*) AS count FROM artifacts");
+  const [[relationships]] = await db.query("SELECT COUNT(*) AS count FROM relationships");
+  const [[timelineEvents]] = await db.query("SELECT COUNT(*) AS count FROM timeline_events");
   return {
-    works: db.prepare("SELECT COUNT(*) AS count FROM works").get().count,
-    publishedWorks: db.prepare("SELECT COUNT(*) AS count FROM works WHERE visibility = 'published'").get().count,
-    artifacts: db.prepare("SELECT COUNT(*) AS count FROM artifacts").get().count,
-    relationships: db.prepare("SELECT COUNT(*) AS count FROM relationships").get().count,
-    timelineEvents: db.prepare("SELECT COUNT(*) AS count FROM timeline_events").get().count,
+    works: works.count,
+    publishedWorks: publishedWorks.count,
+    artifacts: artifacts.count,
+    relationships: relationships.count,
+    timelineEvents: timelineEvents.count,
   };
 }

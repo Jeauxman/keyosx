@@ -17,7 +17,7 @@ function normalize(text) {
   return String(text || "").trim().toLowerCase();
 }
 
-function inferStatusFilter(question) {
+export function inferStatusFilter(question) {
   const text = normalize(question);
   if (/(what.?s (live|current|active|running)|current works|in rotation|today)/.test(text)) return "current";
   if (/(old|retired|dormant|legacy|superseded|past|historical|shut down)/.test(text)) return "old";
@@ -25,13 +25,13 @@ function inferStatusFilter(question) {
   return null;
 }
 
-function inferKindFilter(question) {
+export function inferKindFilter(question) {
   const text = normalize(question);
   for (const kind of Object.keys(KIND_LABELS)) {
-    if (text.includes(kind)) return kind;
+    if (new RegExp(`\\b${kind}s?\\b`).test(text)) return kind;
   }
-  if (/(app|application)/.test(text)) return "application";
-  if (/(book|manuscript)/.test(text)) return "book";
+  if (/\bapps?\b/.test(text)) return "application";
+  if (/\bmanuscripts?\b/.test(text)) return "book";
   return null;
 }
 
@@ -57,20 +57,16 @@ function relationSummary(relationships) {
   }).join("; ");
 }
 
-function textForWork(work, { db } = {}) {
+function textForWork(work) {
   const status = STATUS_LABELS[work.status] || work.status;
   const kind = KIND_LABELS[work.kind] || work.kind;
   const detail = work.status_detail ? ` — ${work.status_detail}` : "";
   const link = work.primary_url ? ` → ${work.primary_url}` : "";
   const review = work.needs_review ? " *(compiled record — needs administrator verification)*" : "";
-  const line = `- **${work.name}** (${kind} · ${status}${detail}). ${work.tagline || work.summary || ""}${link}${review}`;
-  if (!db) return line;
-  const relationships = listRelationshipsForWork(db, work.id);
-  const relations = relationSummary(relationships);
-  return relations ? `${line}\n  Related: ${relations}.` : line;
+  return `- **${work.name}** (${kind} · ${status}${detail}). ${work.tagline || work.summary || ""}${link}${review}`;
 }
 
-function rankWorks(works, question) {
+export function rankWorks(works, question) {
   const words = normalize(question).split(/[^a-z0-9]+/).filter((word) => word.length > 2);
   const statusFilter = inferStatusFilter(question);
   const kindFilter = inferKindFilter(question);
@@ -86,18 +82,26 @@ function rankWorks(works, question) {
     .map(({ work }) => work);
 }
 
-function findDirectMatch(works, question) {
+export function findDirectMatch(works, question) {
   const text = normalize(question);
-  return works.find((work) => text.includes(normalize(work.name)) || text.includes(normalize(work.slug))) || null;
+  const candidates = works.filter((work) => text.includes(normalize(work.name)) || text.includes(normalize(work.slug)));
+  if (!candidates.length) return null;
+  // Prefer the most specific match — e.g. "FlintBill Socratic Tutor" over "FlintBill" —
+  // by picking whichever candidate's matched name/slug is longest.
+  return candidates.reduce((best, work) => {
+    const length = Math.max(normalize(work.name).length, normalize(work.slug).length);
+    const bestLength = Math.max(normalize(best.name).length, normalize(best.slug).length);
+    return length > bestLength ? work : best;
+  });
 }
 
-function article(word) {
+export function article(word) {
   return /^[aeiou]/i.test(word) ? "an" : "a";
 }
 
-function buildDirectAnswer({ db, work, guideName }) {
-  const relationships = listRelationshipsForWork(db, work.id);
-  const timeline = listTimelineForWork(db, work.id);
+async function buildDirectAnswer({ db, work, guideName }) {
+  const relationships = await listRelationshipsForWork(db, work.id);
+  const timeline = await listTimelineForWork(db, work.id);
   const status = STATUS_LABELS[work.status] || work.status;
   const kind = KIND_LABELS[work.kind] || work.kind;
   const parts = [
@@ -169,12 +173,12 @@ export async function askJackRabbit({ db, question, guideName = "Jack Rabbit" })
   const cleanQuestion = String(question || "").trim();
   if (!cleanQuestion) throw new Error("Ask Jack Rabbit a question about the catalog first.");
   if (cleanQuestion.length > 600) throw new Error("Please keep questions to 600 characters or fewer.");
-  const allWorks = listWorks(db, { includeUnpublished: false, limit: 500 });
+  const allWorks = await listWorks(db, { includeUnpublished: false, limit: 500 });
 
   const direct = findDirectMatch(allWorks, cleanQuestion);
   if (direct) {
     return {
-      answer: buildDirectAnswer({ db, work: direct, guideName }),
+      answer: await buildDirectAnswer({ db, work: direct, guideName }),
       matches: [direct],
       provider: "offline",
     };

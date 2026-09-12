@@ -34,8 +34,6 @@ import { askJackRabbit } from "./assistant.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const db = openDatabase();
-const seedResult = seedDatabase(db);
 const port = Number(process.env.PORT || 3000);
 const isProduction = process.env.NODE_ENV === "production";
 const adminPassword = process.env.ADMIN_PASSWORD || (isProduction ? "" : "keyosx-local-admin");
@@ -47,7 +45,6 @@ if (!adminPassword || !sessionSecret) {
 if (!process.env.ADMIN_PASSWORD) {
   console.warn("[KeyOSX] Development administrator password is active. Set ADMIN_PASSWORD before public deployment.");
 }
-if (seedResult.seeded) console.log("[KeyOSX] Catalog seeded:", seedResult);
 
 app.disable("x-powered-by");
 app.use(express.json({ limit: "1mb" }));
@@ -97,174 +94,192 @@ function sendError(res, error, status = 400) {
   res.status(status).json({ error: message });
 }
 
-function databaseExport() {
+function asyncRoute(handler) {
+  return (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
+}
+
+async function databaseExport(db) {
   return {
     exportVersion: 1,
     exportedAt: new Date().toISOString(),
-    summary: getDatabaseSummary(db),
-    settings: getSettings(db),
-    works: listWorks(db, { includeUnpublished: true, limit: 1000 }),
-    artifacts: listArtifacts(db, { includeUnpublished: true }),
-    relationships: listRelationships(db),
-    timeline: listTimeline(db, { limit: 500 }),
+    summary: await getDatabaseSummary(db),
+    settings: await getSettings(db),
+    works: await listWorks(db, { includeUnpublished: true, limit: 1000 }),
+    artifacts: await listArtifacts(db, { includeUnpublished: true }),
+    relationships: await listRelationships(db),
+    timeline: await listTimeline(db, { limit: 500 }),
   };
 }
 
-app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, service: "KeyOSX", summary: getDatabaseSummary(db) });
-});
+async function main() {
+  const db = await openDatabase();
+  const seedResult = await seedDatabase(db);
+  if (seedResult.seeded) console.log("[KeyOSX] Catalog seeded:", seedResult);
 
-app.get("/api/config", (_req, res) => {
-  const settings = getSettings(db);
-  res.json({
-    brandName: settings.brandName || "KeyOSX",
-    brandTagline: settings.brandTagline || "The master living kiosk for every work Joe has built, is building, or is planning.",
-    guideName: settings.guideName || "Jack Rabbit",
-    kinds: WORK_KINDS,
-    statuses: WORK_STATUSES,
-    counts: (() => {
-      const all = listWorks(db, { includeUnpublished: false, limit: 1000 });
-      return {
+  app.get("/api/health", asyncRoute(async (_req, res) => {
+    res.json({ ok: true, service: "KeyOSX", summary: await getDatabaseSummary(db) });
+  }));
+
+  app.get("/api/config", asyncRoute(async (_req, res) => {
+    const settings = await getSettings(db);
+    const all = await listWorks(db, { includeUnpublished: false, limit: 1000 });
+    res.json({
+      brandName: settings.brandName || "KeyOSX",
+      brandTagline: settings.brandTagline || "The master living kiosk for every work Joe has built, is building, or is planning.",
+      guideName: settings.guideName || "Jack Rabbit",
+      kinds: WORK_KINDS,
+      statuses: WORK_STATUSES,
+      counts: {
         total: all.length,
         old: all.filter((work) => work.status === "old").length,
         current: all.filter((work) => work.status === "current").length,
         future: all.filter((work) => work.status === "future").length,
-      };
-    })(),
+      },
+    });
+  }));
+
+  app.get("/api/works", asyncRoute(async (req, res) => {
+    const kind = WORK_KINDS.includes(String(req.query.kind)) ? String(req.query.kind) : undefined;
+    const status = WORK_STATUSES.includes(String(req.query.status)) ? String(req.query.status) : undefined;
+    const search = String(req.query.q || "").trim() || undefined;
+    res.json({ works: await listWorks(db, { kind, status, search, includeUnpublished: false, limit: 500 }) });
+  }));
+
+  app.get("/api/works/:id", asyncRoute(async (req, res) => {
+    const detail = await getWorkDetail(db, Number(req.params.id));
+    if (!detail || detail.work.visibility !== "published") return res.status(404).json({ error: "That work is not available." });
+    detail.artifacts = detail.artifacts.filter((artifact) => artifact.status === "published");
+    res.json(detail);
+  }));
+
+  app.post("/api/assistant", asyncRoute(async (req, res) => {
+    try {
+      const settings = await getSettings(db);
+      const result = await askJackRabbit({ db, question: req.body?.message, guideName: settings.guideName || "Jack Rabbit" });
+      res.json(result);
+    } catch (error) {
+      sendError(res, error);
+    }
+  }));
+
+  app.get("/api/admin/session", (req, res) => {
+    res.json({ authenticated: isAdmin(req) });
   });
-});
 
-app.get("/api/works", (req, res) => {
-  const kind = WORK_KINDS.includes(String(req.query.kind)) ? String(req.query.kind) : undefined;
-  const status = WORK_STATUSES.includes(String(req.query.status)) ? String(req.query.status) : undefined;
-  const search = String(req.query.q || "").trim() || undefined;
-  res.json({ works: listWorks(db, { kind, status, search, includeUnpublished: false, limit: 500 }) });
-});
+  app.post("/api/admin/login", (req, res) => {
+    const candidate = String(req.body?.password || "");
+    const actual = Buffer.from(adminPassword);
+    const submitted = Buffer.from(candidate);
+    const matches = actual.length === submitted.length && crypto.timingSafeEqual(actual, submitted);
+    if (!matches) return res.status(401).json({ error: "Incorrect administrator password." });
+    res.setHeader("Set-Cookie", `keyosx_admin=${createSession()}; HttpOnly; SameSite=Strict; Path=/; Max-Age=43200${isProduction ? "; Secure" : ""}`);
+    res.json({ authenticated: true });
+  });
 
-app.get("/api/works/:id", (req, res) => {
-  const detail = getWorkDetail(db, Number(req.params.id));
-  if (!detail || detail.work.visibility !== "published") return res.status(404).json({ error: "That work is not available." });
-  detail.artifacts = detail.artifacts.filter((artifact) => artifact.status === "published");
-  res.json(detail);
-});
+  app.post("/api/admin/logout", (_req, res) => {
+    res.setHeader("Set-Cookie", "keyosx_admin=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0");
+    res.json({ authenticated: false });
+  });
 
-app.post("/api/assistant", async (req, res) => {
-  try {
-    const settings = getSettings(db);
-    const result = await askJackRabbit({ db, question: req.body?.message, guideName: settings.guideName || "Jack Rabbit" });
-    res.json(result);
-  } catch (error) {
-    sendError(res, error);
+  app.get("/api/admin/bootstrap", requireAdmin, asyncRoute(async (_req, res) => {
+    res.json({
+      settings: await getSettings(db),
+      works: await listWorks(db, { includeUnpublished: true, limit: 1000 }),
+      artifacts: await listArtifacts(db, { includeUnpublished: true }),
+      relationships: await listRelationships(db),
+      timeline: await listTimeline(db, { limit: 500 }),
+    });
+  }));
+
+  app.get("/api/admin/export", requireAdmin, asyncRoute(async (_req, res) => {
+    res.setHeader("Content-Disposition", `attachment; filename=keyosx-backup-${new Date().toISOString().slice(0, 10)}.json`);
+    res.type("application/json").send(JSON.stringify(await databaseExport(db), null, 2));
+  }));
+
+  app.post("/api/admin/works", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      res.status(201).json({ work: await createWork(db, req.body || {}) });
+    } catch (error) { sendError(res, error); }
+  }));
+
+  app.put("/api/admin/works/:id", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      const current = await getWork(db, Number(req.params.id));
+      if (!current) return res.status(404).json({ error: "Work not found." });
+      res.json({ work: await updateWork(db, current.id, req.body || {}) });
+    } catch (error) { sendError(res, error); }
+  }));
+
+  app.delete("/api/admin/works/:id", requireAdmin, asyncRoute(async (req, res) => {
+    if (!(await deleteWork(db, Number(req.params.id)))) return res.status(404).json({ error: "Work not found." });
+    res.json({ deleted: true });
+  }));
+
+  app.post("/api/admin/artifacts", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      res.status(201).json({ artifact: await createArtifact(db, req.body || {}) });
+    } catch (error) { sendError(res, error); }
+  }));
+
+  app.put("/api/admin/artifacts/:id", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      const current = await getArtifact(db, Number(req.params.id));
+      if (!current) return res.status(404).json({ error: "Artifact not found." });
+      res.json({ artifact: await updateArtifact(db, current.id, req.body || {}) });
+    } catch (error) { sendError(res, error); }
+  }));
+
+  app.delete("/api/admin/artifacts/:id", requireAdmin, asyncRoute(async (req, res) => {
+    if (!(await deleteArtifact(db, Number(req.params.id)))) return res.status(404).json({ error: "Artifact not found." });
+    res.json({ deleted: true });
+  }));
+
+  app.post("/api/admin/relationships", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      res.status(201).json({ relationship: await createRelationship(db, req.body || {}) });
+    } catch (error) { sendError(res, error); }
+  }));
+
+  app.delete("/api/admin/relationships/:id", requireAdmin, asyncRoute(async (req, res) => {
+    if (!(await deleteRelationship(db, Number(req.params.id)))) return res.status(404).json({ error: "Relationship not found." });
+    res.json({ deleted: true });
+  }));
+
+  app.post("/api/admin/timeline", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      res.status(201).json({ event: await createTimelineEvent(db, req.body || {}) });
+    } catch (error) { sendError(res, error); }
+  }));
+
+  app.delete("/api/admin/timeline/:id", requireAdmin, asyncRoute(async (req, res) => {
+    if (!(await deleteTimelineEvent(db, Number(req.params.id)))) return res.status(404).json({ error: "Timeline event not found." });
+    res.json({ deleted: true });
+  }));
+
+  app.get("/api/admin/meta", requireAdmin, (_req, res) => {
+    res.json({ artifactTypes: ARTIFACT_TYPES, relationTypes: RELATION_TYPES, timelineEventTypes: TIMELINE_EVENT_TYPES, kinds: WORK_KINDS, statuses: WORK_STATUSES });
+  });
+
+  app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
+
+  // eslint-disable-next-line no-unused-vars
+  app.use((error, _req, res, _next) => {
+    console.error("[KeyOSX] Unhandled request error:", error);
+    res.status(500).json({ error: "An unexpected error occurred." });
+  });
+
+  app.listen(port, () => {
+    console.log(`[KeyOSX] Living kiosk listening on http://localhost:${port}`);
+  });
+
+  function closeGracefully() {
+    db.end().finally(() => process.exit(0));
   }
-});
-
-app.get("/api/admin/session", (req, res) => {
-  res.json({ authenticated: isAdmin(req) });
-});
-
-app.post("/api/admin/login", (req, res) => {
-  const candidate = String(req.body?.password || "");
-  const actual = Buffer.from(adminPassword);
-  const submitted = Buffer.from(candidate);
-  const matches = actual.length === submitted.length && crypto.timingSafeEqual(actual, submitted);
-  if (!matches) return res.status(401).json({ error: "Incorrect administrator password." });
-  res.setHeader("Set-Cookie", `keyosx_admin=${createSession()}; HttpOnly; SameSite=Strict; Path=/; Max-Age=43200${isProduction ? "; Secure" : ""}`);
-  res.json({ authenticated: true });
-});
-
-app.post("/api/admin/logout", (_req, res) => {
-  res.setHeader("Set-Cookie", "keyosx_admin=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0");
-  res.json({ authenticated: false });
-});
-
-app.get("/api/admin/bootstrap", requireAdmin, (_req, res) => {
-  res.json({
-    settings: getSettings(db),
-    works: listWorks(db, { includeUnpublished: true, limit: 1000 }),
-    artifacts: listArtifacts(db, { includeUnpublished: true }),
-    relationships: listRelationships(db),
-    timeline: listTimeline(db, { limit: 500 }),
-  });
-});
-
-app.get("/api/admin/export", requireAdmin, (_req, res) => {
-  res.setHeader("Content-Disposition", `attachment; filename=keyosx-backup-${new Date().toISOString().slice(0, 10)}.json`);
-  res.type("application/json").send(JSON.stringify(databaseExport(), null, 2));
-});
-
-app.post("/api/admin/works", requireAdmin, (req, res) => {
-  try {
-    res.status(201).json({ work: createWork(db, req.body || {}) });
-  } catch (error) { sendError(res, error); }
-});
-
-app.put("/api/admin/works/:id", requireAdmin, (req, res) => {
-  try {
-    const current = getWork(db, Number(req.params.id));
-    if (!current) return res.status(404).json({ error: "Work not found." });
-    res.json({ work: updateWork(db, current.id, req.body || {}) });
-  } catch (error) { sendError(res, error); }
-});
-
-app.delete("/api/admin/works/:id", requireAdmin, (req, res) => {
-  if (!deleteWork(db, Number(req.params.id))) return res.status(404).json({ error: "Work not found." });
-  res.json({ deleted: true });
-});
-
-app.post("/api/admin/artifacts", requireAdmin, (req, res) => {
-  try {
-    res.status(201).json({ artifact: createArtifact(db, req.body || {}) });
-  } catch (error) { sendError(res, error); }
-});
-
-app.put("/api/admin/artifacts/:id", requireAdmin, (req, res) => {
-  try {
-    const current = getArtifact(db, Number(req.params.id));
-    if (!current) return res.status(404).json({ error: "Artifact not found." });
-    res.json({ artifact: updateArtifact(db, current.id, req.body || {}) });
-  } catch (error) { sendError(res, error); }
-});
-
-app.delete("/api/admin/artifacts/:id", requireAdmin, (req, res) => {
-  if (!deleteArtifact(db, Number(req.params.id))) return res.status(404).json({ error: "Artifact not found." });
-  res.json({ deleted: true });
-});
-
-app.post("/api/admin/relationships", requireAdmin, (req, res) => {
-  try {
-    res.status(201).json({ relationship: createRelationship(db, req.body || {}) });
-  } catch (error) { sendError(res, error); }
-});
-
-app.delete("/api/admin/relationships/:id", requireAdmin, (req, res) => {
-  if (!deleteRelationship(db, Number(req.params.id))) return res.status(404).json({ error: "Relationship not found." });
-  res.json({ deleted: true });
-});
-
-app.post("/api/admin/timeline", requireAdmin, (req, res) => {
-  try {
-    res.status(201).json({ event: createTimelineEvent(db, req.body || {}) });
-  } catch (error) { sendError(res, error); }
-});
-
-app.delete("/api/admin/timeline/:id", requireAdmin, (req, res) => {
-  if (!deleteTimelineEvent(db, Number(req.params.id))) return res.status(404).json({ error: "Timeline event not found." });
-  res.json({ deleted: true });
-});
-
-app.get("/api/admin/meta", requireAdmin, (_req, res) => {
-  res.json({ artifactTypes: ARTIFACT_TYPES, relationTypes: RELATION_TYPES, timelineEventTypes: TIMELINE_EVENT_TYPES, kinds: WORK_KINDS, statuses: WORK_STATUSES });
-});
-
-app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
-
-app.listen(port, () => {
-  console.log(`[KeyOSX] Living kiosk listening on http://localhost:${port}`);
-});
-
-function closeGracefully() {
-  try { db.close(); } catch { /* already closed */ }
-  process.exit(0);
+  process.on("SIGINT", closeGracefully);
+  process.on("SIGTERM", closeGracefully);
 }
-process.on("SIGINT", closeGracefully);
-process.on("SIGTERM", closeGracefully);
+
+main().catch((error) => {
+  console.error("[KeyOSX] Failed to start:", error);
+  process.exit(1);
+});
