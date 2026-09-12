@@ -1876,6 +1876,126 @@
       "reference_label": "Codex, June 25, 2026",
       "status": "published",
       "needs_review": true
+    },
+    {
+      "workSlug": "carcassonne-concierge",
+      "artifact_type": "document",
+      "title": "ChateauAragon Proposal (final)",
+      "description": "A client property proposal document found in the local file audit. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "carcassonne-concierge",
+      "artifact_type": "document",
+      "title": "MASTER_STATUS",
+      "description": "A project status-tracking document from the Carcassonne Concierge app's own repository. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "carcassonne-concierge",
+      "artifact_type": "document",
+      "title": "DECISIONS",
+      "description": "A decisions log from the Carcassonne Concierge app's own repository. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "carcassonne-concierge",
+      "artifact_type": "spec",
+      "title": "ARCHITECTURE",
+      "description": "An architecture document from the Carcassonne Concierge app's own repository. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "carcassonne-concierge",
+      "artifact_type": "document",
+      "title": "PRODUCTION RUNBOOK",
+      "description": "An operational runbook from the Carcassonne Concierge app's own repository. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "joe-3000",
+      "artifact_type": "document",
+      "title": "GAEM Master Context",
+      "description": "A GAEM context/reference document found under the Joe 3000 persona's material. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "irefs",
+      "artifact_type": "document",
+      "title": "Italian Real Estate Almanac — Complete Technical Inventory",
+      "description": "A technical inventory document for the Italian Real Estate Almanac implementation. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "joe-troubadour",
+      "artifact_type": "spec",
+      "title": "The Joe Troubadour Almanac — Master System Architecture",
+      "description": "A system architecture document apparently describing an Almanac instance built under the Joe Troubadour brand. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "homelink-services",
+      "artifact_type": "spec",
+      "title": "HomeLink.Services Complete Business Plan",
+      "description": "A business plan document for HomeLink Services. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "homelink-services",
+      "artifact_type": "document",
+      "title": "HomeLink Services — Complete Replit Deployment Guide",
+      "description": "A Replit deployment guide for HomeLink Services. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "homelink-services",
+      "artifact_type": "document",
+      "title": "Complete Renters Guide Checklist",
+      "description": "A renters-guide checklist document, brand match uncertain between HomeLink Services and Florida Renter's Guide. Identified by Codex's automated local file-system audit; brand attribution and relevance are unverified.",
+      "url": "",
+      "reference_label": "Codex local file audit, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
+    },
+    {
+      "workSlug": "keyosx",
+      "artifact_type": "dataset",
+      "title": "Codex local file-system audit manifest",
+      "description": "A 10,776-row manifest (CSV/JSONL) covering 8,097 Downloads records, 2,624 Codex/project records, and 55 OneDrive top-level folders, each tagged with a best-guess Brand ID from the Joe Central Asset Hub registry: 3,695 high-confidence matches, 197 medium, 1,029 low, 5,855 unmatched; 2,671 flagged as likely duplicates. Quality caveat: most 'final' or 'high-confidence' rows are internal implementation files (individual source files, git history, test fixtures) rather than standalone documents — only a small hand-picked subset was promoted into the catalog as artifacts. The full manifest is the intended foundation for the proposed 'Jackrabbit, chase this idea' local search workflow, not a finished artifact set on its own.",
+      "url": "",
+      "reference_label": "keyosx-artifact-manifest.csv / .jsonl, 2026-09-12",
+      "status": "draft",
+      "needs_review": true
     }
   ],
   "relationships": [
