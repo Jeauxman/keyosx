@@ -8,6 +8,7 @@ import {
   TIMELINE_EVENT_TYPES,
   WORK_KINDS,
   WORK_STATUSES,
+  WORK_VISIBILITIES,
   createArtifact,
   createRelationship,
   createTimelineEvent,
@@ -28,6 +29,7 @@ import {
   openDatabase,
   seedDatabase,
   updateArtifact,
+  updateRelationship,
   updateWork,
 } from "./db.mjs";
 import { askJackRabbit } from "./assistant.mjs";
@@ -160,6 +162,7 @@ async function main() {
     const detail = await getWorkDetail(db, Number(req.params.id));
     if (!detail || detail.work.visibility !== "published") return res.status(404).json({ error: "That work is not available." });
     detail.artifacts = detail.artifacts.filter((artifact) => artifact.status === "published");
+    detail.relationships = detail.relationships.filter((relationship) => relationship.status === "published");
     res.json(detail);
   }));
 
@@ -251,6 +254,14 @@ async function main() {
     } catch (error) { sendError(res, error); }
   }));
 
+  app.put("/api/admin/relationships/:id", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      const relationship = await updateRelationship(db, Number(req.params.id), req.body || {});
+      if (!relationship) return res.status(404).json({ error: "Relationship not found." });
+      res.json({ relationship });
+    } catch (error) { sendError(res, error); }
+  }));
+
   app.delete("/api/admin/relationships/:id", requireAdmin, asyncRoute(async (req, res) => {
     if (!(await deleteRelationship(db, Number(req.params.id)))) return res.status(404).json({ error: "Relationship not found." });
     res.json({ deleted: true });
@@ -275,7 +286,7 @@ async function main() {
   }));
 
   app.get("/api/admin/meta", requireAdmin, (_req, res) => {
-    res.json({ artifactTypes: ARTIFACT_TYPES, relationTypes: RELATION_TYPES, timelineEventTypes: TIMELINE_EVENT_TYPES, kinds: WORK_KINDS, statuses: WORK_STATUSES });
+    res.json({ artifactTypes: ARTIFACT_TYPES, relationTypes: RELATION_TYPES, timelineEventTypes: TIMELINE_EVENT_TYPES, kinds: WORK_KINDS, statuses: WORK_STATUSES, visibilities: WORK_VISIBILITIES });
   });
 
   app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));

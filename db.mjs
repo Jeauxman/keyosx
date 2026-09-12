@@ -101,6 +101,9 @@ const SCHEMA_STATEMENTS = [
     to_work_id INT NOT NULL,
     relation_type ENUM('module_of','part_of_catalog','powered_by','sibling_of','successor_of','predecessor_of','depends_on','inspired','licenses_to','distinct_from') NOT NULL,
     note VARCHAR(500) NOT NULL DEFAULT '',
+    evidence_note VARCHAR(500) NOT NULL DEFAULT '',
+    status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
+    needs_review TINYINT(1) NOT NULL DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_relationships_from FOREIGN KEY (from_work_id) REFERENCES works(id) ON DELETE CASCADE,
@@ -128,6 +131,15 @@ const CHARSET_FIX_STATEMENTS = [
   "ALTER TABLE artifacts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
   "ALTER TABLE relationships CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
   "ALTER TABLE timeline_events CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
+];
+
+// Columns added after the relationships table already existed on the live database.
+// CREATE TABLE IF NOT EXISTS won't retrofit them, so add them explicitly, ignoring
+// "column already exists" so this is safe to re-run on every startup.
+const COLUMN_MIGRATIONS = [
+  "ALTER TABLE relationships ADD COLUMN evidence_note VARCHAR(500) NOT NULL DEFAULT ''",
+  "ALTER TABLE relationships ADD COLUMN status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft'",
+  "ALTER TABLE relationships ADD COLUMN needs_review TINYINT(1) NOT NULL DEFAULT 0",
 ];
 
 const INDEX_STATEMENTS = [
@@ -159,6 +171,13 @@ export async function openDatabase(config = {}) {
   }
   for (const statement of CHARSET_FIX_STATEMENTS) {
     await pool.query(statement);
+  }
+  for (const statement of COLUMN_MIGRATIONS) {
+    try {
+      await pool.query(statement);
+    } catch (error) {
+      if (error.code !== "ER_DUP_FIELDNAME") throw error;
+    }
   }
   for (const statement of INDEX_STATEMENTS) {
     try {
@@ -379,31 +398,55 @@ export async function listArtifacts(db, { workId, includeUnpublished = false } =
 
 // ---------- Relationships ----------
 
+function relationshipFromRow(row) {
+  if (!row) return null;
+  return { ...row, needs_review: Boolean(row.needs_review) };
+}
+
 export async function normalizeRelationshipInput(db, input) {
   const fromWorkId = Number(input.from_work_id || input.fromWorkId);
   const toWorkId = Number(input.to_work_id || input.toWorkId);
   const relationType = String(input.relation_type || input.relationType || "").trim();
+  const status = String(input.status || "draft").trim();
   if (!Number.isInteger(fromWorkId) || !(await getWork(db, fromWorkId))) throw new Error("A valid source work is required.");
   if (!Number.isInteger(toWorkId) || !(await getWork(db, toWorkId))) throw new Error("A valid target work is required.");
   if (fromWorkId === toWorkId) throw new Error("A work cannot relate to itself.");
   if (!RELATION_TYPES.includes(relationType)) throw new Error("Select a valid relationship type.");
+  if (!WORK_VISIBILITIES.includes(status)) throw new Error("Select a valid relationship status.");
   return {
     from_work_id: fromWorkId,
     to_work_id: toWorkId,
     relation_type: relationType,
     note: String(input.note || "").trim(),
+    evidence_note: String(input.evidence_note || input.evidenceNote || "").trim(),
+    status,
+    needs_review: input.needs_review === true || input.needsReview === true || input.needs_review === "true" || input.needs_review === 1 ? 1 : 0,
   };
 }
 
 export async function createRelationship(db, input) {
-  const relationship = await normalizeRelationshipInput(db, input);
+  // New relationships default to draft (admin-only) unless the caller explicitly marks
+  // them published — a reviewed edge should be a deliberate act, not the default.
+  const relationship = await normalizeRelationshipInput(db, { status: "draft", ...input });
   const [result] = await db.execute(
-    `INSERT INTO relationships (from_work_id, to_work_id, relation_type, note, updated_at)
-     VALUES (:from_work_id, :to_work_id, :relation_type, :note, :updated_at)`,
+    `INSERT INTO relationships (from_work_id, to_work_id, relation_type, note, evidence_note, status, needs_review, updated_at)
+     VALUES (:from_work_id, :to_work_id, :relation_type, :note, :evidence_note, :status, :needs_review, :updated_at)`,
     { ...relationship, updated_at: now() }
   );
   const [rows] = await db.execute("SELECT * FROM relationships WHERE id = :id", { id: result.insertId });
-  return rows[0];
+  return relationshipFromRow(rows[0]);
+}
+
+export async function updateRelationship(db, id, input) {
+  const relationship = await normalizeRelationshipInput(db, input);
+  await db.execute(
+    `UPDATE relationships SET from_work_id = :from_work_id, to_work_id = :to_work_id, relation_type = :relation_type,
+      note = :note, evidence_note = :evidence_note, status = :status, needs_review = :needs_review, updated_at = :updated_at
+     WHERE id = :id`,
+    { ...relationship, id, updated_at: now() }
+  );
+  const [rows] = await db.execute("SELECT * FROM relationships WHERE id = :id", { id });
+  return relationshipFromRow(rows[0]);
 }
 
 export async function deleteRelationship(db, id) {
@@ -411,27 +454,30 @@ export async function deleteRelationship(db, id) {
   return result.affectedRows > 0;
 }
 
-export async function listRelationshipsForWork(db, workId) {
+export async function listRelationshipsForWork(db, workId, { includeUnpublished = false } = {}) {
+  const statusClause = includeUnpublished ? "" : "AND r.status = 'published'";
   const [outgoing] = await db.execute(
     `SELECT r.*, w.name AS other_name, w.slug AS other_slug, w.status AS other_status, w.kind AS other_kind, 'outgoing' AS direction
-     FROM relationships r JOIN works w ON w.id = r.to_work_id WHERE r.from_work_id = :workId`,
+     FROM relationships r JOIN works w ON w.id = r.to_work_id WHERE r.from_work_id = :workId ${statusClause}`,
     { workId }
   );
   const [incoming] = await db.execute(
     `SELECT r.*, w.name AS other_name, w.slug AS other_slug, w.status AS other_status, w.kind AS other_kind, 'incoming' AS direction
-     FROM relationships r JOIN works w ON w.id = r.from_work_id WHERE r.to_work_id = :workId`,
+     FROM relationships r JOIN works w ON w.id = r.from_work_id WHERE r.to_work_id = :workId ${statusClause}`,
     { workId }
   );
-  return [...outgoing, ...incoming];
+  return [...outgoing, ...incoming].map(relationshipFromRow);
 }
 
-export async function listRelationships(db) {
+export async function listRelationships(db, { includeUnpublished = true } = {}) {
+  const statusClause = includeUnpublished ? "" : "WHERE r.status = 'published'";
   const [rows] = await db.query(
     `SELECT r.*, fw.name AS from_name, tw.name AS to_name
      FROM relationships r JOIN works fw ON fw.id = r.from_work_id JOIN works tw ON tw.id = r.to_work_id
+     ${statusClause}
      ORDER BY fw.name`
   );
-  return rows;
+  return rows.map(relationshipFromRow);
 }
 
 // ---------- Timeline ----------
@@ -494,7 +540,7 @@ export async function getWorkDetail(db, id) {
     work,
     artifacts: await listArtifacts(db, { workId: id, includeUnpublished: true }),
     timeline: await listTimelineForWork(db, id),
-    relationships: await listRelationshipsForWork(db, id),
+    relationships: await listRelationshipsForWork(db, id, { includeUnpublished: true }),
   };
 }
 
@@ -546,13 +592,19 @@ export async function seedDatabase(db, { force = false } = {}) {
     }
     for (const relationship of seed.relationships || []) {
       await connection.execute(
-        `INSERT INTO relationships (from_work_id, to_work_id, relation_type, note, updated_at)
-         VALUES (:from_work_id, :to_work_id, :relation_type, :note, :updated_at)`,
+        `INSERT INTO relationships (from_work_id, to_work_id, relation_type, note, evidence_note, status, needs_review, updated_at)
+         VALUES (:from_work_id, :to_work_id, :relation_type, :note, :evidence_note, :status, :needs_review, :updated_at)`,
         {
           from_work_id: workIds.get(relationship.fromSlug),
           to_work_id: workIds.get(relationship.toSlug),
           relation_type: relationship.relationType,
           note: String(relationship.note || "").trim(),
+          evidence_note: String(relationship.evidenceNote || "").trim(),
+          // Existing hand-curated relationships (no explicit status in the seed file) were
+          // already reviewed when authored — default them published. New evidence-derived
+          // edges must explicitly opt into "published"; the default is draft/admin-only.
+          status: relationship.status || "published",
+          needs_review: relationship.needsReview ? 1 : 0,
           updated_at: now(),
         }
       );

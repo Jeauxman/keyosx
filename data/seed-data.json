@@ -2370,6 +2370,87 @@
       "toSlug": "automation-foundation",
       "relationType": "depends_on",
       "note": "Approved finds would still hand off through Automation Foundation, not a new bespoke backend."
+    },
+    {
+      "fromSlug": "ask-joe",
+      "toSlug": "4thishouse",
+      "relationType": "module_of",
+      "note": "A Q&A/lead tool for 4ThisHouse.",
+      "evidenceNote": "Domain askjoe.4thishouse.com is a subdomain of 4thishouse.com.",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "travel-buddy",
+      "toSlug": "basil-leaf-chronicles",
+      "relationType": "module_of",
+      "note": "A travel companion tool for Basil Leaf Chronicles.",
+      "evidenceNote": "Domain travelbuddy.basilleafchronicles.com is a subdomain of basilleafchronicles.com.",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "chef-buddy",
+      "toSlug": "basil-leaf-chronicles",
+      "relationType": "module_of",
+      "note": "A culinary companion tool for Basil Leaf Chronicles.",
+      "evidenceNote": "Domain chefbuddy.basilleafchronicles.com is a subdomain of basilleafchronicles.com.",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "builder-buddy",
+      "toSlug": "global-builders-and-supply",
+      "relationType": "module_of",
+      "note": "A builder tool for Global Builders and Supply.",
+      "evidenceNote": "Domain builderbuddy.globalbuildersandsupply.com is a subdomain of globalbuildersandsupply.com.",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "life-buddy",
+      "toSlug": "thyme-for-change",
+      "relationType": "module_of",
+      "note": "A coaching companion app for Thyme for Change.",
+      "evidenceNote": "Domain lifebuddy.thymeforchange.com is a subdomain of thymeforchange.com.",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "snapbrat",
+      "toSlug": "joe-business",
+      "relationType": "module_of",
+      "note": "A Joe.Business utility app.",
+      "evidenceNote": "Domain snapbrat.joe.business is a subdomain of joe.business.",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "teambuilder-pro",
+      "toSlug": "joe-solutions",
+      "relationType": "module_of",
+      "note": "Leadership/coaching program powered by Joe.Solutions.",
+      "evidenceNote": "Domain teambuilderpro.joe.solutions is a subdomain of joe.solutions; Brand Registry notes say 'confirmed via YouTube: powered by Joe.Solutions & Joe.Business.'",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "medclub-pro",
+      "toSlug": "joe-solutions",
+      "relationType": "module_of",
+      "note": "Health/membership program powered by Joe.Solutions.",
+      "evidenceNote": "Domain medclubpro.joe.solutions is a subdomain of joe.solutions.",
+      "status": "draft",
+      "needsReview": false
+    },
+    {
+      "fromSlug": "carcassonne-studios",
+      "toSlug": "black-mountain-productions",
+      "relationType": "part_of_catalog",
+      "note": "A France-based production/content entity, hypothesized to sit under Black Mountain Productions' studio banner.",
+      "evidenceNote": "Brand Registry (BR-049) describes Black Mountain Productions as a 'Studio banner above all content brands' but does not itemize which brands that covers.",
+      "status": "draft",
+      "needsReview": true
     }
   ],
   "timeline": [

@@ -369,13 +369,15 @@ function relationshipsTabContent() {
     <label class="full"><span class="field-label">Related work (this work → related work)</span><select name="to_work_id" required>${workOptions}</select></label>
     <label><span class="field-label">Relation type</span><select name="relation_type">${relationOptions}</select></label>
     <label class="full"><span class="field-label">Note</span><input name="note"></label>
-    <div class="full form-actions"><button class="button button-primary" type="submit">Add relationship</button></div>
+    <label class="full"><span class="field-label">Evidence (why you believe this — cite the source)</span><input name="evidence_note" placeholder="e.g. subdomain askjoe.4thishouse.com"></label>
+    <div class="full form-actions"><button class="button button-primary" type="submit">Add relationship (as draft)</button></div>
   </form>
   <div class="row-list">${items.map((r) => {
     const outgoing = Number(r.from_work_id) === Number(state.manageWorkId);
     const otherName = outgoing ? r.to_name : r.from_name;
     const label = outgoing ? `${r.relation_type} → ${otherName}` : `${otherName} ${r.relation_type} → this work`;
-    return `<div class="row-item"><span>${escapeHtml(label)}${r.note ? ` — ${escapeHtml(r.note)}` : ""}</span><button class="button button-danger" data-delete-relationship="${r.id}">Delete</button></div>`;
+    const badges = `${statusPill(r.status === "published" ? "current" : r.status === "draft" ? "future" : "old")}${r.needs_review ? ' <span class="badge badge-sample">Needs review</span>' : ""}`;
+    return `<div class="row-item"><span>${badges} <strong>${escapeHtml(label)}</strong>${r.note ? ` — ${escapeHtml(r.note)}` : ""}${r.evidence_note ? `<br><small>Evidence: ${escapeHtml(r.evidence_note)}</small>` : ""}</span><span style="display:flex;gap:6px;flex-shrink:0">${r.status === "published" ? `<button class="button button-secondary" data-unpublish-relationship="${r.id}">Unpublish</button>` : `<button class="button button-primary" data-publish-relationship="${r.id}">Publish</button>`}<button class="button button-danger" data-delete-relationship="${r.id}">Delete</button></span></div>`;
   }).join("") || '<p style="color:var(--muted)">No relationships yet.</p>'}</div>`;
 }
 
@@ -417,8 +419,8 @@ function bindManageEvents(backdrop) {
     event.preventDefault();
     try {
       const payload = formDataObject(event.currentTarget);
-      await api("/api/admin/relationships", { method: "POST", body: JSON.stringify({ from_work_id: state.manageWorkId, to_work_id: payload.to_work_id, relation_type: payload.relation_type, note: payload.note }) });
-      await refresh(); showToast("Relationship added.");
+      await api("/api/admin/relationships", { method: "POST", body: JSON.stringify({ from_work_id: state.manageWorkId, to_work_id: payload.to_work_id, relation_type: payload.relation_type, note: payload.note, evidence_note: payload.evidence_note }) });
+      await refresh(); showToast("Relationship added as draft — publish it once reviewed.");
     } catch (error) { showToast(error.message, true); }
   });
   const timelineForm = backdrop.querySelector("#add-timeline-form");
@@ -437,6 +439,16 @@ function bindManageEvents(backdrop) {
     if (!window.confirm("Delete this relationship?")) return;
     try { await api(`/api/admin/relationships/${button.dataset.deleteRelationship}`, { method: "DELETE" }); await refresh(); showToast("Relationship deleted."); } catch (error) { showToast(error.message, true); }
   }));
+  const setRelationshipStatus = async (id, status) => {
+    const current = state.admin.relationships.find((r) => Number(r.id) === Number(id));
+    if (!current) return;
+    try {
+      await api(`/api/admin/relationships/${id}`, { method: "PUT", body: JSON.stringify({ ...current, status }) });
+      await refresh(); showToast(status === "published" ? "Relationship published." : "Relationship unpublished.");
+    } catch (error) { showToast(error.message, true); }
+  };
+  backdrop.querySelectorAll("[data-publish-relationship]").forEach((button) => button.addEventListener("click", () => setRelationshipStatus(button.dataset.publishRelationship, "published")));
+  backdrop.querySelectorAll("[data-unpublish-relationship]").forEach((button) => button.addEventListener("click", () => setRelationshipStatus(button.dataset.unpublishRelationship, "draft")));
   backdrop.querySelectorAll("[data-delete-timeline]").forEach((button) => button.addEventListener("click", async () => {
     if (!window.confirm("Delete this timeline entry?")) return;
     try { await api(`/api/admin/timeline/${button.dataset.deleteTimeline}`, { method: "DELETE" }); await refresh(); showToast("Timeline entry deleted."); } catch (error) { showToast(error.message, true); }
