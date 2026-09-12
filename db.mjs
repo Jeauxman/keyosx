@@ -59,7 +59,7 @@ const SCHEMA_STATEMENTS = [
     \`key\` VARCHAR(120) PRIMARY KEY,
     value TEXT NOT NULL,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-  ) ENGINE=InnoDB`,
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS works (
     id INT AUTO_INCREMENT PRIMARY KEY,
     slug VARCHAR(160) NOT NULL UNIQUE,
@@ -80,7 +80,7 @@ const SCHEMA_STATEMENTS = [
     needs_review TINYINT(1) NOT NULL DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-  ) ENGINE=InnoDB`,
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS artifacts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     work_id INT NOT NULL,
@@ -94,7 +94,7 @@ const SCHEMA_STATEMENTS = [
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_artifacts_work FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE
-  ) ENGINE=InnoDB`,
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS relationships (
     id INT AUTO_INCREMENT PRIMARY KEY,
     from_work_id INT NOT NULL,
@@ -105,7 +105,7 @@ const SCHEMA_STATEMENTS = [
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_relationships_from FOREIGN KEY (from_work_id) REFERENCES works(id) ON DELETE CASCADE,
     CONSTRAINT fk_relationships_to FOREIGN KEY (to_work_id) REFERENCES works(id) ON DELETE CASCADE
-  ) ENGINE=InnoDB`,
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS timeline_events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     work_id INT NOT NULL,
@@ -116,7 +116,18 @@ const SCHEMA_STATEMENTS = [
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_timeline_work FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE
-  ) ENGINE=InnoDB`,
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+];
+
+// Existing tables from before this fix may still be latin1 (MySQL's historical default),
+// which is what caused UTF-8 text like em-dashes to come back mojibake'd. CONVERT TO is
+// safe to re-run on every startup — a no-op once the table is already utf8mb4.
+const CHARSET_FIX_STATEMENTS = [
+  "ALTER TABLE settings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
+  "ALTER TABLE works CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
+  "ALTER TABLE artifacts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
+  "ALTER TABLE relationships CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
+  "ALTER TABLE timeline_events CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
 ];
 
 const INDEX_STATEMENTS = [
@@ -138,11 +149,15 @@ export async function openDatabase(config = {}) {
     waitForConnections: true,
     connectionLimit: 10,
     dateStrings: true,
+    charset: "utf8mb4",
   });
   if (!config.user && !process.env.DB_USER) {
     throw new Error("DB_USER, DB_PASSWORD, and DB_NAME must be set (see .env.example) — KeyOSX stores its catalog in MySQL.");
   }
   for (const statement of SCHEMA_STATEMENTS) {
+    await pool.query(statement);
+  }
+  for (const statement of CHARSET_FIX_STATEMENTS) {
     await pool.query(statement);
   }
   for (const statement of INDEX_STATEMENTS) {
