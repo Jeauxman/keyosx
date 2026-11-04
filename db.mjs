@@ -55,6 +55,18 @@ export const TIMELINE_EVENT_TYPES = [
 ];
 
 const SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS agent_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    from_agent VARCHAR(160) NOT NULL,
+    to_entity VARCHAR(160) NOT NULL,
+    intent VARCHAR(300) NOT NULL,
+    status ENUM('queued','sent','answered','failed') NOT NULL DEFAULT 'queued',
+    last_error VARCHAR(300) NOT NULL DEFAULT '',
+    issue_id INT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_agent_requests_entity (to_entity, status)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS issue_requests (
     publication_id VARCHAR(160) NOT NULL,
     period_key VARCHAR(20) NOT NULL,
@@ -911,3 +923,30 @@ export function issuePeriod(cadence, date = new Date()) {
   const start = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
   return { key: "M" + iso(start).slice(0, 7), start: iso(start) };
 }
+
+// ---- Structured requests from Jack Rabbit to an entity's editorial agent ----
+export async function createAgentRequest(db, { from_agent, to_entity, intent }) {
+  const [result] = await db.execute(
+    "INSERT INTO agent_requests (from_agent, to_entity, intent) VALUES (:from_agent, :to_entity, :intent)",
+    { from_agent: String(from_agent).slice(0, 160), to_entity: String(to_entity).slice(0, 160), intent: String(intent).slice(0, 300) }
+  );
+  return result.insertId;
+}
+
+export async function setAgentRequestStatus(db, id, status, { error = "", issue_id = null, onlyFrom = "" } = {}) {
+  await db.execute(
+    `UPDATE agent_requests SET status = :status, last_error = :error, issue_id = COALESCE(:issue_id, issue_id), updated_at = NOW() WHERE id = :id${onlyFrom ? " AND status = :onlyFrom" : ""}`,
+    { id, status, error: String(error).slice(0, 300), issue_id, ...(onlyFrom ? { onlyFrom } : {}) }
+  );
+}
+
+export async function getAgentRequest(db, id) {
+  const [rows] = await db.execute("SELECT * FROM agent_requests WHERE id = :id", { id });
+  return rows[0] || null;
+}
+
+export async function listAgentRequests(db) {
+  const [rows] = await db.execute("SELECT * FROM agent_requests ORDER BY id DESC LIMIT 100");
+  return rows;
+}
+

@@ -116,11 +116,23 @@ function agentCard(agent) {
   </article>`;
 }
 
+function rackHtml(rack) {
+  if (!rack.matches.length) return "";
+  const best = rack.matches[0];
+  const items = rack.items.length
+    ? `<p class="rack-note"><strong>On the rack, approved by the editors:</strong></p><div class="match-chips">${rack.items.map((item) => `<button class="match-chip" data-rack-open="${escapeHtml(item.publication_id)}" data-issue-id="${item.issue_id}">${escapeHtml(item.publication_name)} · ${escapeHtml(item.title)}</button>`).join("")}</div>`
+    : `<p class="rack-note">${escapeHtml(best.name)} fits this, but nothing approved matches it yet.</p>`;
+  const ask = rack.requested
+    ? `<p class="rack-note">Passed to ${escapeHtml(best.name)}'s editor. It only appears on the rack after the editor approves it.</p>`
+    : `<button class="match-chip" data-rack-ask="${escapeHtml(best.id)}" data-intent="${escapeHtml(rack.intent)}">Ask ${escapeHtml(best.name)}'s editor to cover this</button>`;
+  return `<div class="rack-suggest">${items}${ask}</div>`;
+}
+
 function renderMessages() {
   if (!state.messages.length) {
     return `<div class="message message-guide"><strong>${escapeHtml(state.config?.guideName || "Jack Rabbit")}</strong><br>I search KeyOSX's published catalog. Ask about a specific work, or things like "what's live right now" or "what's planned next".</div>`;
   }
-  return state.messages.map((message) => `<div class="message ${message.role === "user" ? "message-user" : "message-guide"}">${message.role === "guide" ? markdownLite(message.content) : escapeHtml(message.content)}${message.matches?.length ? `<div class="match-chips">${message.matches.map((match) => `<button class="match-chip" data-detail-id="${match.id}">${escapeHtml(match.name)}</button>`).join("")}</div>` : ""}</div>`).join("");
+  return state.messages.map((message) => `<div class="message ${message.role === "user" ? "message-user" : "message-guide"}">${message.role === "guide" ? markdownLite(message.content) : escapeHtml(message.content)}${message.rack ? rackHtml(message.rack) : ""}${message.matches?.length ? `<div class="match-chips">${message.matches.map((match) => `<button class="match-chip" data-detail-id="${match.id}">${escapeHtml(match.name)}</button>`).join("")}</div>` : ""}</div>`).join("");
 }
 
 function renderPublic() {
@@ -212,6 +224,17 @@ function bindPublicEvents() {
     renderPublic();
   });
   document.querySelectorAll("[data-detail-id]").forEach((button) => button.addEventListener("click", () => openDetail(button.dataset.detailId)));
+  document.querySelectorAll("[data-rack-open]").forEach((button) => button.addEventListener("click", () => openIssue(button.dataset.rackOpen, button.dataset.issueId)));
+  document.querySelectorAll("[data-rack-ask]").forEach((button) => button.addEventListener("click", async () => {
+    button.disabled = true;
+    try {
+      await api("/api/agent-requests", { method: "POST", body: JSON.stringify({ publication_id: button.dataset.rackAsk, intent: button.dataset.intent }) });
+      const message = [...state.messages].reverse().find((m) => m.rack && m.rack.intent === button.dataset.intent);
+      if (message) message.rack.requested = true;
+      renderPublic();
+      showToast("Request sent to the editor.");
+    } catch (error) { button.disabled = false; showToast(error.message, true); }
+  }));
   document.querySelectorAll("[data-open-issue]").forEach((button) => button.addEventListener("click", () => openIssue(button.dataset.openIssue, button.dataset.issueId)));
   document.querySelector("#admin-link").addEventListener("click", showAdmin);
   document.querySelector("#footer-admin").addEventListener("click", showAdmin);
@@ -243,7 +266,9 @@ async function askGuide(message) {
   if (history) history.scrollTop = history.scrollHeight;
   try {
     const result = await api("/api/assistant", { method: "POST", body: JSON.stringify({ message }) });
-    state.messages.push({ role: "guide", content: result.answer, matches: result.matches });
+    let rack = null;
+    try { rack = await api("/api/jack/route", { method: "POST", body: JSON.stringify({ message }) }); rack.intent = message; } catch { /* the catalog answer still stands */ }
+    state.messages.push({ role: "guide", content: result.answer, matches: result.matches, rack });
   } catch (error) {
     state.messages.push({ role: "guide", content: `I could not search the catalog just now: ${error.message}` });
   }
@@ -395,6 +420,7 @@ function renderLogin() {
 async function loadAdmin() {
   state.admin = await api("/api/admin/bootstrap");
   state.admin.pendingIssues = (await api("/api/admin/issues/pending")).issues;
+  state.admin.agentRequests = (await api("/api/admin/agent-requests")).requests;
   if (!state.entities.publications.length) { try { state.entities = await api("/api/entities"); } catch { /* names fall back to ids */ } }
   if (!state.adminMeta) state.adminMeta = await api("/api/admin/meta");
 }
@@ -410,7 +436,10 @@ function publicationName(id) {
 function pendingPanelHtml() {
   const pending = state.admin.pendingIssues || [];
   const rows = pending.map((issue) => `<tr><td><strong>${escapeHtml(publicationName(issue.publication_id))}</strong><br><small>${escapeHtml(issue.title)}</small></td><td>${escapeHtml(issue.issue_date)}</td><td>${issue.published_revision ? `Live: rev ${issue.published_revision} · awaiting rev ${issue.latest_revision}` : `New draft (rev ${issue.latest_revision})`}<br><small>Stage: ${escapeHtml(issue.latest_stage || "items")}</small></td><td><button class="button button-primary" data-review-issue="${issue.id}">Review</button></td></tr>`).join("");
-  return `<section class="admin-panel" id="pending-issues" style="margin:18px 0"><h2 style="margin:0 0 6px">Issues awaiting approval ${pending.length ? `<span class="badge badge-sample">${pending.length}</span>` : ""}</h2>${pending.length ? `<div class="admin-table-wrap"><table><thead><tr><th>Publication</th><th>Issue date</th><th>State</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p style="color:var(--muted)">Nothing is waiting. Drafts posted by editorial agents appear here.</p>'}</section>`;
+  const requests = (state.admin.agentRequests || []).slice(0, 10);
+  const requestRows = requests.map((r) => `<tr><td>${escapeHtml(r.intent)}</td><td>${escapeHtml(publicationName(r.to_entity))}</td><td>${escapeHtml(r.status)}${r.last_error ? ` <small>(${escapeHtml(r.last_error)})</small>` : ""}</td><td>${escapeHtml(r.created_at)}</td></tr>`).join("");
+  const requestsHtml = `<h3 style="margin:22px 0 6px">Visitor requests to editors</h3>${requests.length ? `<div class="admin-table-wrap"><table><thead><tr><th>Asked for</th><th>Publication</th><th>Status</th><th>When</th></tr></thead><tbody>${requestRows}</tbody></table></div>` : '<p style="color:var(--muted)">None yet. Requests come from visitors talking to Jack Rabbit.</p>'}`;
+  return `<section class="admin-panel" id="pending-issues" style="margin:18px 0"><h2 style="margin:0 0 6px">Issues awaiting approval ${pending.length ? `<span class="badge badge-sample">${pending.length}</span>` : ""}</h2>${pending.length ? `<div class="admin-table-wrap"><table><thead><tr><th>Publication</th><th>Issue date</th><th>State</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p style="color:var(--muted)">Nothing is waiting. Drafts posted by editorial agents appear here.</p>'}${requestsHtml}</section>`;
 }
 
 async function openIssueReview(issueId) {

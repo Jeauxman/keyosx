@@ -25,6 +25,10 @@ import {
   getWorkDetail,
   getIssueItems,
   claimComposition,
+  createAgentRequest,
+  getAgentRequest,
+  listAgentRequests,
+  setAgentRequestStatus,
   discardDraftIssue,
   getIssueRevisions,
   getRequestState,
@@ -214,7 +218,7 @@ async function main() {
       const response = await fetch(generatorUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...(agentToken ? { Authorization: "Bearer " + agentToken } : {}) },
-        body: JSON.stringify({ publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), callback: "/api/agent/issues" }),
+        body: JSON.stringify({ type: "issue_request", publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), callback: "/api/agent/issues" }),
         signal: AbortSignal.timeout(10000),
       });
       if (!response.ok) throw new Error("agent returned HTTP " + response.status);
@@ -224,6 +228,91 @@ async function main() {
       await setRequestStatus(db, publication.id, period.key, "failed", error.message).catch(() => {});
     }
   }
+
+  // ---- Jack Rabbit routing: find the publication (entity) whose genre fits what the visitor said. ----
+  // Answers come ONLY from approved, published issue items. Nothing is generated here.
+  const STOP = new Set("the and for with from this that what where when how can want need about some any more new best good have has are was were you your our they them their there here just like get got give show tell find make would could should into over under then than also very much many idea tip app news opportunity thing things stuff".split(" "));
+  const wordsOf = (text) => (String(text || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").match(/[a-z0-9]{3,}/g) || [])
+    .map((word) => (word.length > 4 && word.endsWith("s") ? word.slice(0, -1) : word)).filter((word) => !STOP.has(word));
+  const overlap = (wanted, text) => { const have = new Set(wordsOf(text)); return wanted.filter((word) => have.has(word)).length; };
+
+  const actionHits = new Map();
+  const allowAction = (req, bucket, max) => {
+    const key = bucket + ":" + req.ip;
+    const nowMs = Date.now();
+    const hits = (actionHits.get(key) || []).filter((t) => nowMs - t < 60000);
+    if (hits.length >= max) return false;
+    hits.push(nowMs);
+    actionHits.set(key, hits);
+    if (actionHits.size > 5000) actionHits.clear();
+    return true;
+  };
+
+  app.post("/api/jack/route", asyncRoute(async (req, res) => {
+    if (!req.is("application/json")) return res.status(415).json({ error: "JSON required." });
+    if (!allowAction(req, "route", 20)) return res.status(429).json({ error: "Too many requests. Try again shortly." });
+    const message = String(req.body?.message || "").slice(0, 300);
+    const wanted = [...new Set(wordsOf(message))];
+    if (!wanted.length) return res.json({ matches: [], items: [] });
+    const ranked = entities.publications
+      .map((publication) => ({ publication, score: overlap(wanted, `${publication.name} ${publication.beat || ""} ${publication.tagline || ""}`) }))
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3);
+    const latest = await latestIssueByPublication(db);
+    const items = [];
+    for (const { publication } of ranked) {
+      const issue = latest.get(publication.id);
+      if (!issue) continue;
+      const published = await getIssueItems(db, issue.id, issue.published_revision);
+      const scored = published.map((item) => ({ item, score: overlap(wanted, `${item.title} ${item.summary || ""}`) }));
+      const best = scored.filter((entry) => entry.score > 0).sort((a, b) => b.score - a.score).slice(0, 3);
+      for (const { item } of (best.length ? best : scored.filter((entry) => entry.item.featured).slice(0, 2))) {
+        items.push({ id: item.id, kind: item.kind, title: item.title, publication_id: publication.id, publication_name: publication.name, issue_id: issue.id });
+      }
+    }
+    res.json({
+      matches: ranked.map(({ publication, score }) => ({ id: publication.id, name: publication.name, beat: publication.beat, score })),
+      items: items.slice(0, 6),
+    });
+  }));
+
+  // The visitor asks a publication's editor to cover something. Recorded, sent to the agent, answered as a DRAFT revision.
+  async function dispatchVisitorRequest(requestId, publication, intent) {
+    const period = issuePeriod(publication.cadence);
+    const issues = await listIssues(db, publication.id);
+    const live = issues[0] && issues[0].issue_date >= period.start ? issues[0] : null;
+    const current_issue = live ? { title: live.title, issue_date: live.issue_date, items: (await getIssueItems(db, live.id, live.published_revision)).map(({ kind, title, summary, url, featured }) => ({ kind, title, summary, url, featured: !!featured })) } : null;
+    try {
+      const response = await fetch(generatorUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...(agentToken ? { Authorization: "Bearer " + agentToken } : {}) },
+        body: JSON.stringify({ type: "visitor_request", request_id: requestId, from: "keyosx:agent:jack-rabbit", publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), intent, current_issue, callback: "/api/agent/issues" }),
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!response.ok) throw new Error("agent returned HTTP " + response.status);
+      await setAgentRequestStatus(db, requestId, "sent", { onlyFrom: "queued" });
+    } catch (error) {
+      console.error("[KeyOSX] visitor request dispatch failed:", error.message);
+      await setAgentRequestStatus(db, requestId, "failed", { error: error.message }).catch(() => {});
+    }
+  }
+
+  app.post("/api/agent-requests", asyncRoute(async (req, res) => {
+    if (!req.is("application/json")) return res.status(415).json({ error: "JSON required." });
+    if (!allowAction(req, "request", 5)) return res.status(429).json({ error: "Too many requests. Try again shortly." });
+    const publication = knownPublication(String(req.body?.publication_id || ""));
+    if (!publication) return res.status(400).json({ error: "Unknown publication." });
+    const intent = String(req.body?.intent || "").replace(/\s+/g, " ").trim();
+    if (intent.length < 5 || intent.length > 300) return res.status(400).json({ error: "Describe what you would like in 5 to 300 characters." });
+    const id = await createAgentRequest(db, { from_agent: "keyosx:agent:jack-rabbit", to_entity: publication.id, intent });
+    if (generatorUrl) dispatchVisitorRequest(id, publication, intent);
+    res.status(201).json({ id, status: "queued", agent_connected: !!generatorUrl });
+  }));
+
+  app.get("/api/admin/agent-requests", requireAdmin, asyncRoute(async (_req, res) => {
+    res.json({ requests: await listAgentRequests(db) });
+  }));
 
   // The deliberate "someone looked" signal. POST + JSON body (not triggered by link previews or crawler GETs), 10/min per client.
   const observeHits = new Map();
@@ -259,6 +348,12 @@ async function main() {
       const result = await upsertIssue(db, { ...req.body, created_by: tokenOk ? "agent" : "admin" }, { publish });
       const when = /^\d{4}-\d{2}-\d{2}$/.test(String(req.body.issue_date)) ? new Date(req.body.issue_date + "T00:00:00Z") : new Date();
       await setRequestStatus(db, publication.id, issuePeriod(publication.cadence, when).key, "completed").catch(() => {});
+      // A draft that answers a visitor request links back to it (still a draft; the owner approves it like any revision).
+      const requestId = Number(req.body?.request_id);
+      if (requestId) {
+        const linked = await getAgentRequest(db, requestId);
+        if (linked && linked.to_entity === publication.id) await setAgentRequestStatus(db, requestId, "answered", { issue_id: result.id }).catch(() => {});
+      }
       res.status(201).json(result);
     } catch (error) {
       res.status(400).json({ error: error.message });

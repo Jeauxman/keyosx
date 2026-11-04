@@ -61,6 +61,26 @@ Approving a later revision also covers earlier ones. Visitors never see unapprov
 approval ("awaiting editor"); the open cover refreshes itself every 15 seconds. Omitting `stage` behaves as `items`, so one-shot agents still work.
 `scripts/mock-generator.mjs` posts all four stages a few seconds apart as a reference.
 
+### Visitor requests (Jack Rabbit -> the publication's agent)
+
+Jack Rabbit routes what a visitor says to the publication whose genre fits and answers **only from approved, published items**.
+If the visitor asks the editor to cover something, KeyOSX stores a request and sends the **same webhook** with `"type": "visitor_request"`
+(composition requests now carry `"type": "issue_request"`):
+
+```json
+{ "type": "visitor_request", "request_id": 7, "from": "keyosx:agent:jack-rabbit",
+  "publication_id": "keyosx:publication:cinebon", "name": "CinéBon", "beat": "...", "cadence": "weekly",
+  "period_key": "W2026-11-02", "issue_date": "2026-11-04",
+  "intent": "hosting a silent film night",
+  "current_issue": { "title": "Week of 2 Nov", "issue_date": "2026-11-02", "items": [ ... ] },
+  "callback": "/api/agent/issues" }
+```
+
+Answer by posting a **revision of the current issue** (same `title + issue_date`; include the existing `items` plus the new ones) with
+`"request_id": 7`. If `current_issue` is null, post the period's issue as usual. As with everything else it is saved as a **draft**; the
+owner approves it, and only then does it reach the rack. The request becomes `answered` once a draft linked to it arrives. Visitors are told
+exactly that: "it only appears after the editor approves it". The same content rules apply (no unsourced news).
+
 ## 3. Content rules for the agent
 
 - **Cover:** generate a new masthead-consistent cover each period and upload it to Cloudinary

@@ -24,6 +24,14 @@ http.createServer((req, res) => {
   req.on("end", async () => {
     res.writeHead(202).end();
     const job = JSON.parse(raw || "{}");
+    if (job.type === "visitor_request") {
+      // Answer a visitor's request: a NEW REVISION of this period's issue = its current items plus the requested ones (draft; owner approves).
+      const existing = job.current_issue;
+      const added = [1, 2].map((n) => ({ kind: "idea", title: `Requested: ${job.intent.slice(0, 50)} (${n})`, summary: "Added by the mock agent in answer to a visitor request. (Sample item.)" }));
+      console.log("[mock-agent] visitor request", job.request_id, "->", job.publication_id);
+      await post(job, { stage: "items", request_id: job.request_id, title: existing?.title || `Mock issue ${job.period_key}`, issue_date: existing?.issue_date || job.issue_date, items: [...(existing?.items || []), ...added] });
+      return;
+    }
     const kinds = [["tip", true], ["idea", true], ["opportunity", true], ["news", false]];
     const outline = kinds.map(([kind, featured], i) => ({ kind, featured, title: `Mock ${kind} ${i + 1} for ${job.name}` }));
     const full = outline.map((item) => ({ ...item, summary: "Written by the mock agent to test staging. (Sample item.)" }));
