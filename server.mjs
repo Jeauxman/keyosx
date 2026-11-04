@@ -193,7 +193,7 @@ async function main() {
     let composing = false;
     if (!fresh) {
       composing = true;
-      if (await recordObservation(db, publication.id, period.key) && generatorUrl) {
+      if (generatorUrl && await recordObservation(db, publication.id, period.key)) {
         fetch(generatorUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json", ...(agentToken ? { Authorization: "Bearer " + agentToken } : {}) },

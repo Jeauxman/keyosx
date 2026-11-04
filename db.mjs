@@ -756,9 +756,18 @@ export async function latestIssueByPublication(db) {
 
 // "Nothing exists until observed": the first visitor to open a cover in a new period triggers that period's issue.
 // Returns true only for the observer that created the request, so the agent is called once per period.
-export async function recordObservation(db, publication_id, period_key) {
-  const [result] = await db.execute("INSERT IGNORE INTO issue_requests (publication_id, period_key) VALUES (:publication_id, :period_key)", { publication_id, period_key });
-  return result.affectedRows === 1;
+export async function recordObservation(db, publication_id, period_key, retryAfterMinutes = 60) {
+  const [rows] = await db.execute("SELECT requested_at FROM issue_requests WHERE publication_id = :publication_id AND period_key = :period_key", { publication_id, period_key });
+  if (!rows.length) {
+    const [result] = await db.execute("INSERT IGNORE INTO issue_requests (publication_id, period_key) VALUES (:publication_id, :period_key)", { publication_id, period_key });
+    return result.affectedRows === 1;
+  }
+  // Already requested: ask again only if the agent has not delivered within the retry window.
+  const [stale] = await db.execute(
+    "UPDATE issue_requests SET requested_at = NOW() WHERE publication_id = :publication_id AND period_key = :period_key AND requested_at < (NOW() - INTERVAL :minutes MINUTE)",
+    { publication_id, period_key, minutes: retryAfterMinutes }
+  );
+  return stale.affectedRows === 1;
 }
 
 // Period key and the first day of the current window for a cadence (UTC).
