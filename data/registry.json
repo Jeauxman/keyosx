@@ -1229,11 +1229,11 @@
       "registry": "publication",
       "focus": "Satirical newspaper; political and social humor",
       "catalog_slug": null,
-      "status": "on-rack",
+      "status": "candidate",
       "rack_priority": "later",
       "verified": false,
       "flags": [
-        "Printed masthead found by Manus (1 asset). May relate to The Honest Liar; rights/tone review needed before kiosk use."
+        "Joe 2026-11-04: Daily Shit is the magazine. Current cover art is not approved; Joe is making a new one. Not on the rack until then."
       ]
     },
     {
@@ -1249,7 +1249,7 @@
       "rack_priority": "later",
       "verified": false,
       "flags": [
-        "Printed masthead found by Manus (1 asset). May relate to The Honest Liar; tone review needed."
+        "Joe 2026-11-04: Morning Shit Press is the podcast. Current art is not approved; Joe is making a new one. The WSHIT poster says 'Morning Shit Gazette': confirm which name is canonical."
       ]
     },
     {
@@ -1443,6 +1443,22 @@
       "flags": [
         "Cover supplied by Joe 2026-11-04."
       ]
+    },
+    {
+      "n": 97,
+      "id": "keyosx:publication:wshit",
+      "name": "WSHIT",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Radio show / satirical media company (umbrella for Daily Shit and Morning Shit Press)",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Joe 2026-11-04: WSHIT is the radio show with many shit talkers. Poster lists brands: Morning Shit Gazette, NOIZE, Au Contraire, Almanac, Troubadour."
+      ]
     }
   ],
   "known_issue_names": [
@@ -1497,6 +1513,11 @@
       "date": "2026-11-04",
       "by": "Joe",
       "decision": "Daily Shit is the magazine and Morning Shit Press is the podcast; built as the page /daily-shit.html, with Daily Shit on the rack."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "WSHIT is the radio show; Daily Shit (magazine) and Morning Shit Press (podcast) get new covers made by Joe. Old covers are off the page and the rack."
     }
   ],
   "cover_assets": {
@@ -1519,8 +1540,7 @@
       "intelligent-design": "intelligent-design",
       "retrofuturism": "retrofuturism",
       "pride-mediterraneo": "pride-mediterraneo",
-      "daily-shit": "daily-shit",
-      "morning-shit-press (page only)": "morning-shit-press"
+      "wshit": "wshit"
     },
     "asset": {
       "homelink-local-south-france": "HomeLink Local South France banner",
@@ -1543,6 +1563,10 @@
       "salt": "SALT cover (alternate to Zout, held back on the Zout / Salt Journal card)",
       "eat-stay-love-carcassonne": "Earlier Eat Stay Love promo (alternate)"
     },
-    "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation."
+    "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation.",
+    "held": {
+      "daily-shit": "Joe: not nice; replacing with a new cover. File kept, not displayed.",
+      "morning-shit-press": "Joe: not nice; replacing with a new cover. File kept, not displayed."
+    }
   }
 }

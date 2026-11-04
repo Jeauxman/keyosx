@@ -705,25 +705,26 @@
       ]
     },
     {
-      "id": "keyosx:publication:daily-shit",
-      "name": "Daily Shit",
+      "id": "keyosx:publication:wshit",
+      "name": "WSHIT",
       "type": "publication",
       "editorial_agent": "keyosx:agent:almanac",
       "related": [
+        "keyosx:publication:noize",
         "keyosx:publication:au-contraire"
       ],
       "integration_status": "unverified",
       "requires_approval": true,
-      "beat_status": "inferred",
-      "tagline": "We post news. Stays a sh!t that could be true. Podcast: Morning Shit Press.",
-      "beat": "Satire: the daily paper, read out loud by the Morning Shit Press podcast.",
+      "beat_status": "confirmed",
+      "tagline": "A new media company. Same old bullshit.",
+      "beat": "The radio show with many shit talkers: satirical news, shows and podcasts, with Daily Shit (magazine) and Morning Shit Press (podcast).",
       "cadence": "daily",
-      "series": "Satire",
+      "series": "Radio",
       "page": "/daily-shit.html",
       "issues": [
         {
-          "title": "Vol. 1 · No. 001",
-          "image": "/covers/daily-shit.webp",
+          "title": "Launch poster",
+          "image": "/covers/wshit.webp",
           "status": "proposed"
         }
       ]
