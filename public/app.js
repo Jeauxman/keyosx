@@ -109,6 +109,7 @@ function publicationCard(publication) {
 
 function agentCard(agent) {
   return `<article class="content-card">
+    ${agent.cover ? `<div class="rack-covers"><figure><img loading="lazy" src="${escapeHtml(agent.cover)}" alt="${escapeHtml(agent.name)}"></figure></div>` : ""}
     <div class="card-meta"><span>⚙</span>${escapeHtml(agent.type)} ${integrationBadge(agent)}</div>
     <h3>${escapeHtml(agent.name)}</h3>
     <p>${agent.capabilities.length ? escapeHtml(agent.capabilities.join(" · ")) : "Capabilities not yet defined."}</p>

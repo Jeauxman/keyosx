@@ -156,7 +156,7 @@
       "entity_type": "publication",
       "focus": "Italian living, travel and property",
       "catalog_slug": null,
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
       "flags": [],
@@ -198,7 +198,7 @@
       "entity_type": "publication",
       "focus": "Extraordinary people and stories",
       "catalog_slug": null,
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
       "flags": [],
@@ -212,7 +212,7 @@
       "entity_type": "publication",
       "focus": "Art, philosophy and experimentation",
       "catalog_slug": "simultanism",
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
       "flags": [
@@ -1347,6 +1347,22 @@
       "flags": [
         "Printed masthead found by Manus (1 asset); rights check flagged."
       ]
+    },
+    {
+      "n": 91,
+      "id": "keyosx:publication:lern",
+      "name": "L.E.R.N.",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Learning, empowerment and responsibility network",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Cover supplied by Joe 2026-11-04 (Issue 01, May 2025). Confirm relation to AI Masterclass / education brands."
+      ]
     }
   ],
   "known_issue_names": [
@@ -1397,5 +1413,34 @@
       "by": "Joe",
       "decision": "Keep Mediterraneano as the canonical name; MEDITERRANEO (as printed on covers) is an approved alias for keyosx:publication:mediterraneano."
     }
-  ]
+  ],
+  "cover_assets": {
+    "_note": "Cover and brand art Joe supplied 2026-11-04, stored in public/covers. 'rack' = used as the one rack cover; 'asset' = brand art kept for its own entry; 'held' = not shown until Joe confirms.",
+    "rack": {
+      "mediterraneano": "mediterraneano",
+      "cinebon": "cinebon",
+      "au-contraire": "au-contraire-the-move",
+      "eat-stay-love-carcassonne": "eat-stay-love-carcassonne",
+      "troubadour-quarterly": "joe-troubadour",
+      "dolce-far-niente": "dolce-far-niente",
+      "lern": "lern",
+      "heroes": "heroes",
+      "simultanism": "simultanism-poster",
+      "jack-rabbit": "jack-rabbit"
+    },
+    "asset": {
+      "homelink-local-south-france": "HomeLink Local South France banner",
+      "carcas-fun-family-pack": "Carca's Fun family pack",
+      "au-contraire-newspaper": "Au Contraire newspaper edition, Carcassonne 2026 (issue name 'Carcassonne Summer 2026')",
+      "be-your-brand": "Joe brand map poster",
+      "gods-create": "Make No Mistake, Gods Create (work)",
+      "lets-grow": "Let's Grow (GoCarcassonne at your service)",
+      "taste-and-travel": "Taste & Travel, Basil Leaf affiliate logo",
+      "simultanism-philosophy": "Simultanism philosophy poster (alternate)"
+    },
+    "held": {
+      "daily-shit": "Satire newspaper with explicit headline: not on the public rack until Joe confirms",
+      "morning-shit-press": "Satire broadcast, same reason"
+    }
+  }
 }

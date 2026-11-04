@@ -176,7 +176,7 @@ async function main() {
     const latest = await latestIssueByPublication(db);
     const publications = entities.publications.map((publication) => {
       const live = latest.get(publication.id);
-      const shelf = publication.issues.map((issue) => ({ title: issue.title, status: issue.status || "proposed", image_url: CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image }));
+      const shelf = publication.issues.map((issue) => ({ title: issue.title, status: issue.status || "proposed", image_url: String(issue.image).startsWith("/") ? issue.image : CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image }));
       // A posted issue from the editorial agent always leads the shelf as the current cover.
       const issues = live && live.cover_url ? [{ title: live.title, status: "published", image_url: live.cover_url, issue_id: live.id, issue_date: live.issue_date, is_sample: !!live.is_sample }, ...shelf] : shelf;
       return { ...link(publication), issues, current_issue_id: live?.id ?? null };
