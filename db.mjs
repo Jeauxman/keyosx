@@ -803,6 +803,21 @@ export async function listPendingIssues(db) {
   return rows;
 }
 
+// Everything the owner needs to review: every revision with its cover and items.
+export async function getIssueRevisions(db, issue_id) {
+  const [issues] = await db.execute("SELECT * FROM issues WHERE id = :issue_id", { issue_id });
+  if (!issues.length) return null;
+  const [revisions] = await db.execute("SELECT revision, cover_url, created_by, created_at FROM issue_revisions WHERE issue_id = :issue_id ORDER BY revision DESC", { issue_id });
+  const [items] = await db.execute("SELECT * FROM issue_items WHERE issue_id = :issue_id ORDER BY featured DESC, sort_order ASC", { issue_id });
+  return { issue: issues[0], revisions: revisions.map((rev) => ({ ...rev, items: items.filter((item) => item.revision === rev.revision) })) };
+}
+
+// Discarding is only for drafts that have never gone live; a live issue's history is never removed.
+export async function discardDraftIssue(db, issue_id) {
+  const [result] = await db.execute("UPDATE issues SET status = 'archived', updated_at = :updated_at WHERE id = :issue_id AND published_revision IS NULL", { issue_id, updated_at: now() });
+  return result.affectedRows === 1;
+}
+
 export async function listIssues(db, publication_id) {
   const [issues] = await db.execute(
     "SELECT * FROM issues WHERE publication_id = :publication_id AND status = 'published' AND published_revision IS NOT NULL ORDER BY issue_date DESC, id DESC LIMIT 50",

@@ -349,6 +349,8 @@ function renderLogin() {
 
 async function loadAdmin() {
   state.admin = await api("/api/admin/bootstrap");
+  state.admin.pendingIssues = (await api("/api/admin/issues/pending")).issues;
+  if (!state.entities.publications.length) { try { state.entities = await api("/api/entities"); } catch { /* names fall back to ids */ } }
   if (!state.adminMeta) state.adminMeta = await api("/api/admin/meta");
 }
 
@@ -356,9 +358,40 @@ function adminWorkRows() {
   return state.admin.works.map((work) => `<tr><td><strong>${escapeHtml(work.name)}</strong>${work.needs_review ? ' <span class="badge badge-sample">Needs review</span>' : ""}<br><small>${escapeHtml(work.category || "")}</small></td><td>${escapeHtml(KIND_LABELS[work.kind] || work.kind)}</td><td>${statusPill(work.status)}</td><td>${escapeHtml(work.visibility)}</td><td><button class="button button-secondary" data-edit-work="${work.id}">Edit</button> <button class="button button-secondary" data-manage-work="${work.id}">Manage details</button> <button class="button button-danger" data-delete-work="${work.id}">Delete</button></td></tr>`).join("");
 }
 
+function publicationName(id) {
+  return state.entities.publications.find((publication) => publication.id === id)?.name || id.split(":").pop();
+}
+
+function pendingPanelHtml() {
+  const pending = state.admin.pendingIssues || [];
+  const rows = pending.map((issue) => `<tr><td><strong>${escapeHtml(publicationName(issue.publication_id))}</strong><br><small>${escapeHtml(issue.title)}</small></td><td>${escapeHtml(issue.issue_date)}</td><td>${issue.published_revision ? `Live: rev ${issue.published_revision} · awaiting rev ${issue.latest_revision}` : `New draft (rev ${issue.latest_revision})`}</td><td><button class="button button-primary" data-review-issue="${issue.id}">Review</button></td></tr>`).join("");
+  return `<section class="admin-panel" id="pending-issues" style="margin:18px 0"><h2 style="margin:0 0 6px">Issues awaiting approval ${pending.length ? `<span class="badge badge-sample">${pending.length}</span>` : ""}</h2>${pending.length ? `<div class="admin-table-wrap"><table><thead><tr><th>Publication</th><th>Issue date</th><th>State</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p style="color:var(--muted)">Nothing is waiting. Drafts posted by editorial agents appear here.</p>'}</section>`;
+}
+
+async function openIssueReview(issueId) {
+  try {
+    const { issue, revisions } = await api(`/api/admin/issues/${issueId}`);
+    const latest = revisions[0];
+    const live = issue.published_revision;
+    const itemRow = (item) => `<li>${item.featured ? "★ " : ""}<span class="badge">${escapeHtml(ITEM_KIND_LABELS[item.kind] || item.kind)}</span> <strong>${escapeHtml(item.title)}</strong>${item.summary ? `<br><small>${escapeHtml(item.summary)}</small>` : ""}${item.url ? `<br><small><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.url)}</a></small>` : ""}${item.kind === "news" && !item.url ? ' <span class="badge badge-sample">News without a source link</span>' : ""}</li>`;
+    const revHtml = (rev) => `<div class="detail-section"><h4>Revision ${rev.revision}${rev.revision === live ? " — LIVE" : rev.revision === latest.revision ? " — awaiting approval" : ""} <small>by ${escapeHtml(rev.created_by || "unknown")} · ${escapeHtml(rev.created_at)}</small></h4><div class="issue-layout">${rev.cover_url ? `<img class="issue-cover" src="${escapeHtml(rev.cover_url)}" alt="Cover, revision ${rev.revision}">` : '<p style="color:var(--muted)">No cover supplied.</p>'}<ol style="margin:0;padding-left:1.1rem;line-height:1.5">${rev.items.map(itemRow).join("") || "<li>No items.</li>"}</ol></div></div>`;
+    const { backdrop, close } = showModal(`<div class="modal-head"><div><h2>${escapeHtml(publicationName(issue.publication_id))} — ${escapeHtml(issue.title)}</h2><p style="margin:4px 0 0;color:var(--muted)">Check sources, artwork and rights before approving. Approving makes this revision what every visitor sees.</p></div><button class="button button-secondary icon-button" data-close-modal aria-label="Close">×</button></div>${revisions.map(revHtml).join("")}<div class="issue-actions"><button class="button button-primary" data-approve>Approve &amp; publish revision ${latest.revision}</button>${live ? "" : '<button class="button button-secondary" data-discard>Discard draft</button>'}</div>`, true);
+    const refresh = async () => { close(); await loadAdmin(); renderAdmin(); };
+    backdrop.querySelector("[data-approve]").addEventListener("click", async () => {
+      try { await api(`/api/admin/issues/${issue.id}/publish`, { method: "POST", body: JSON.stringify({ revision: latest.revision }) }); showToast("Issue published."); await refresh(); } catch (error) { showToast(error.message, true); }
+    });
+    backdrop.querySelector("[data-discard]")?.addEventListener("click", async () => {
+      if (!window.confirm("Discard this draft? It has never been published.")) return;
+      try { await api(`/api/admin/issues/${issue.id}/discard`, { method: "POST", body: "{}" }); showToast("Draft discarded."); await refresh(); } catch (error) { showToast(error.message, true); }
+    });
+  } catch (error) { showToast(error.message, true); }
+}
+
 function renderAdmin() {
   const published = state.admin.works.filter((work) => work.visibility === "published").length;
   app.innerHTML = `<main class="admin-shell"><div class="page-width"><div class="admin-top"><div><a class="brand" href="#top" id="back-to-kiosk"><span class="brand-mark">KX</span><span><span class="brand-title">KeyOSX</span><span class="brand-subtitle">Administrator console</span></span></a><p style="color:var(--muted);margin:12px 0 0">${published} published works · ${state.admin.artifacts.length} artifacts · ${state.admin.relationships.length} relationships · ${state.admin.timeline.length} timeline entries</p></div><div class="admin-actions"><button class="button button-secondary" id="export-backup">Export backup</button><button class="button button-secondary" id="admin-logout">Sign out</button></div></div><div class="admin-grid"><section class="admin-panel"><div class="eyebrow" style="color:var(--clay)">Works</div><h2>The catalog</h2><p>Every brand, platform, engine, application, book, document, or concept is a work. Use "Manage details" to add artifacts, relationships, and timeline entries.</p><div class="admin-actions"><button class="button button-primary" id="add-work">Add work</button></div><div class="admin-table-wrap"><table><thead><tr><th>Work</th><th>Kind</th><th>Status</th><th>Visibility</th><th>Actions</th></tr></thead><tbody>${adminWorkRows() || '<tr><td colspan="5">No works have been created.</td></tr>'}</tbody></table></div></section></div></div></main>`;
+  document.querySelector(".admin-top").insertAdjacentHTML("afterend", pendingPanelHtml());
+  document.querySelectorAll("[data-review-issue]").forEach((button) => button.addEventListener("click", () => openIssueReview(button.dataset.reviewIssue)));
   document.querySelector("#back-to-kiosk").addEventListener("click", async (event) => { event.preventDefault(); await bootPublic(); });
   document.querySelector("#export-backup").addEventListener("click", () => { window.location.assign("/api/admin/export"); });
   document.querySelector("#admin-logout").addEventListener("click", async () => { await api("/api/admin/logout", { method: "POST" }); showToast("Signed out."); await bootPublic(); });

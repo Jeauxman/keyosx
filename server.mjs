@@ -25,6 +25,8 @@ import {
   getWorkDetail,
   getIssueItems,
   claimComposition,
+  discardDraftIssue,
+  getIssueRevisions,
   getRequestState,
   issuePeriod,
   listPendingIssues,
@@ -266,6 +268,16 @@ async function main() {
   // Owner approval: list drafts awaiting review, and publish a chosen revision.
   app.get("/api/admin/issues/pending", requireAdmin, asyncRoute(async (_req, res) => {
     res.json({ issues: await listPendingIssues(db) });
+  }));
+  app.get("/api/admin/issues/:id", requireAdmin, asyncRoute(async (req, res) => {
+    const detail = await getIssueRevisions(db, Number(req.params.id));
+    if (!detail) return res.status(404).json({ error: "That issue does not exist." });
+    res.json(detail);
+  }));
+  app.post("/api/admin/issues/:id/discard", requireAdmin, asyncRoute(async (req, res) => {
+    const ok = await discardDraftIssue(db, Number(req.params.id));
+    if (!ok) return res.status(400).json({ error: "Only a draft that has never been published can be discarded." });
+    res.json({ ok: true });
   }));
   app.post("/api/admin/issues/:id/publish", requireAdmin, asyncRoute(async (req, res) => {
     try {
