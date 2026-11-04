@@ -55,6 +55,36 @@ export const TIMELINE_EVENT_TYPES = [
 ];
 
 const SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS issue_requests (
+    publication_id VARCHAR(160) NOT NULL,
+    period_key VARCHAR(20) NOT NULL,
+    requested_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (publication_id, period_key)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  `CREATE TABLE IF NOT EXISTS issues (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    publication_id VARCHAR(160) NOT NULL,
+    title VARCHAR(300) NOT NULL,
+    cover_url VARCHAR(500) NOT NULL DEFAULT '',
+    issue_date VARCHAR(10) NOT NULL,
+    status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
+    is_sample TINYINT(1) NOT NULL DEFAULT 0,
+    created_by VARCHAR(120) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_issues_publication (publication_id, issue_date)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  `CREATE TABLE IF NOT EXISTS issue_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    issue_id INT NOT NULL,
+    kind ENUM('news','tip','idea','app','opportunity','other') NOT NULL DEFAULT 'opportunity',
+    title VARCHAR(300) NOT NULL,
+    summary TEXT,
+    url VARCHAR(500) NOT NULL DEFAULT '',
+    featured TINYINT(1) NOT NULL DEFAULT 0,
+    sort_order INT NOT NULL DEFAULT 0,
+    CONSTRAINT fk_issue_items_issue FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS settings (
     \`key\` VARCHAR(120) PRIMARY KEY,
     value TEXT NOT NULL,
@@ -658,4 +688,91 @@ export async function getDatabaseSummary(db) {
     relationships: relationships.count,
     timelineEvents: timelineEvents.count,
   };
+}
+
+export const ISSUE_ITEM_KINDS = ["news", "tip", "idea", "app", "opportunity", "other"];
+
+const safeUrl = (value) => (/^https?:\/\//.test(String(value || "")) ? String(value).slice(0, 500) : "");
+
+// Called by an editorial agent (or the administrator) each time a publication runs a new issue.
+// Items replace any existing items when the same publication + issue_date + title is re-posted.
+export async function upsertIssue(db, input) {
+  const publication_id = String(input.publication_id || "").trim().slice(0, 160);
+  const title = String(input.title || "").trim().slice(0, 300);
+  const issue_date = String(input.issue_date || "").trim();
+  if (!publication_id || !title) throw new Error("publication_id and title are required.");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(issue_date)) throw new Error("issue_date must be YYYY-MM-DD.");
+  const status = ["draft", "published", "archived"].includes(input.status) ? input.status : "draft";
+  const items = Array.isArray(input.items) ? input.items.slice(0, 60) : [];
+  const [existing] = await db.execute(
+    "SELECT id FROM issues WHERE publication_id = :publication_id AND issue_date = :issue_date AND title = :title",
+    { publication_id, issue_date, title }
+  );
+  let id = existing[0]?.id;
+  const row = { publication_id, title, issue_date, status, cover_url: safeUrl(input.cover_url), is_sample: input.is_sample ? 1 : 0, created_by: String(input.created_by || "").slice(0, 120), updated_at: now() };
+  if (id) {
+    await db.execute("UPDATE issues SET cover_url=:cover_url, status=:status, is_sample=:is_sample, created_by=:created_by, updated_at=:updated_at WHERE id=:id", { ...row, id });
+    await db.execute("DELETE FROM issue_items WHERE issue_id = :id", { id });
+  } else {
+    const [result] = await db.execute(
+      "INSERT INTO issues (publication_id, title, cover_url, issue_date, status, is_sample, created_by, updated_at) VALUES (:publication_id, :title, :cover_url, :issue_date, :status, :is_sample, :created_by, :updated_at)",
+      row
+    );
+    id = result.insertId;
+  }
+  let order = 0;
+  for (const item of items) {
+    const itemTitle = String(item.title || "").trim().slice(0, 300);
+    if (!itemTitle) continue;
+    await db.execute(
+      "INSERT INTO issue_items (issue_id, kind, title, summary, url, featured, sort_order) VALUES (:issue_id, :kind, :title, :summary, :url, :featured, :sort_order)",
+      { issue_id: id, kind: ISSUE_ITEM_KINDS.includes(item.kind) ? item.kind : "opportunity", title: itemTitle, summary: String(item.summary || "").slice(0, 2000), url: safeUrl(item.url), featured: item.featured ? 1 : 0, sort_order: order++ }
+    );
+  }
+  return { id, publication_id, title, issue_date, status, items: order };
+}
+
+export async function listIssues(db, publication_id, { includeUnpublished = false } = {}) {
+  const [issues] = await db.execute(
+    `SELECT * FROM issues WHERE publication_id = :publication_id ${includeUnpublished ? "" : "AND status = 'published'"} ORDER BY issue_date DESC, id DESC LIMIT 50`,
+    { publication_id }
+  );
+  return issues;
+}
+
+export async function getIssueItems(db, issue_id) {
+  const [items] = await db.execute("SELECT * FROM issue_items WHERE issue_id = :issue_id ORDER BY featured DESC, sort_order ASC", { issue_id });
+  return items;
+}
+
+export async function latestIssueByPublication(db) {
+  const [rows] = await db.execute(
+    "SELECT i.* FROM issues i JOIN (SELECT publication_id, MAX(issue_date) d FROM issues WHERE status='published' GROUP BY publication_id) m ON m.publication_id = i.publication_id AND m.d = i.issue_date WHERE i.status='published' ORDER BY i.id DESC"
+  );
+  const latest = new Map();
+  for (const row of rows) if (!latest.has(row.publication_id)) latest.set(row.publication_id, row);
+  return latest;
+}
+
+// "Nothing exists until observed": the first visitor to open a cover in a new period triggers that period's issue.
+// Returns true only for the observer that created the request, so the agent is called once per period.
+export async function recordObservation(db, publication_id, period_key) {
+  const [result] = await db.execute("INSERT IGNORE INTO issue_requests (publication_id, period_key) VALUES (:publication_id, :period_key)", { publication_id, period_key });
+  return result.affectedRows === 1;
+}
+
+// Period key and the first day of the current window for a cadence (UTC).
+export function issuePeriod(cadence, date = new Date()) {
+  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const iso = (x) => x.toISOString().slice(0, 10);
+  if (cadence === "weekly") {
+    const start = new Date(d); start.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); // Monday
+    return { key: "W" + iso(start), start: iso(start) };
+  }
+  if (cadence === "quarterly") {
+    const start = new Date(Date.UTC(d.getUTCFullYear(), Math.floor(d.getUTCMonth() / 3) * 3, 1));
+    return { key: "Q" + iso(start).slice(0, 7), start: iso(start) };
+  }
+  const start = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+  return { key: "M" + iso(start).slice(0, 7), start: iso(start) };
 }

@@ -1,0 +1,74 @@
+[
+  {
+    "publication_id": "keyosx:publication:cinebon",
+    "title": "Sample issue — structure demo",
+    "issue_date": "2026-11-04",
+    "status": "published",
+    "is_sample": true,
+    "items": [
+      {
+        "kind": "tip",
+        "title": "Build a one-director double-feature night",
+        "summary": "Pick one director, one early and one late film, and write three discussion questions. (Sample item.)",
+        "featured": true
+      },
+      {
+        "kind": "idea",
+        "title": "Start a film-of-the-week club",
+        "summary": "A weekly pick with a shared watchlist and a 10-minute call. (Sample item.)",
+        "featured": true
+      },
+      {
+        "kind": "app",
+        "title": "Watchlist tracker idea",
+        "summary": "A simple app that tracks what you want to watch and where it streams. (Sample item.)",
+        "featured": true
+      },
+      {
+        "kind": "news",
+        "title": "Where real release news will appear",
+        "summary": "The CinéBon agent posts verified weekly film news here. (Sample item.)",
+        "featured": false
+      },
+      {
+        "kind": "opportunity",
+        "title": "Pitch a film-night partner venue",
+        "summary": "Small venues often want a recurring cinema night. (Sample item.)",
+        "featured": false
+      }
+    ]
+  },
+  {
+    "publication_id": "keyosx:publication:au-contraire",
+    "title": "Sample issue — structure demo",
+    "issue_date": "2026-11-04",
+    "status": "published",
+    "is_sample": true,
+    "items": [
+      {
+        "kind": "idea",
+        "title": "Argue the opposite of your own plan",
+        "summary": "Write the strongest case against your next decision, then see what survives. (Sample item.)",
+        "featured": true
+      },
+      {
+        "kind": "tip",
+        "title": "Ask what would have to be true",
+        "summary": "Instead of debating, list what would need to be true for the unpopular option to win. (Sample item.)",
+        "featured": true
+      },
+      {
+        "kind": "opportunity",
+        "title": "Find the unserved opposite",
+        "summary": "Look for the customer your whole industry is ignoring. (Sample item.)",
+        "featured": true
+      },
+      {
+        "kind": "app",
+        "title": "Devil’s-advocate prompt tool idea",
+        "summary": "A tool that returns the best counter-argument to any idea you type. (Sample item.)",
+        "featured": false
+      }
+    ]
+  }
+]

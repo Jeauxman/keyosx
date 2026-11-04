@@ -23,6 +23,12 @@ import {
   getSettings,
   getWork,
   getWorkDetail,
+  getIssueItems,
+  issuePeriod,
+  recordObservation,
+  latestIssueByPublication,
+  listIssues,
+  upsertIssue,
   listArtifacts,
   listRelationships,
   listTimeline,
@@ -157,15 +163,65 @@ async function main() {
     const published = await listWorks(db, { includeUnpublished: false, limit: 1000 });
     const idBySlug = new Map(published.map((work) => [work.slug, work.id]));
     const link = (entity) => ({ ...entity, work_id: entity.workSlug ? idBySlug.get(entity.workSlug) ?? null : null });
-    const publications = entities.publications.map((publication) => ({
-      ...link(publication),
-      issues: publication.issues.map((issue) => ({ title: issue.title, status: issue.status || "proposed", image_url: CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image })),
-    }));
+    const latest = await latestIssueByPublication(db);
+    const publications = entities.publications.map((publication) => {
+      const live = latest.get(publication.id);
+      const shelf = publication.issues.map((issue) => ({ title: issue.title, status: issue.status || "proposed", image_url: CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image }));
+      // A posted issue from the editorial agent always leads the shelf as the current cover.
+      const issues = live && live.cover_url ? [{ title: live.title, status: "published", image_url: live.cover_url, issue_id: live.id, issue_date: live.issue_date, is_sample: !!live.is_sample }, ...shelf] : shelf;
+      return { ...link(publication), issues, current_issue_id: live?.id ?? null };
+    });
     const type = String(req.query.type || "");
     res.json({
       publications: type && type !== "publication" ? [] : publications,
       agents: type && type !== "agent" ? [] : entities.agents.map(link),
     });
+  }));
+
+  const generatorUrl = process.env.ISSUE_GENERATOR_URL || "";
+  const agentToken = process.env.AGENT_API_TOKEN || "";
+  const knownPublication = (id) => entities.publications.find((publication) => publication.id === id);
+
+  // The visitor opens a cover: latest published issue (with its opportunity list) plus the back-issue archive.
+  app.get("/api/publications/:id/issues", asyncRoute(async (req, res) => {
+    const publication = knownPublication(req.params.id);
+    if (!publication) return res.status(404).json({ error: "That publication is not on the rack." });
+    const issues = await listIssues(db, publication.id);
+    // Observation triggers composition: no issue yet in this cadence window -> ask the editorial agent, once per period.
+    const period = issuePeriod(publication.cadence);
+    const fresh = !!issues[0] && issues[0].issue_date >= period.start;
+    let composing = false;
+    if (!fresh) {
+      composing = true;
+      if (await recordObservation(db, publication.id, period.key) && generatorUrl) {
+        fetch(generatorUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...(agentToken ? { Authorization: "Bearer " + agentToken } : {}) },
+          body: JSON.stringify({ publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), callback: "/api/agent/issues" }),
+        }).catch((error) => console.error("[KeyOSX] issue generator call failed:", error.message));
+      }
+    }
+    const requested = Number(req.query.issue) || issues[0]?.id;
+    const current = issues.find((issue) => issue.id === requested) || null;
+    res.json({
+      publication: { id: publication.id, name: publication.name, tagline: publication.tagline, beat: publication.beat || "", cadence: publication.cadence || "", beat_status: publication.beat_status || "inferred" },
+      fresh, composing, generator_configured: !!generatorUrl, period: period.key,
+      current: current ? { ...current, items: await getIssueItems(db, current.id) } : null,
+      archive: issues.map(({ id, title, issue_date, cover_url, is_sample }) => ({ id, title, issue_date, cover_url, is_sample })),
+    });
+  }));
+
+  // Editorial agents post a new issue (cover + opportunity list) on their cadence. Bearer token, or administrator session.
+  app.post("/api/agent/issues", asyncRoute(async (req, res) => {
+    const bearer = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+    const tokenOk = agentToken && bearer.length === agentToken.length && crypto.timingSafeEqual(Buffer.from(bearer), Buffer.from(agentToken));
+    if (!tokenOk && !isAdmin(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+    if (!knownPublication(String(req.body?.publication_id || ""))) return res.status(400).json({ error: "Unknown publication_id." });
+    try {
+      res.status(201).json(await upsertIssue(db, { ...req.body, created_by: tokenOk ? "agent" : "admin" }));
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   }));
 
   app.get("/api/works", asyncRoute(async (req, res) => {

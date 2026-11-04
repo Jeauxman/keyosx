@@ -96,7 +96,8 @@ function publicationCard(publication) {
   const agent = state.entities.agents.find((item) => item.id === publication.editorial_agent);
   const related = (publication.related || []).map((id) => state.entities.publications.find((item) => item.id === id)).filter(Boolean);
   return `<article class="content-card rack-card">
-    <div class="rack-covers">${publication.issues.map((issue) => `<figure><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><figcaption>${escapeHtml(issue.title)}<br><em>${escapeHtml(issue.status === "published" ? "Published" : "Proposed cover")}</em></figcaption></figure>`).join("")}</div>
+    <div class="rack-covers">${publication.issues.map((issue) => `<figure><button class="cover-open" data-open-issue="${escapeHtml(publication.id)}" ${issue.issue_id ? `data-issue-id="${issue.issue_id}"` : ""} aria-label="Open ${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"></button><figcaption>${escapeHtml(issue.title)}<br><em>${escapeHtml(issue.is_sample ? "Sample issue" : issue.status === "published" ? "Current issue" : "Proposed cover")}</em></figcaption></figure>`).join("")}</div>
+    <div class="beat-line"><strong>${escapeHtml(publication.cadence || "")}</strong> · ${escapeHtml(publication.beat || "")}${publication.beat_status === "inferred" ? ' <span class="badge badge-sample">Genre inferred</span>' : ""}</div>
     <div class="card-meta"><span>▤</span>Publication ${integrationBadge(publication)}</div>
     <h3>${escapeHtml(publication.name)}</h3>
     <p>${escapeHtml(publication.tagline)}</p>
@@ -211,6 +212,7 @@ function bindPublicEvents() {
     renderPublic();
   });
   document.querySelectorAll("[data-detail-id]").forEach((button) => button.addEventListener("click", () => openDetail(button.dataset.detailId)));
+  document.querySelectorAll("[data-open-issue]").forEach((button) => button.addEventListener("click", () => openIssue(button.dataset.openIssue, button.dataset.issueId)));
   document.querySelector("#admin-link").addEventListener("click", showAdmin);
   document.querySelector("#footer-admin").addEventListener("click", showAdmin);
   document.querySelectorAll("[data-prompt]").forEach((button) => button.addEventListener("click", () => askGuide(button.dataset.prompt)));
@@ -268,6 +270,43 @@ async function openDetail(id) {
       ? `<div class="artifact-list">${artifacts.map((a) => `<div class="artifact-row"><strong>${escapeHtml(a.title)}</strong><br><small>${escapeHtml(a.artifact_type)}${a.reference_label ? ` · ${escapeHtml(a.reference_label)}` : ""}</small>${a.description ? `<p style="margin:6px 0 0">${escapeHtml(a.description)}</p>` : ""}${a.url ? `<p style="margin:6px 0 0"><a href="${escapeHtml(a.url)}" target="_blank" rel="noopener noreferrer">Open →</a></p>` : ""}</div>`).join("")}</div>`
       : `<p style="color:var(--muted)">No artifacts recorded yet.</p>`;
     showModal(`<div class="modal-head"><div><div class="card-meta"><span>${KIND_ICONS[work.kind] || "•"}</span>${escapeHtml(KIND_LABELS[work.kind] || work.kind)} ${statusPill(work.status)} ${work.needs_review ? '<span class="badge badge-sample">Needs review</span>' : ""}</div><h2>${escapeHtml(work.name)}</h2></div><button class="button button-secondary icon-button" data-close-modal aria-label="Close">×</button></div><p style="line-height:1.6;color:var(--ink-soft)">${escapeHtml(work.tagline || "")}</p><p style="line-height:1.6">${escapeHtml(work.summary || "")}</p>${work.body ? `<p style="line-height:1.65;white-space:pre-wrap;color:var(--muted)">${escapeHtml(work.body)}</p>` : ""}<div class="detail-grid">${fields.map(([label, value]) => `<div class="detail-block"><small>${escapeHtml(label)}</small><p>${escapeHtml(value)}</p></div>`).join("")}</div>${work.tags?.length ? `<div class="tags">${work.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${work.primary_url ? `<p style="margin-top:18px"><a class="button button-primary" href="${/^https?:\/\//.test(work.primary_url) ? escapeHtml(work.primary_url) : "#"}" target="_blank" rel="noopener noreferrer">${escapeHtml(work.primary_url)}</a></p>` : ""}<div class="detail-section"><h4>Relationships</h4>${relationshipHtml}</div><div class="detail-section"><h4>Timeline</h4>${timelineHtml}</div><div class="detail-section"><h4>Artifacts</h4>${artifactHtml}</div>`, true);
+  } catch (error) { showToast(error.message, true); }
+}
+
+const ITEM_KIND_LABELS = { news: "News", tip: "Tip", idea: "Idea", app: "App", opportunity: "Opportunity", other: "Other" };
+
+// A cover opens to that issue: Jack Rabbit offers three options first, then the full list to choose from.
+async function openIssue(publicationId, issueId) {
+  try {
+    const data = await api(`/api/publications/${encodeURIComponent(publicationId)}/issues${issueId ? `?issue=${encodeURIComponent(issueId)}` : ""}`);
+    const { publication, current, archive, fresh, composing, generator_configured } = data;
+    const guide = escapeHtml(state.config?.guideName || "Jack Rabbit");
+    const items = current?.items || [];
+    const picks = items.filter((item) => item.featured).slice(0, 3);
+    const itemHtml = (item) => `<button class="issue-item" data-pick="${item.id}"><span class="badge">${escapeHtml(ITEM_KIND_LABELS[item.kind] || item.kind)}</span><strong>${escapeHtml(item.title)}</strong></button>`;
+    const body = current
+      ? `<div class="issue-layout"><img class="issue-cover" src="${escapeHtml(current.cover_url || state.entities.publications.find((p) => p.id === publication.id)?.issues[0]?.image_url || "")}" alt="${escapeHtml(publication.name)} — ${escapeHtml(current.title)}">
+        <div class="issue-main">
+          ${composing ? `<p class="issue-guide"><strong>${guide}:</strong> You looked, so this ${escapeHtml(publication.cadence || "")} issue is being composed now. ${generator_configured ? "It will be here shortly — showing the last issue meanwhile." : "No editorial agent is connected yet, so you are seeing the last issue."}</p>` : ""}${current.is_sample ? '<p><span class="badge badge-sample">Sample issue — shows the format, not real content</span></p>' : ""}
+          <p class="issue-guide"><strong>${guide}:</strong> ${picks.length ? "Here are three places to start. Pick one, or browse the whole issue." : "Browse this issue and pick what fits you."}</p>
+          ${picks.length ? `<div class="issue-picks">${picks.map(itemHtml).join("")}</div>` : ""}
+          <h4>Everything in this issue</h4>
+          <div class="issue-list">${items.map(itemHtml).join("")}</div>
+          <div id="issue-detail" class="issue-detail" aria-live="polite"></div>
+        </div></div>`
+      : `<p class="issue-guide"><strong>${guide}:</strong> You looked, so ${escapeHtml(publication.name)}'s ${escapeHtml(publication.cadence || "")} issue has been requested. ${generator_configured ? "It will appear here once the editorial agent posts it." : "No editorial agent is connected yet, so nothing is listed."}</p>`;
+    const { backdrop } = showModal(`<div class="modal-head"><div><div class="card-meta"><span>▤</span>${escapeHtml(publication.cadence || "")} · ${escapeHtml(publication.beat || "")}</div><h2>${escapeHtml(publication.name)}${current ? ` — ${escapeHtml(current.title)}` : ""}</h2></div><button class="button button-secondary icon-button" data-close-modal aria-label="Close">×</button></div>${body}${archive.length > 1 ? `<div class="detail-section"><h4>Back issues</h4><div class="issue-list">${archive.map((issue) => `<button class="issue-item" data-back-issue="${issue.id}"><strong>${escapeHtml(issue.title)}</strong><span>${escapeHtml(issue.issue_date)}</span></button>`).join("")}</div></div>` : ""}`, true);
+    const byId = new Map(items.map((item) => [String(item.id), item]));
+    backdrop.querySelectorAll("[data-pick]").forEach((button) => button.addEventListener("click", () => {
+      const item = byId.get(button.dataset.pick);
+      const sameKind = items.filter((other) => other.kind === item.kind && other.id !== item.id);
+      const detail = backdrop.querySelector("#issue-detail");
+      detail.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.summary || "No detail yet.")}</p><div class="issue-actions">${item.url ? `<a class="button button-primary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Go to the source →</a>` : ""}${sameKind.length ? `<button class="button button-secondary" data-similar>More ${escapeHtml((ITEM_KIND_LABELS[item.kind] || item.kind).toLowerCase())}s like this (${sameKind.length})</button>` : ""}<button class="button button-secondary" data-ask>Ask ${guide} about this</button></div><div class="issue-similar"></div>`;
+      detail.querySelector("[data-ask]").addEventListener("click", () => { backdrop.remove(); askGuide(`${publication.name}: ${item.title}`); });
+      detail.querySelector("[data-similar]")?.addEventListener("click", () => { detail.querySelector(".issue-similar").innerHTML = sameKind.map(itemHtml).join(""); detail.querySelectorAll("[data-pick]").forEach((b) => b.addEventListener("click", () => backdrop.querySelector(`[data-pick="${b.dataset.pick}"]`).click())); });
+      detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }));
+    backdrop.querySelectorAll("[data-back-issue]").forEach((button) => button.addEventListener("click", () => { backdrop.remove(); openIssue(publicationId, button.dataset.backIssue); }));
   } catch (error) { showToast(error.message, true); }
 }
 

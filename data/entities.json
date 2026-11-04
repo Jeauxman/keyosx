@@ -1,5 +1,5 @@
 {
-  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo). Issues are cover concepts with status 'proposed' until each gets its own record, content and approval history; do not treat them as published. Covers were checked by eye against their mastheads: a cover is filed under the title printed on it, not under the Cloudinary tags.",
+  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo). Issues are cover concepts with status 'proposed' until each gets its own record, content and approval history; do not treat them as published. Covers were checked by eye against their mastheads: a cover is filed under the title printed on it, not under the Cloudinary tags. beat_status 'confirmed' = stated by Joe; 'inferred' = guessed from name/tagline, to be corrected. Issues are posted by each publication's editorial agent via POST /api/agent/issues.",
   "publications": [
     {
       "id": "keyosx:publication:mediterraneano",
@@ -31,7 +31,10 @@
           "image": "v1782237403/ChatGPT_Image_Jun_23_2026_11_27_02_AM_sud5yn",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Mediterranean living: places, food, relocation and slow-life ideas.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:the-libertine",
@@ -77,7 +80,10 @@
           "image": "v1782238748/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_15_AM",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Freedom, philosophy and the art of living well.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:matriarch",
@@ -102,7 +108,10 @@
           "image": "v1782237435/ChatGPT_Image_Jun_23_2026_11_16_37_AM_ldvtyg",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Women, wisdom and leadership.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:me-dia",
@@ -133,7 +142,10 @@
           "image": "v1782238853/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_40_AM",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Creators and their stories: tools, tips and openings for makers.",
+      "cadence": "weekly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:au-contraire",
@@ -168,7 +180,10 @@
           "image": "v1782237381/ChatGPT_Image_Jun_23_2026_11_30_44_AM_kclsdr",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Contrarian takes: ideas built on the opposite of the obvious.",
+      "cadence": "weekly",
+      "beat_status": "confirmed"
     },
     {
       "id": "keyosx:publication:noize",
@@ -199,7 +214,10 @@
           "image": "v1782237401/ChatGPT_Image_Jun_23_2026_11_27_34_AM_rkqcua",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Music and media industry: features, gigs and tools for artists.",
+      "cadence": "weekly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:synphony-magazine",
@@ -225,7 +243,10 @@
           "image": "v1782237384/ChatGPT_Image_Jun_23_2026_11_30_24_AM_y0oggt",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Global awareness and connection.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:cinebon",
@@ -250,7 +271,10 @@
           "image": "v1782237406/ChatGPT_Image_Jun_23_2026_11_26_10_AM_bvn7kp",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Cinephile news, tips, ideas and apps for film lovers.",
+      "cadence": "weekly",
+      "beat_status": "confirmed"
     },
     {
       "id": "keyosx:publication:carcassonne-monthly",
@@ -286,7 +310,10 @@
           "image": "v1782237391/ChatGPT_Image_Jun_23_2026_11_29_00_AM_sdfbtm",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Carcassonne local gems, culinary life and events.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:eat-stay-love-carcassonne",
@@ -306,7 +333,10 @@
           "image": "v1782238689/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_16_57_AM",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Where to eat, stay and love in Carcassonne.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:troubadour-quarterly",
@@ -329,7 +359,10 @@
           "image": "v1782237323/ChatGPT_Image_Jun_23_2026_11_43_19_AM_r8sdec",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Art, travel and the new European renaissance.",
+      "cadence": "quarterly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:u-man",
@@ -352,7 +385,10 @@
           "image": "v1782237431/ChatGPT_Image_Jun_23_2026_11_18_28_AM_crayvv",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Travel hotspots and where to go next.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:aude-chronicles",
@@ -375,7 +411,10 @@
           "image": "v1782237423/ChatGPT_Image_Jun_23_2026_11_20_33_AM_w4o43u",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Food and summer life in the Aude.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:hostelles",
@@ -403,7 +442,10 @@
           "image": "v1782853387/understanding/understanding_book_cover_v4",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Travel and stays for women.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     },
     {
       "id": "keyosx:publication:zout-salt-journal",
@@ -436,7 +478,10 @@
           "image": "v1783339691/megameed/zout-journal-cover-v2-modern.png",
           "status": "proposed"
         }
-      ]
+      ],
+      "beat": "Finance and the organic economy.",
+      "cadence": "monthly",
+      "beat_status": "inferred"
     }
   ],
   "agents": [
