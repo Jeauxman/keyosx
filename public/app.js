@@ -96,11 +96,12 @@ function publicationCard(publication) {
   const agent = state.entities.agents.find((item) => item.id === publication.editorial_agent);
   const related = (publication.related || []).map((id) => state.entities.publications.find((item) => item.id === id)).filter(Boolean);
   return `<article class="content-card rack-card">
-    <div class="rack-covers">${publication.issues.map((issue) => `<figure><button class="cover-open" data-open-issue="${escapeHtml(publication.id)}" ${issue.issue_id ? `data-issue-id="${issue.issue_id}"` : ""} aria-label="Open ${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"></button><figcaption>${escapeHtml(issue.title)}<br><em>${escapeHtml(issue.is_sample ? "Sample issue" : issue.status === "published" ? "Current issue" : "Proposed cover")}</em></figcaption></figure>`).join("")}</div>
+    <div class="rack-covers">${publication.issues.slice(0, 1).map((issue) => `<figure><button class="cover-open" data-open-issue="${escapeHtml(publication.id)}" ${issue.issue_id ? `data-issue-id="${issue.issue_id}"` : ""} aria-label="Open ${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"></button><figcaption>${escapeHtml(issue.title)}<br><em>${escapeHtml(issue.is_sample ? "Sample issue" : issue.status === "published" ? "Current issue" : "Proposed cover")}</em></figcaption></figure>`).join("")}</div>
     <div class="beat-line"><strong>${escapeHtml(publication.cadence || "")}</strong> · ${escapeHtml(publication.beat || "")}${publication.beat_status === "inferred" ? ' <span class="badge badge-sample">Genre inferred</span>' : ""}</div>
-    <div class="card-meta"><span>▤</span>Publication ${integrationBadge(publication)}</div>
+    <div class="card-meta"><span>▤</span>${escapeHtml(publication.series || "Publication")} series ${integrationBadge(publication)}</div>
     <h3>${escapeHtml(publication.name)}</h3>
     <p>${escapeHtml(publication.tagline)}</p>
+    ${publication.issues.length > 1 ? `<div class="card-details">${publication.issues.length - 1} more proposed cover(s) held back. One cover per series on the rack; the Almanac makes the next ones once it goes live.</div>` : ""}
     <div class="card-details">${agent ? `Editorial agent: ${escapeHtml(agent.name)}` : "No editorial agent assigned yet"}${related.length ? ` · Related: ${related.map((item) => escapeHtml(item.name)).join(", ")}` : ""}</div>
     ${publication.work_id ? `<button class="button card-link" data-detail-id="${publication.work_id}">Open in the catalog <span aria-hidden="true">→</span></button>` : ""}
   </article>`;
