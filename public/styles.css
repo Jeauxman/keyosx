@@ -236,3 +236,17 @@ td .button { min-height: 32px; padding: 6px 8px; font-size: .76rem; }
 .issue-detail { margin-top: 1rem; }
 .issue-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
 @media (max-width: 640px) { .issue-layout { grid-template-columns: 1fr; } .issue-cover { max-width: 14rem; } }
+
+.stage-track { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 1rem 0 0; padding: 0; }
+.stage { display: grid; gap: .1rem; padding: .5rem .6rem; border-radius: 8px; background: #efe9dc; font-size: .85rem; border-left: 4px solid #cfc6b3; }
+.stage small { color: var(--muted, #6b6558); min-height: 1em; }
+.stage-dot { display: none; }
+.stage-done { border-left-color: #2e7d4f; background: #e4f3ea; }
+.stage-waiting { border-left-color: #c28a1f; background: #fff3d6; }
+.stage-making { border-left-color: #c2603a; background: #fde9df; }
+.stage-making small::before { content: ""; display: inline-block; width: .5rem; height: .5rem; margin-right: .35rem; border-radius: 50%; background: #c2603a; animation: stage-pulse 1s infinite; }
+@keyframes stage-pulse { 50% { opacity: .25; } }
+.cover-printing { aspect-ratio: 3 / 4; display: grid; place-items: center; text-align: center; color: #6b6558; border: 2px dashed #cfc6b3; background: repeating-linear-gradient(0deg, #efe9dc, #efe9dc 14px, #f6f1e6 14px, #f6f1e6 28px); animation: stage-pulse 2s infinite; }
+.issue-video { width: 100%; max-height: 22rem; border-radius: 8px; background: #000; margin: .5rem 0 1rem; }
+@media (max-width: 640px) { .stage-track { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .stage-making small::before, .cover-printing { animation: none; } }

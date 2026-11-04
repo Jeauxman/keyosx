@@ -68,7 +68,10 @@ const SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS issue_revisions (
     issue_id INT NOT NULL,
     revision INT NOT NULL,
+    stage ENUM('outline','cover','items','media') NOT NULL DEFAULT 'items',
     cover_url VARCHAR(500) NOT NULL DEFAULT '',
+    media_url VARCHAR(500) NOT NULL DEFAULT '',
+    media_poster_url VARCHAR(500) NOT NULL DEFAULT '',
     created_by VARCHAR(120) NOT NULL DEFAULT '',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (issue_id, revision)
@@ -190,6 +193,9 @@ const COLUMN_MIGRATIONS = [
   "ALTER TABLE issues ADD COLUMN published_revision INT NULL",
   "ALTER TABLE issues ADD COLUMN published_at DATETIME NULL",
   "ALTER TABLE issue_items ADD COLUMN revision INT NOT NULL DEFAULT 1",
+  "ALTER TABLE issue_revisions ADD COLUMN stage ENUM('outline','cover','items','media') NOT NULL DEFAULT 'items'",
+  "ALTER TABLE issue_revisions ADD COLUMN media_url VARCHAR(500) NOT NULL DEFAULT ''",
+  "ALTER TABLE issue_revisions ADD COLUMN media_poster_url VARCHAR(500) NOT NULL DEFAULT ''",
   "ALTER TABLE issue_requests ADD COLUMN status ENUM('queued','running','failed','completed') NOT NULL DEFAULT 'queued'",
   "ALTER TABLE issue_requests ADD COLUMN attempts INT NOT NULL DEFAULT 1",
   "ALTER TABLE issue_requests ADD COLUMN last_error VARCHAR(300) NOT NULL DEFAULT ''",
@@ -715,6 +721,7 @@ export async function getDatabaseSummary(db) {
 }
 
 export const ISSUE_ITEM_KINDS = ["news", "tip", "idea", "app", "opportunity", "other"];
+export const ISSUE_STAGES = ["outline", "cover", "items", "media"];
 
 const safeUrl = (value) => (/^https?:\/\//.test(String(value || "")) ? String(value).slice(0, 500) : "");
 
@@ -729,6 +736,11 @@ export async function upsertIssue(db, input, { publish = false } = {}) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(issue_date)) throw new Error("issue_date must be YYYY-MM-DD.");
   const items = Array.isArray(input.items) ? input.items.slice(0, 60) : [];
   const cover_url = safeUrl(input.cover_url);
+  const stage = ISSUE_STAGES.includes(input.stage) ? input.stage : "items";
+  const media_url = safeUrl(input.media_url);
+  const media_poster_url = safeUrl(input.media_poster_url);
+  if (stage === "media" && !media_url) throw new Error("A media-stage revision needs an http(s) media_url.");
+  if (stage === "cover" && !cover_url) throw new Error("A cover-stage revision needs an http(s) cover_url.");
   const created_by = String(input.created_by || "").slice(0, 120);
   const conn = await db.getConnection();
   try {
@@ -746,7 +758,7 @@ export async function upsertIssue(db, input, { publish = false } = {}) {
       id = result.insertId;
     }
     const revision = (existing[0]?.latest_revision || 0) + 1;
-    await conn.execute("INSERT INTO issue_revisions (issue_id, revision, cover_url, created_by) VALUES (:id, :revision, :cover_url, :created_by)", { id, revision, cover_url, created_by });
+    await conn.execute("INSERT INTO issue_revisions (issue_id, revision, stage, cover_url, media_url, media_poster_url, created_by) VALUES (:id, :revision, :stage, :cover_url, :media_url, :media_poster_url, :created_by)", { id, revision, stage, cover_url, media_url, media_poster_url, created_by });
     let order = 0;
     for (const item of items) {
       const itemTitle = String(item.title || "").trim().slice(0, 300);
@@ -759,7 +771,7 @@ export async function upsertIssue(db, input, { publish = false } = {}) {
     await conn.execute("UPDATE issues SET latest_revision = :revision, is_sample = :is_sample, updated_at = :updated_at WHERE id = :id", { id, revision, is_sample: input.is_sample ? 1 : 0, updated_at: now() });
     if (publish) await publishWithin(conn, id, revision);
     await conn.commit();
-    return { id, revision, status: publish ? "published" : "draft", items: order };
+    return { id, revision, stage, status: publish ? "published" : "draft", items: order };
   } catch (error) {
     await conn.rollback();
     throw error;
@@ -798,7 +810,7 @@ export async function publishIssue(db, id, revision) {
 
 export async function listPendingIssues(db) {
   const [rows] = await db.execute(
-    "SELECT * FROM issues WHERE latest_revision > COALESCE(published_revision, 0) ORDER BY updated_at DESC LIMIT 100"
+    "SELECT i.*, r.stage AS latest_stage FROM issues i LEFT JOIN issue_revisions r ON r.issue_id = i.id AND r.revision = i.latest_revision WHERE i.latest_revision > COALESCE(i.published_revision, 0) ORDER BY i.updated_at DESC LIMIT 100"
   );
   return rows;
 }
@@ -807,7 +819,7 @@ export async function listPendingIssues(db) {
 export async function getIssueRevisions(db, issue_id) {
   const [issues] = await db.execute("SELECT * FROM issues WHERE id = :issue_id", { issue_id });
   if (!issues.length) return null;
-  const [revisions] = await db.execute("SELECT revision, cover_url, created_by, created_at FROM issue_revisions WHERE issue_id = :issue_id ORDER BY revision DESC", { issue_id });
+  const [revisions] = await db.execute("SELECT revision, stage, cover_url, media_url, media_poster_url, created_by, created_at FROM issue_revisions WHERE issue_id = :issue_id ORDER BY revision DESC", { issue_id });
   const [items] = await db.execute("SELECT * FROM issue_items WHERE issue_id = :issue_id ORDER BY featured DESC, sort_order ASC", { issue_id });
   return { issue: issues[0], revisions: revisions.map((rev) => ({ ...rev, items: items.filter((item) => item.revision === rev.revision) })) };
 }
@@ -820,7 +832,12 @@ export async function discardDraftIssue(db, issue_id) {
 
 export async function listIssues(db, publication_id) {
   const [issues] = await db.execute(
-    "SELECT * FROM issues WHERE publication_id = :publication_id AND status = 'published' AND published_revision IS NOT NULL ORDER BY issue_date DESC, id DESC LIMIT 50",
+    `SELECT i.*, p.stage, p.media_url, p.media_poster_url,
+            (SELECT GROUP_CONCAT(x.stage) FROM issue_revisions x WHERE x.issue_id = i.id AND x.revision > i.published_revision) AS pending_stages
+     FROM issues i
+     JOIN issue_revisions p ON p.issue_id = i.id AND p.revision = i.published_revision
+     WHERE i.publication_id = :publication_id AND i.status = 'published' AND i.published_revision IS NOT NULL
+     ORDER BY i.issue_date DESC, i.id DESC LIMIT 50`,
     { publication_id }
   );
   return issues;

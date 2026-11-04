@@ -275,39 +275,84 @@ async function openDetail(id) {
 
 const ITEM_KIND_LABELS = { news: "News", tip: "Tip", idea: "Idea", app: "App", opportunity: "Opportunity", other: "Other" };
 
-// A cover opens to that issue: Jack Rabbit offers three options first, then the full list to choose from.
+// A cover opens to that issue: a "printing" strip shows how far it has developed, then Jack Rabbit offers three
+// options, then the full list. The open cover refreshes itself as new stages are approved.
+const STAGE_STEPS = [["outline", "Outline"], ["cover", "Cover"], ["items", "Stories"], ["media", "Video"]];
+
+function stageTrackHtml(current, items, requestStatus) {
+  const done = {
+    outline: items.length > 0,
+    cover: !!current?.cover_url,
+    items: items.some((item) => item.summary),
+    media: !!current?.media_url,
+  };
+  const firstOpen = STAGE_STEPS.findIndex(([key]) => !done[key]);
+  return `<ol class="stage-track" aria-label="How this issue is being made">${STAGE_STEPS.map(([key, label], index) => {
+    const state = done[key] ? "done" : (current?.pending_stages || "").split(",").includes(key) ? "waiting" : index === firstOpen && requestStatus === "running" ? "making" : "todo";
+    const note = { done: "ready", waiting: "awaiting editor", making: "in production", todo: "" }[state];
+    return `<li class="stage stage-${state}"><span class="stage-dot" aria-hidden="true"></span><strong>${label}</strong><small>${note}</small></li>`;
+  }).join("")}</ol>`;
+}
+
+function mediaHtml(current) {
+  if (!current?.media_url) return "";
+  const url = escapeHtml(current.media_url);
+  const poster = current.media_poster_url ? ` poster="${escapeHtml(current.media_poster_url)}"` : "";
+  return /\.(mp4|webm|mov)(\?|$)/i.test(current.media_url)
+    ? `<video class="issue-video" controls preload="metadata"${poster}><source src="${url}"></video>`
+    : `<p><a class="button button-primary" href="${url}" target="_blank" rel="noopener noreferrer">Watch the video →</a></p>`;
+}
+
 async function openIssue(publicationId, issueId) {
   try {
-    const data = await api(`/api/publications/${encodeURIComponent(publicationId)}/issues${issueId ? `?issue=${encodeURIComponent(issueId)}` : ""}`);
-    const { publication, current, archive, fresh, composing, generator_configured } = data;
+    const endpoint = `/api/publications/${encodeURIComponent(publicationId)}/issues${issueId ? `?issue=${encodeURIComponent(issueId)}` : ""}`;
+    const data = await api(endpoint);
+    const { publication, current, archive, composing, generator_configured, request_status } = data;
     if (composing) api(`/api/publications/${encodeURIComponent(publicationId)}/observe`, { method: "POST", body: "{}" }).catch(() => {});
     const guide = escapeHtml(state.config?.guideName || "Jack Rabbit");
     const items = current?.items || [];
     const picks = items.filter((item) => item.featured).slice(0, 3);
     const itemHtml = (item) => `<button class="issue-item" data-pick="${item.id}"><span class="badge">${escapeHtml(ITEM_KIND_LABELS[item.kind] || item.kind)}</span><strong>${escapeHtml(item.title)}</strong></button>`;
+    const shelfCover = state.entities.publications.find((p) => p.id === publication.id)?.issues[0]?.image_url || "";
+    const coverHtml = current?.cover_url
+      ? `<img class="issue-cover" src="${escapeHtml(current.cover_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(current.title)}">`
+      : `<div class="issue-cover cover-printing" role="img" aria-label="Cover is being made"><span>Cover being made…</span></div>`;
     const body = current
-      ? `<div class="issue-layout"><img class="issue-cover" src="${escapeHtml(current.cover_url || state.entities.publications.find((p) => p.id === publication.id)?.issues[0]?.image_url || "")}" alt="${escapeHtml(publication.name)} — ${escapeHtml(current.title)}">
+      ? `${stageTrackHtml(current, items, request_status)}<div class="issue-layout">${coverHtml}
         <div class="issue-main">
           ${composing ? `<p class="issue-guide"><strong>${guide}:</strong> You looked, so this ${escapeHtml(publication.cadence || "")} issue is being composed now. ${generator_configured ? "It will be here shortly — showing the last issue meanwhile." : "No editorial agent is connected yet, so you are seeing the last issue."}</p>` : ""}${current.is_sample ? '<p><span class="badge badge-sample">Sample issue — shows the format, not real content</span></p>' : ""}
+          ${mediaHtml(current)}
           <p class="issue-guide"><strong>${guide}:</strong> ${picks.length ? "Here are three places to start. Pick one, or browse the whole issue." : "Browse this issue and pick what fits you."}</p>
           ${picks.length ? `<div class="issue-picks">${picks.map(itemHtml).join("")}</div>` : ""}
           <h4>Everything in this issue</h4>
           <div class="issue-list">${items.map(itemHtml).join("")}</div>
           <div id="issue-detail" class="issue-detail" aria-live="polite"></div>
         </div></div>`
-      : `<p class="issue-guide"><strong>${guide}:</strong> You looked, so ${escapeHtml(publication.name)}'s ${escapeHtml(publication.cadence || "")} issue has been requested. ${generator_configured ? "It will appear here once the editorial agent posts it." : "No editorial agent is connected yet, so nothing is listed."}</p>`;
+      : `<p class="issue-guide"><strong>${guide}:</strong> You looked, so ${escapeHtml(publication.name)}'s ${escapeHtml(publication.cadence || "")} issue has been requested. ${generator_configured ? "It will appear here once the editorial agent posts it and the editor approves it." : "No editorial agent is connected yet, so nothing is listed."}</p>`;
     const { backdrop } = showModal(`<div class="modal-head"><div><div class="card-meta"><span>▤</span>${escapeHtml(publication.cadence || "")} · ${escapeHtml(publication.beat || "")}</div><h2>${escapeHtml(publication.name)}${current ? ` — ${escapeHtml(current.title)}` : ""}</h2></div><button class="button button-secondary icon-button" data-close-modal aria-label="Close">×</button></div>${body}${archive.length > 1 ? `<div class="detail-section"><h4>Back issues</h4><div class="issue-list">${archive.map((issue) => `<button class="issue-item" data-back-issue="${issue.id}"><strong>${escapeHtml(issue.title)}</strong><span>${escapeHtml(issue.issue_date)}</span></button>`).join("")}</div></div>` : ""}`, true);
+    void shelfCover;
     const byId = new Map(items.map((item) => [String(item.id), item]));
     backdrop.querySelectorAll("[data-pick]").forEach((button) => button.addEventListener("click", () => {
       const item = byId.get(button.dataset.pick);
       const sameKind = items.filter((other) => other.kind === item.kind && other.id !== item.id);
       const detail = backdrop.querySelector("#issue-detail");
-      detail.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.summary || "No detail yet.")}</p><div class="issue-actions">${item.url ? `<a class="button button-primary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Go to the source →</a>` : ""}${sameKind.length ? `<button class="button button-secondary" data-similar>More ${escapeHtml((ITEM_KIND_LABELS[item.kind] || item.kind).toLowerCase())}s like this (${sameKind.length})</button>` : ""}<button class="button button-secondary" data-ask>Ask ${guide} about this</button></div><div class="issue-similar"></div>`;
+      detail.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.summary || "Details are still being written.")}</p><div class="issue-actions">${item.url ? `<a class="button button-primary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Go to the source →</a>` : ""}${sameKind.length ? `<button class="button button-secondary" data-similar>More ${escapeHtml((ITEM_KIND_LABELS[item.kind] || item.kind).toLowerCase())}s like this (${sameKind.length})</button>` : ""}<button class="button button-secondary" data-ask>Ask ${guide} about this</button></div><div class="issue-similar"></div>`;
       detail.querySelector("[data-ask]").addEventListener("click", () => { backdrop.remove(); askGuide(`${publication.name}: ${item.title}`); });
       detail.querySelector("[data-similar]")?.addEventListener("click", () => { detail.querySelector(".issue-similar").innerHTML = sameKind.map(itemHtml).join(""); detail.querySelectorAll("[data-pick]").forEach((b) => b.addEventListener("click", () => backdrop.querySelector(`[data-pick="${b.dataset.pick}"]`).click())); });
       detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }));
     backdrop.querySelectorAll("[data-back-issue]").forEach((button) => button.addEventListener("click", () => { backdrop.remove(); openIssue(publicationId, button.dataset.backIssue); }));
+
+    // Watch it develop: while this window is open, re-check every 15s and reopen when a stage is approved.
+    const signature = (d) => JSON.stringify([d.current?.published_revision ?? null, d.current?.pending_stages ?? null, d.request_status ?? null]);
+    const opened = signature(data);
+    const timer = setInterval(async () => {
+      if (!document.body.contains(backdrop)) { clearInterval(timer); return; }
+      try {
+        const latest = await api(endpoint);
+        if (signature(latest) !== opened) { clearInterval(timer); backdrop.remove(); openIssue(publicationId, issueId); }
+      } catch { /* keep the current view; try again next tick */ }
+    }, 15000);
   } catch (error) { showToast(error.message, true); }
 }
 
@@ -364,7 +409,7 @@ function publicationName(id) {
 
 function pendingPanelHtml() {
   const pending = state.admin.pendingIssues || [];
-  const rows = pending.map((issue) => `<tr><td><strong>${escapeHtml(publicationName(issue.publication_id))}</strong><br><small>${escapeHtml(issue.title)}</small></td><td>${escapeHtml(issue.issue_date)}</td><td>${issue.published_revision ? `Live: rev ${issue.published_revision} · awaiting rev ${issue.latest_revision}` : `New draft (rev ${issue.latest_revision})`}</td><td><button class="button button-primary" data-review-issue="${issue.id}">Review</button></td></tr>`).join("");
+  const rows = pending.map((issue) => `<tr><td><strong>${escapeHtml(publicationName(issue.publication_id))}</strong><br><small>${escapeHtml(issue.title)}</small></td><td>${escapeHtml(issue.issue_date)}</td><td>${issue.published_revision ? `Live: rev ${issue.published_revision} · awaiting rev ${issue.latest_revision}` : `New draft (rev ${issue.latest_revision})`}<br><small>Stage: ${escapeHtml(issue.latest_stage || "items")}</small></td><td><button class="button button-primary" data-review-issue="${issue.id}">Review</button></td></tr>`).join("");
   return `<section class="admin-panel" id="pending-issues" style="margin:18px 0"><h2 style="margin:0 0 6px">Issues awaiting approval ${pending.length ? `<span class="badge badge-sample">${pending.length}</span>` : ""}</h2>${pending.length ? `<div class="admin-table-wrap"><table><thead><tr><th>Publication</th><th>Issue date</th><th>State</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p style="color:var(--muted)">Nothing is waiting. Drafts posted by editorial agents appear here.</p>'}</section>`;
 }
 
@@ -374,7 +419,7 @@ async function openIssueReview(issueId) {
     const latest = revisions[0];
     const live = issue.published_revision;
     const itemRow = (item) => `<li>${item.featured ? "★ " : ""}<span class="badge">${escapeHtml(ITEM_KIND_LABELS[item.kind] || item.kind)}</span> <strong>${escapeHtml(item.title)}</strong>${item.summary ? `<br><small>${escapeHtml(item.summary)}</small>` : ""}${item.url ? `<br><small><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.url)}</a></small>` : ""}${item.kind === "news" && !item.url ? ' <span class="badge badge-sample">News without a source link</span>' : ""}</li>`;
-    const revHtml = (rev) => `<div class="detail-section"><h4>Revision ${rev.revision}${rev.revision === live ? " — LIVE" : rev.revision === latest.revision ? " — awaiting approval" : ""} <small>by ${escapeHtml(rev.created_by || "unknown")} · ${escapeHtml(rev.created_at)}</small></h4><div class="issue-layout">${rev.cover_url ? `<img class="issue-cover" src="${escapeHtml(rev.cover_url)}" alt="Cover, revision ${rev.revision}">` : '<p style="color:var(--muted)">No cover supplied.</p>'}<ol style="margin:0;padding-left:1.1rem;line-height:1.5">${rev.items.map(itemRow).join("") || "<li>No items.</li>"}</ol></div></div>`;
+    const revHtml = (rev) => `<div class="detail-section"><h4>Revision ${rev.revision} <span class="badge">${escapeHtml(rev.stage || "items")}</span>${rev.revision === live ? " — LIVE" : rev.revision === latest.revision ? " — awaiting approval" : ""} <small>by ${escapeHtml(rev.created_by || "unknown")} · ${escapeHtml(rev.created_at)}</small></h4><div class="issue-layout">${rev.cover_url ? `<img class="issue-cover" src="${escapeHtml(rev.cover_url)}" alt="Cover, revision ${rev.revision}">` : '<p style="color:var(--muted)">No cover supplied.</p>'}<div>${rev.media_url ? mediaHtml(rev) : ""}<ol style="margin:0;padding-left:1.1rem;line-height:1.5">${rev.items.map(itemRow).join("") || "<li>No items.</li>"}</ol></div></div></div>`;
     const { backdrop, close } = showModal(`<div class="modal-head"><div><h2>${escapeHtml(publicationName(issue.publication_id))} — ${escapeHtml(issue.title)}</h2><p style="margin:4px 0 0;color:var(--muted)">Check sources, artwork and rights before approving. Approving makes this revision what every visitor sees.</p></div><button class="button button-secondary icon-button" data-close-modal aria-label="Close">×</button></div>${revisions.map(revHtml).join("")}<div class="issue-actions"><button class="button button-primary" data-approve>Approve &amp; publish revision ${latest.revision}</button>${live ? "" : '<button class="button button-secondary" data-discard>Discard draft</button>'}</div>`, true);
     const refresh = async () => { close(); await loadAdmin(); renderAdmin(); };
     backdrop.querySelector("[data-approve]").addEventListener("click", async () => {

@@ -45,6 +45,22 @@ Rules enforced by the server: `issue_date` is `YYYY-MM-DD`; `kind` is one of
 `featured: true` — those are Jack Rabbit's opening picks. Set `issue_date >=` the period start or the
 issue will not count as current.
 
+### Staged issues (the issue "prints" in layers)
+
+An agent may post the same issue (same `publication_id + issue_date + title`) several times, once per **stage**, each a full
+cumulative snapshot and each its own draft revision. Add `"stage"` to the body:
+
+| stage | requires | visitors see once the owner approves it |
+|---|---|---|
+| `outline` | items with `kind` + `title` (no summaries needed) | the planned list, "Cover being made" placeholder |
+| `cover` | `cover_url` | the cover |
+| `items` (default) | items with summaries/urls | the written stories |
+| `media` | `media_url` (http(s); `.mp4/.webm/.mov` plays inline, otherwise a link); optional `media_poster_url` | the video |
+
+Approving a later revision also covers earlier ones. Visitors never see unapproved content, only the *names* of stages awaiting
+approval ("awaiting editor"); the open cover refreshes itself every 15 seconds. Omitting `stage` behaves as `items`, so one-shot agents still work.
+`scripts/mock-generator.mjs` posts all four stages a few seconds apart as a reference.
+
 ## 3. Content rules for the agent
 
 - **Cover:** generate a new masthead-consistent cover each period and upload it to Cloudinary

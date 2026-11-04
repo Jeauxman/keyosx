@@ -197,7 +197,7 @@ async function main() {
     const period = issuePeriod(publication.cadence);
     const fresh = !!issues[0] && issues[0].issue_date >= period.start;
     const composing = !fresh;
-    const request = fresh ? null : await getRequestState(db, publication.id, period.key);
+    const request = await getRequestState(db, publication.id, period.key);
     const requested = Number(req.query.issue) || issues[0]?.id;
     const current = issues.find((issue) => issue.id === requested) || null;
     res.json({
@@ -205,7 +205,7 @@ async function main() {
       fresh, composing, generator_configured: !!generatorUrl, period: period.key,
       request_status: request?.status ?? null,
       current: current ? { ...current, items: await getIssueItems(db, current.id, current.published_revision) } : null,
-      archive: issues.map(({ id, title, issue_date, cover_url, is_sample }) => ({ id, title, issue_date, cover_url, is_sample })),
+      archive: issues.map(({ id, title, issue_date, cover_url, is_sample, stage }) => ({ id, title, issue_date, cover_url, is_sample, stage })),
     });
   }));
 
