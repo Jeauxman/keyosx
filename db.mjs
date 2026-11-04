@@ -58,8 +58,20 @@ const SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS issue_requests (
     publication_id VARCHAR(160) NOT NULL,
     period_key VARCHAR(20) NOT NULL,
+    status ENUM('queued','running','failed','completed') NOT NULL DEFAULT 'queued',
+    attempts INT NOT NULL DEFAULT 1,
+    last_error VARCHAR(300) NOT NULL DEFAULT '',
     requested_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (publication_id, period_key)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  `CREATE TABLE IF NOT EXISTS issue_revisions (
+    issue_id INT NOT NULL,
+    revision INT NOT NULL,
+    cover_url VARCHAR(500) NOT NULL DEFAULT '',
+    created_by VARCHAR(120) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (issue_id, revision)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS issues (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -69,6 +81,9 @@ const SCHEMA_STATEMENTS = [
     issue_date VARCHAR(10) NOT NULL,
     status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
     is_sample TINYINT(1) NOT NULL DEFAULT 0,
+    latest_revision INT NOT NULL DEFAULT 0,
+    published_revision INT NULL,
+    published_at DATETIME NULL,
     created_by VARCHAR(120) NOT NULL DEFAULT '',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -77,6 +92,7 @@ const SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS issue_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     issue_id INT NOT NULL,
+    revision INT NOT NULL DEFAULT 1,
     kind ENUM('news','tip','idea','app','opportunity','other') NOT NULL DEFAULT 'opportunity',
     title VARCHAR(300) NOT NULL,
     summary TEXT,
@@ -170,6 +186,14 @@ const COLUMN_MIGRATIONS = [
   "ALTER TABLE relationships ADD COLUMN evidence_note VARCHAR(500) NOT NULL DEFAULT ''",
   "ALTER TABLE relationships ADD COLUMN status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft'",
   "ALTER TABLE relationships ADD COLUMN needs_review TINYINT(1) NOT NULL DEFAULT 0",
+  "ALTER TABLE issues ADD COLUMN latest_revision INT NOT NULL DEFAULT 0",
+  "ALTER TABLE issues ADD COLUMN published_revision INT NULL",
+  "ALTER TABLE issues ADD COLUMN published_at DATETIME NULL",
+  "ALTER TABLE issue_items ADD COLUMN revision INT NOT NULL DEFAULT 1",
+  "ALTER TABLE issue_requests ADD COLUMN status ENUM('queued','running','failed','completed') NOT NULL DEFAULT 'queued'",
+  "ALTER TABLE issue_requests ADD COLUMN attempts INT NOT NULL DEFAULT 1",
+  "ALTER TABLE issue_requests ADD COLUMN last_error VARCHAR(300) NOT NULL DEFAULT ''",
+  "ALTER TABLE issue_requests ADD COLUMN updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP",
 ];
 
 const INDEX_STATEMENTS = [
@@ -694,80 +718,150 @@ export const ISSUE_ITEM_KINDS = ["news", "tip", "idea", "app", "opportunity", "o
 
 const safeUrl = (value) => (/^https?:\/\//.test(String(value || "")) ? String(value).slice(0, 500) : "");
 
-// Called by an editorial agent (or the administrator) each time a publication runs a new issue.
-// Items replace any existing items when the same publication + issue_date + title is re-posted.
-export async function upsertIssue(db, input) {
+// Records a new REVISION of an issue inside one transaction. Earlier revisions and their items are never
+// overwritten. Only a trusted caller (administrator or the seed script) may pass publish:true; editorial-agent
+// submissions always land as drafts and go live through publishIssue().
+export async function upsertIssue(db, input, { publish = false } = {}) {
   const publication_id = String(input.publication_id || "").trim().slice(0, 160);
   const title = String(input.title || "").trim().slice(0, 300);
   const issue_date = String(input.issue_date || "").trim();
   if (!publication_id || !title) throw new Error("publication_id and title are required.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(issue_date)) throw new Error("issue_date must be YYYY-MM-DD.");
-  const status = ["draft", "published", "archived"].includes(input.status) ? input.status : "draft";
   const items = Array.isArray(input.items) ? input.items.slice(0, 60) : [];
-  const [existing] = await db.execute(
-    "SELECT id FROM issues WHERE publication_id = :publication_id AND issue_date = :issue_date AND title = :title",
-    { publication_id, issue_date, title }
-  );
-  let id = existing[0]?.id;
-  const row = { publication_id, title, issue_date, status, cover_url: safeUrl(input.cover_url), is_sample: input.is_sample ? 1 : 0, created_by: String(input.created_by || "").slice(0, 120), updated_at: now() };
-  if (id) {
-    await db.execute("UPDATE issues SET cover_url=:cover_url, status=:status, is_sample=:is_sample, created_by=:created_by, updated_at=:updated_at WHERE id=:id", { ...row, id });
-    await db.execute("DELETE FROM issue_items WHERE issue_id = :id", { id });
-  } else {
-    const [result] = await db.execute(
-      "INSERT INTO issues (publication_id, title, cover_url, issue_date, status, is_sample, created_by, updated_at) VALUES (:publication_id, :title, :cover_url, :issue_date, :status, :is_sample, :created_by, :updated_at)",
-      row
+  const cover_url = safeUrl(input.cover_url);
+  const created_by = String(input.created_by || "").slice(0, 120);
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+    const [existing] = await conn.execute(
+      "SELECT id, latest_revision FROM issues WHERE publication_id = :publication_id AND issue_date = :issue_date AND title = :title FOR UPDATE",
+      { publication_id, issue_date, title }
     );
-    id = result.insertId;
+    let id = existing[0]?.id;
+    if (!id) {
+      const [result] = await conn.execute(
+        "INSERT INTO issues (publication_id, title, cover_url, issue_date, status, is_sample, created_by, updated_at) VALUES (:publication_id, :title, '', :issue_date, 'draft', :is_sample, :created_by, :updated_at)",
+        { publication_id, title, issue_date, is_sample: input.is_sample ? 1 : 0, created_by, updated_at: now() }
+      );
+      id = result.insertId;
+    }
+    const revision = (existing[0]?.latest_revision || 0) + 1;
+    await conn.execute("INSERT INTO issue_revisions (issue_id, revision, cover_url, created_by) VALUES (:id, :revision, :cover_url, :created_by)", { id, revision, cover_url, created_by });
+    let order = 0;
+    for (const item of items) {
+      const itemTitle = String(item.title || "").trim().slice(0, 300);
+      if (!itemTitle) continue;
+      await conn.execute(
+        "INSERT INTO issue_items (issue_id, revision, kind, title, summary, url, featured, sort_order) VALUES (:issue_id, :revision, :kind, :title, :summary, :url, :featured, :sort_order)",
+        { issue_id: id, revision, kind: ISSUE_ITEM_KINDS.includes(item.kind) ? item.kind : "opportunity", title: itemTitle, summary: String(item.summary || "").slice(0, 2000), url: safeUrl(item.url), featured: item.featured ? 1 : 0, sort_order: order++ }
+      );
+    }
+    await conn.execute("UPDATE issues SET latest_revision = :revision, is_sample = :is_sample, updated_at = :updated_at WHERE id = :id", { id, revision, is_sample: input.is_sample ? 1 : 0, updated_at: now() });
+    if (publish) await publishWithin(conn, id, revision);
+    await conn.commit();
+    return { id, revision, status: publish ? "published" : "draft", items: order };
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
   }
-  let order = 0;
-  for (const item of items) {
-    const itemTitle = String(item.title || "").trim().slice(0, 300);
-    if (!itemTitle) continue;
-    await db.execute(
-      "INSERT INTO issue_items (issue_id, kind, title, summary, url, featured, sort_order) VALUES (:issue_id, :kind, :title, :summary, :url, :featured, :sort_order)",
-      { issue_id: id, kind: ISSUE_ITEM_KINDS.includes(item.kind) ? item.kind : "opportunity", title: itemTitle, summary: String(item.summary || "").slice(0, 2000), url: safeUrl(item.url), featured: item.featured ? 1 : 0, sort_order: order++ }
-    );
-  }
-  return { id, publication_id, title, issue_date, status, items: order };
 }
 
-export async function listIssues(db, publication_id, { includeUnpublished = false } = {}) {
+async function publishWithin(conn, id, revision) {
+  const [rev] = await conn.execute("SELECT cover_url FROM issue_revisions WHERE issue_id = :id AND revision = :revision", { id, revision });
+  if (!rev.length) throw new Error("That revision does not exist.");
+  await conn.execute(
+    "UPDATE issues SET status = 'published', published_revision = :revision, cover_url = :cover_url, published_at = NOW(), updated_at = :updated_at WHERE id = :id",
+    { id, revision, cover_url: rev[0].cover_url, updated_at: now() }
+  );
+}
+
+// The owner's approval action: makes a specific revision (default: the latest) the one visitors see.
+export async function publishIssue(db, id, revision) {
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+    const [rows] = await conn.execute("SELECT latest_revision FROM issues WHERE id = :id FOR UPDATE", { id });
+    if (!rows.length) throw new Error("That issue does not exist.");
+    const target = Number(revision) || rows[0].latest_revision;
+    await publishWithin(conn, id, target);
+    await conn.commit();
+    return { id, published_revision: target };
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
+  }
+}
+
+export async function listPendingIssues(db) {
+  const [rows] = await db.execute(
+    "SELECT * FROM issues WHERE latest_revision > COALESCE(published_revision, 0) ORDER BY updated_at DESC LIMIT 100"
+  );
+  return rows;
+}
+
+export async function listIssues(db, publication_id) {
   const [issues] = await db.execute(
-    `SELECT * FROM issues WHERE publication_id = :publication_id ${includeUnpublished ? "" : "AND status = 'published'"} ORDER BY issue_date DESC, id DESC LIMIT 50`,
+    "SELECT * FROM issues WHERE publication_id = :publication_id AND status = 'published' AND published_revision IS NOT NULL ORDER BY issue_date DESC, id DESC LIMIT 50",
     { publication_id }
   );
   return issues;
 }
 
-export async function getIssueItems(db, issue_id) {
-  const [items] = await db.execute("SELECT * FROM issue_items WHERE issue_id = :issue_id ORDER BY featured DESC, sort_order ASC", { issue_id });
+// Visitors only ever see the published revision's items.
+export async function getIssueItems(db, issue_id, revision) {
+  const [items] = await db.execute(
+    "SELECT * FROM issue_items WHERE issue_id = :issue_id AND revision = :revision ORDER BY featured DESC, sort_order ASC",
+    { issue_id, revision }
+  );
   return items;
 }
 
 export async function latestIssueByPublication(db) {
   const [rows] = await db.execute(
-    "SELECT i.* FROM issues i JOIN (SELECT publication_id, MAX(issue_date) d FROM issues WHERE status='published' GROUP BY publication_id) m ON m.publication_id = i.publication_id AND m.d = i.issue_date WHERE i.status='published' ORDER BY i.id DESC"
+    "SELECT i.* FROM issues i JOIN (SELECT publication_id, MAX(issue_date) d FROM issues WHERE status='published' AND published_revision IS NOT NULL GROUP BY publication_id) m ON m.publication_id = i.publication_id AND m.d = i.issue_date WHERE i.status='published' AND i.published_revision IS NOT NULL ORDER BY i.id DESC"
   );
   const latest = new Map();
   for (const row of rows) if (!latest.has(row.publication_id)) latest.set(row.publication_id, row);
   return latest;
 }
 
-// "Nothing exists until observed": the first visitor to open a cover in a new period triggers that period's issue.
-// Returns true only for the observer that created the request, so the agent is called once per period.
-export async function recordObservation(db, publication_id, period_key, retryAfterMinutes = 60) {
-  const [rows] = await db.execute("SELECT requested_at FROM issue_requests WHERE publication_id = :publication_id AND period_key = :period_key", { publication_id, period_key });
+// ---- Composition requests: queued -> running -> completed | failed, with controlled retries. ----
+const MAX_ATTEMPTS = 5;
+const STALE_RUNNING_MINUTES = 60;
+
+export async function getRequestState(db, publication_id, period_key) {
+  const [rows] = await db.execute("SELECT status, attempts, last_error FROM issue_requests WHERE publication_id = :publication_id AND period_key = :period_key", { publication_id, period_key });
+  return rows[0] || null;
+}
+
+// Decides whether THIS observer should dispatch the agent. Exactly one concurrent caller wins (conditional UPDATE).
+export async function claimComposition(db, publication_id, period_key) {
+  const [rows] = await db.execute("SELECT status, attempts, updated_at, TIMESTAMPDIFF(MINUTE, updated_at, NOW()) AS age FROM issue_requests WHERE publication_id = :publication_id AND period_key = :period_key", { publication_id, period_key });
   if (!rows.length) {
-    const [result] = await db.execute("INSERT IGNORE INTO issue_requests (publication_id, period_key) VALUES (:publication_id, :period_key)", { publication_id, period_key });
+    const [result] = await db.execute("INSERT IGNORE INTO issue_requests (publication_id, period_key, status, attempts) VALUES (:publication_id, :period_key, 'queued', 1)", { publication_id, period_key });
     return result.affectedRows === 1;
   }
-  // Already requested: ask again only if the agent has not delivered within the retry window.
-  const [stale] = await db.execute(
-    "UPDATE issue_requests SET requested_at = NOW() WHERE publication_id = :publication_id AND period_key = :period_key AND requested_at < (NOW() - INTERVAL :minutes MINUTE)",
-    { publication_id, period_key, minutes: retryAfterMinutes }
+  const row = rows[0];
+  const retry =
+    (row.status === "failed" && row.attempts < MAX_ATTEMPTS && row.age >= 5 * row.attempts) ||
+    ((row.status === "queued" || row.status === "running") && row.age >= STALE_RUNNING_MINUTES && row.attempts < MAX_ATTEMPTS);
+  if (!retry) return false;
+  const [result] = await db.execute(
+    "UPDATE issue_requests SET status = 'queued', attempts = attempts + 1, updated_at = NOW() WHERE publication_id = :publication_id AND period_key = :period_key AND status = :status AND updated_at = :updated_at",
+    { publication_id, period_key, status: row.status, updated_at: row.updated_at }
   );
-  return stale.affectedRows === 1;
+  return result.affectedRows === 1;
+}
+
+export async function setRequestStatus(db, publication_id, period_key, status, error = "", onlyFrom = "") {
+  await db.execute(
+    `UPDATE issue_requests SET status = :status, last_error = :error, updated_at = NOW() WHERE publication_id = :publication_id AND period_key = :period_key${onlyFrom ? " AND status = :onlyFrom" : ""}`,
+    { publication_id, period_key, status, error: String(error).slice(0, 300), ...(onlyFrom ? { onlyFrom } : {}) }
+  );
 }
 
 // Period key and the first day of the current window for a cadence (UTC).

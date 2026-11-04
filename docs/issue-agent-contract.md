@@ -31,7 +31,6 @@ Reply `2xx` immediately; do the work asynchronously (the visitor is told the iss
   "publication_id": "keyosx:publication:cinebon",
   "title": "Week of 2 Nov 2026",
   "issue_date": "2026-11-04",
-  "status": "published",
   "cover_url": "https://res.cloudinary.com/dmsdspzbo/image/upload/.../cinebon-2026-w45.png",
   "items": [
     { "kind": "tip", "title": "...", "summary": "...", "url": "https://source", "featured": true }
@@ -39,9 +38,10 @@ Reply `2xx` immediately; do the work asynchronously (the visitor is told the iss
 }
 ```
 
+**Agents cannot publish.** Every agent post becomes a *draft revision*; any `status` field from an agent token is ignored. The owner publishes a revision with `POST /api/admin/issues/:id/publish` (administrator session; `GET /api/admin/issues/pending` lists drafts). Re-posting the same `publication_id + issue_date + title` adds a new revision; earlier revisions and their items are kept, and visitors keep seeing the published revision until the owner approves the new one.
+
 Rules enforced by the server: `issue_date` is `YYYY-MM-DD`; `kind` is one of
-`news|tip|idea|app|opportunity|other`; urls must be `http(s)`; max 60 items; re-posting the same
-`publication_id + issue_date + title` replaces that issue's items. Mark exactly **three** items
+`news|tip|idea|app|opportunity|other`; urls must be `http(s)`; max 60 items; Mark exactly **three** items
 `featured: true` — those are Jack Rabbit's opening picks. Set `issue_date >=` the period start or the
 issue will not count as current.
 
@@ -55,8 +55,15 @@ issue will not count as current.
 - Fit the publication's `beat`; keep titles short; summaries 1-3 sentences.
 - Never send `is_sample: true` for real issues.
 
-## 4. Open decisions
+## 4. Request lifecycle (server side)
 
-- Auto-publish vs. draft-then-approve (`status: "draft"` is supported; there is no approval UI yet).
-- Where `ISSUE_GENERATOR_URL` is hosted (Codex runtime, or a small relay) — it must be reachable from the
-  Hostinger server.
+Visitors opening a cover triggers a deliberate `POST /api/publications/:id/observe` (JSON, 10/min per client); plain `GET` views write nothing.
+Each publication+period has a request: `queued -> running -> completed` or `failed`. A failed or silent request is retried on a later
+observation (backoff 5 min x attempts; a queued/running request with no result after 60 min is retried; max 5 attempts).
+The request becomes `completed` when the agent posts a draft for that period (draft still awaits owner approval).
+
+## 5. Open decisions
+
+- Where the editorial service is hosted (provider-independent; reachable from the Hostinger server).
+- An approval screen in the admin UI (today approval is the API call above).
+- Living digital issue vs. fixed, versioned, printable edition: this branch only covers the living issue.

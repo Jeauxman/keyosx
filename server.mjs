@@ -24,8 +24,12 @@ import {
   getWork,
   getWorkDetail,
   getIssueItems,
+  claimComposition,
+  getRequestState,
   issuePeriod,
-  recordObservation,
+  listPendingIssues,
+  publishIssue,
+  setRequestStatus,
   latestIssueByPublication,
   listIssues,
   upsertIssue,
@@ -187,28 +191,57 @@ async function main() {
     const publication = knownPublication(req.params.id);
     if (!publication) return res.status(404).json({ error: "That publication is not on the rack." });
     const issues = await listIssues(db, publication.id);
-    // Observation triggers composition: no issue yet in this cadence window -> ask the editorial agent, once per period.
+    // Viewing is read-only. Interest is recorded only by the explicit POST .../observe below.
     const period = issuePeriod(publication.cadence);
     const fresh = !!issues[0] && issues[0].issue_date >= period.start;
-    let composing = false;
-    if (!fresh) {
-      composing = true;
-      if (generatorUrl && await recordObservation(db, publication.id, period.key)) {
-        fetch(generatorUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", ...(agentToken ? { Authorization: "Bearer " + agentToken } : {}) },
-          body: JSON.stringify({ publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), callback: "/api/agent/issues" }),
-        }).catch((error) => console.error("[KeyOSX] issue generator call failed:", error.message));
-      }
-    }
+    const composing = !fresh;
+    const request = fresh ? null : await getRequestState(db, publication.id, period.key);
     const requested = Number(req.query.issue) || issues[0]?.id;
     const current = issues.find((issue) => issue.id === requested) || null;
     res.json({
       publication: { id: publication.id, name: publication.name, tagline: publication.tagline, beat: publication.beat || "", cadence: publication.cadence || "", beat_status: publication.beat_status || "inferred" },
       fresh, composing, generator_configured: !!generatorUrl, period: period.key,
-      current: current ? { ...current, items: await getIssueItems(db, current.id) } : null,
+      request_status: request?.status ?? null,
+      current: current ? { ...current, items: await getIssueItems(db, current.id, current.published_revision) } : null,
       archive: issues.map(({ id, title, issue_date, cover_url, is_sample }) => ({ id, title, issue_date, cover_url, is_sample })),
     });
+  }));
+
+  async function dispatchComposition(publication, period) {
+    try {
+      const response = await fetch(generatorUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...(agentToken ? { Authorization: "Bearer " + agentToken } : {}) },
+        body: JSON.stringify({ publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), callback: "/api/agent/issues" }),
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!response.ok) throw new Error("agent returned HTTP " + response.status);
+      await setRequestStatus(db, publication.id, period.key, "running", "", "queued");
+    } catch (error) {
+      console.error("[KeyOSX] issue generator call failed:", error.message);
+      await setRequestStatus(db, publication.id, period.key, "failed", error.message).catch(() => {});
+    }
+  }
+
+  // The deliberate "someone looked" signal. POST + JSON body (not triggered by link previews or crawler GETs), 10/min per client.
+  const observeHits = new Map();
+  app.post("/api/publications/:id/observe", asyncRoute(async (req, res) => {
+    const publication = knownPublication(req.params.id);
+    if (!publication) return res.status(404).json({ error: "That publication is not on the rack." });
+    if (!req.is("application/json")) return res.status(415).json({ error: "JSON required." });
+    const nowMs = Date.now();
+    const hits = (observeHits.get(req.ip) || []).filter((t) => nowMs - t < 60000);
+    if (hits.length >= 10) return res.status(429).json({ error: "Too many requests. Try again shortly." });
+    hits.push(nowMs);
+    observeHits.set(req.ip, hits);
+    if (observeHits.size > 5000) observeHits.clear();
+    const period = issuePeriod(publication.cadence);
+    const issues = await listIssues(db, publication.id);
+    if (issues[0] && issues[0].issue_date >= period.start) return res.json({ requested: false, reason: "fresh" });
+    if (!generatorUrl) return res.json({ requested: false, reason: "no-agent" });
+    const claimed = await claimComposition(db, publication.id, period.key);
+    if (claimed) dispatchComposition(publication, period);
+    res.json({ requested: claimed });
   }));
 
   // Editorial agents post a new issue (cover + opportunity list) on their cadence. Bearer token, or administrator session.
@@ -218,7 +251,25 @@ async function main() {
     if (!tokenOk && !isAdmin(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
     if (!knownPublication(String(req.body?.publication_id || ""))) return res.status(400).json({ error: "Unknown publication_id." });
     try {
-      res.status(201).json(await upsertIssue(db, { ...req.body, created_by: tokenOk ? "agent" : "admin" }));
+      // Agents can never publish. Only an administrator session may publish directly, and only on explicit request.
+      const publish = !tokenOk && isAdmin(req) && req.body?.status === "published";
+      const publication = knownPublication(String(req.body.publication_id));
+      const result = await upsertIssue(db, { ...req.body, created_by: tokenOk ? "agent" : "admin" }, { publish });
+      const when = /^\d{4}-\d{2}-\d{2}$/.test(String(req.body.issue_date)) ? new Date(req.body.issue_date + "T00:00:00Z") : new Date();
+      await setRequestStatus(db, publication.id, issuePeriod(publication.cadence, when).key, "completed").catch(() => {});
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }));
+
+  // Owner approval: list drafts awaiting review, and publish a chosen revision.
+  app.get("/api/admin/issues/pending", requireAdmin, asyncRoute(async (_req, res) => {
+    res.json({ issues: await listPendingIssues(db) });
+  }));
+  app.post("/api/admin/issues/:id/publish", requireAdmin, asyncRoute(async (req, res) => {
+    try {
+      res.json(await publishIssue(db, Number(req.params.id), req.body?.revision));
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

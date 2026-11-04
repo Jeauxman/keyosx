@@ -280,6 +280,7 @@ async function openIssue(publicationId, issueId) {
   try {
     const data = await api(`/api/publications/${encodeURIComponent(publicationId)}/issues${issueId ? `?issue=${encodeURIComponent(issueId)}` : ""}`);
     const { publication, current, archive, fresh, composing, generator_configured } = data;
+    if (composing) api(`/api/publications/${encodeURIComponent(publicationId)}/observe`, { method: "POST", body: "{}" }).catch(() => {});
     const guide = escapeHtml(state.config?.guideName || "Jack Rabbit");
     const items = current?.items || [];
     const picks = items.filter((item) => item.featured).slice(0, 3);

@@ -8,5 +8,5 @@ import { openDatabase, upsertIssue } from "../db.mjs";
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const samples = JSON.parse(fs.readFileSync(path.join(dir, "..", "data", "sample-issues.json"), "utf8"));
 const db = await openDatabase();
-for (const issue of samples) console.log(await upsertIssue(db, { ...issue, created_by: "seed-issues" }));
+for (const issue of samples) console.log(await upsertIssue(db, { ...issue, created_by: "seed-issues" }, { publish: true }));
 await db.end();
