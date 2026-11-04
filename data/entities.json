@@ -11,14 +11,24 @@
       "related": [
         "keyosx:publication:the-libertine",
         "keyosx:publication:matriarch",
-        "keyosx:publication:me-dia"
+        "keyosx:publication:au-contraire"
       ],
       "integration_status": "unverified",
       "requires_approval": true,
       "issues": [
         {
-          "title": "Mediterraneano Summer 2026",
-          "image": "v1782237434/ChatGPT_Image_Jun_23_2026_11_16_51_AM_x6bvwg.png",
+          "title": "Summer 2026",
+          "image": "v1782238674/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_16_51_AM",
+          "status": "proposed"
+        },
+        {
+          "title": "La Mia Mediterraneo",
+          "image": "v1782237404/ChatGPT_Image_Jun_23_2026_11_26_47_AM_bfujz0",
+          "status": "proposed"
+        },
+        {
+          "title": "La Mia Mediterraneo — Alt",
+          "image": "v1782237403/ChatGPT_Image_Jun_23_2026_11_27_02_AM_sud5yn",
           "status": "proposed"
         }
       ]
@@ -31,29 +41,40 @@
       "tagline": "Freedom, passion, intelligence.",
       "editorial_agent": null,
       "related": [
-        "keyosx:publication:mediterraneano"
+        "keyosx:publication:mediterraneano",
+        "keyosx:publication:matriarch"
       ],
       "integration_status": "unverified",
       "requires_approval": true,
       "issues": [
         {
-          "title": "The New Renaissance",
-          "image": "v1782237438/high-level-description-an-ultra-premium-_scpECWipUoCSQkb-V-o07w_4Cf9pixkQAK3y5S67h3d5A_ky0yqy.jpg",
-          "status": "proposed"
-        },
-        {
-          "title": "The Art of Living Well",
-          "image": "v1782237437/high-level-description-an-ultra-premium-_NMgCe8TfWl24oa2RwJpNPg_4Cf9pixkQAK3y5S67h3d5A_qqw48e.jpg",
-          "status": "proposed"
-        },
-        {
-          "title": "Europe's Last Great Villages",
-          "image": "v1782237438/high-level-description-an-ultra-premium-_ty_lovsDWROcDuHu8XXF8A_4Cf9pixkQAK3y5S67h3d5A_cover_owbd3b.jpg",
-          "status": "proposed"
-        },
-        {
           "title": "Luxury Lifestyle Issue",
-          "image": "v1782238762/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_20_AM.png",
+          "image": "v1782238762/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_20_AM",
+          "status": "proposed"
+        },
+        {
+          "title": "The New Renaissance",
+          "image": "v1782237439/09ea6e31ca79b3e6c04b00095fc0e50c-2f1b77aa-262a-40d4-b195-cef5a7928aba_k1a3kn",
+          "status": "proposed"
+        },
+        {
+          "title": "The New Renaissance — Alt",
+          "image": "v1782237438/high-level-description-an-ultra-premium-_scpECWipUoCSQkb-V-o07w_4Cf9pixkQAK3y5S67h3d5A_ky0yqy",
+          "status": "proposed"
+        },
+        {
+          "title": "Summer Escape",
+          "image": "v1782237438/high-level-description-an-ultra-premium-_ty_lovsDWROcDuHu8XXF8A_4Cf9pixkQAK3y5S67h3d5A_cover_owbd3b",
+          "status": "proposed"
+        },
+        {
+          "title": "Freedom Lifestyle",
+          "image": "v1782237416/ChatGPT_Image_Jun_23_2026_11_21_32_AM_fmpivx",
+          "status": "proposed"
+        },
+        {
+          "title": "Cat Ladies",
+          "image": "v1782238748/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_15_AM",
           "status": "proposed"
         }
       ]
@@ -73,7 +94,12 @@
       "issues": [
         {
           "title": "Summer 2026",
-          "image": "v1782238623/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_16_37_AM.png",
+          "image": "v1782238623/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_16_37_AM",
+          "status": "proposed"
+        },
+        {
+          "title": "Living Wisely Together",
+          "image": "v1782237435/ChatGPT_Image_Jun_23_2026_11_16_37_AM_ldvtyg",
           "status": "proposed"
         }
       ]
@@ -83,22 +109,298 @@
       "name": "ME+DÍA",
       "type": "publication",
       "workSlug": "me-dia-os",
-      "tagline": "Editorial covers and creator issues.",
+      "tagline": "Made by people, powered by stories.",
       "editorial_agent": "keyosx:agent:flintbill",
       "related": [
-        "keyosx:publication:the-libertine"
+        "keyosx:publication:noize",
+        "keyosx:publication:synphony-magazine"
       ],
       "integration_status": "unverified",
       "requires_approval": true,
       "issues": [
         {
           "title": "The Creator Issue",
-          "image": "v1782238900/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_52_AM.png",
+          "image": "v1782238900/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_52_AM",
           "status": "proposed"
         },
         {
           "title": "ME+DÍA Brand Launch",
-          "image": "v1782238853/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_40_AM.png",
+          "image": "v1782238882/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_48_AM",
+          "status": "proposed"
+        },
+        {
+          "title": "ME+DÍA Brand Launch",
+          "image": "v1782238853/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_40_AM",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:au-contraire",
+      "name": "Au Contraire",
+      "type": "publication",
+      "workSlug": "au-contraire",
+      "tagline": "Media brand.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:carcassonne-monthly"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "The Move",
+          "image": "v1782237381/ChatGPT_Image_Jun_23_2026_11_30_47_AM_xpouzj",
+          "status": "proposed"
+        },
+        {
+          "title": "Eat. Stay. Love. Carcassonne",
+          "image": "v1782237383/ChatGPT_Image_Jun_23_2026_11_30_31_AM_vvgzed",
+          "status": "proposed"
+        },
+        {
+          "title": "Carcassonne Summer 2026",
+          "image": "v1782237382/ChatGPT_Image_Jun_23_2026_11_30_33_AM_mlqwyq",
+          "status": "proposed"
+        },
+        {
+          "title": "Carcassonne",
+          "image": "v1782237381/ChatGPT_Image_Jun_23_2026_11_30_44_AM_kclsdr",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:noize",
+      "name": "NOIZE",
+      "type": "publication",
+      "workSlug": "noizeos",
+      "tagline": "Media and audio brand.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:me-dia",
+        "keyosx:publication:cinebon"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "NOIZE Magazine Feature",
+          "image": "v1782237403/ChatGPT_Image_Jun_23_2026_11_27_23_AM_zivbpe",
+          "status": "proposed"
+        },
+        {
+          "title": "NOIZE Media Mogul Feature",
+          "image": "v1782237402/ChatGPT_Image_Jun_23_2026_11_27_25_AM_crtqzl",
+          "status": "proposed"
+        },
+        {
+          "title": "Joe Fansler NOIZE Profile",
+          "image": "v1782237401/ChatGPT_Image_Jun_23_2026_11_27_34_AM_rkqcua",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:synphony-magazine",
+      "name": "Synphony Magazine",
+      "type": "publication",
+      "workSlug": null,
+      "tagline": "Going global.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:me-dia",
+        "keyosx:publication:noize"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Cover",
+          "image": "v1782237385/ChatGPT_Image_Jun_23_2026_11_30_18_AM_lvhuhu",
+          "status": "proposed"
+        },
+        {
+          "title": "Going Global Awareness",
+          "image": "v1782237384/ChatGPT_Image_Jun_23_2026_11_30_24_AM_y0oggt",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:cinebon",
+      "name": "CinéBon",
+      "type": "publication",
+      "workSlug": null,
+      "tagline": "Film and entertainment features.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:noize"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Cover",
+          "image": "v1782237405/ChatGPT_Image_Jun_23_2026_11_26_24_AM_tk8r7y",
+          "status": "proposed"
+        },
+        {
+          "title": "Joe Fansler Entertainment Feature",
+          "image": "v1782237406/ChatGPT_Image_Jun_23_2026_11_26_10_AM_bvn7kp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:carcassonne-monthly",
+      "name": "Carcassonne Monthly",
+      "type": "publication",
+      "workSlug": "gocarcassonne",
+      "tagline": "Local gems and culinary lifestyle.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:eat-stay-love-carcassonne",
+        "keyosx:publication:au-contraire"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Special Edition 2026",
+          "image": "v1782237395/ChatGPT_Image_Jun_23_2026_11_28_04_AM_niqyhd",
+          "status": "proposed"
+        },
+        {
+          "title": "Culinary Lifestyle",
+          "image": "v1782237395/ChatGPT_Image_Jun_23_2026_11_28_06_AM_tgvevx",
+          "status": "proposed"
+        },
+        {
+          "title": "Celebrate Marina",
+          "image": "v1782237392/ChatGPT_Image_Jun_23_2026_11_28_58_AM_fv0p08",
+          "status": "proposed"
+        },
+        {
+          "title": "La Maison de l'Ambassadeur",
+          "image": "v1782237391/ChatGPT_Image_Jun_23_2026_11_29_00_AM_sdfbtm",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:eat-stay-love-carcassonne",
+      "name": "Eat Stay Love Carcassonne",
+      "type": "publication",
+      "workSlug": "gocarcassonne",
+      "tagline": "Carcassonne local gems.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:carcassonne-monthly"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Local Gems",
+          "image": "v1782238689/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_16_57_AM",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:troubadour-quarterly",
+      "name": "The Troubadour Quarterly",
+      "type": "publication",
+      "workSlug": "joe-troubadour",
+      "tagline": "The architect of Europe’s next renaissance.",
+      "editorial_agent": null,
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "The Architect of Europe's Next Renaissance",
+          "image": "v1782237361/ChatGPT_Image_Jun_23_2026_11_34_25_AM_nvhzhu",
+          "status": "proposed"
+        },
+        {
+          "title": "Discover Carcassonne and Cathar Country",
+          "image": "v1782237323/ChatGPT_Image_Jun_23_2026_11_43_19_AM_r8sdec",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:u-man",
+      "name": "U-MAN",
+      "type": "publication",
+      "workSlug": "travel-buddy",
+      "tagline": "Where’s the next hotspot?",
+      "editorial_agent": null,
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Where's the Next Hotspot",
+          "image": "v1782238804/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_28_AM",
+          "status": "proposed"
+        },
+        {
+          "title": "Next Global Hotspots",
+          "image": "v1782237431/ChatGPT_Image_Jun_23_2026_11_18_28_AM_crayvv",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:aude-chronicles",
+      "name": "Aude Chronicles",
+      "type": "publication",
+      "workSlug": "basil-leaf-chronicles",
+      "tagline": "Culinary summers in the Aude.",
+      "editorial_agent": null,
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Summer Treasures in Aude",
+          "image": "v1782237423/ChatGPT_Image_Jun_23_2026_11_20_42_AM_p7odsv",
+          "status": "proposed"
+        },
+        {
+          "title": "Discover Aude Summer",
+          "image": "v1782237423/ChatGPT_Image_Jun_23_2026_11_20_33_AM_w4o43u",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:hostelles",
+      "name": "Hostelles",
+      "type": "publication",
+      "workSlug": "hostelles",
+      "tagline": "Travel stays for women.",
+      "editorial_agent": null,
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Cover v6",
+          "image": "v1782853409/understanding/understanding_book_cover_v6",
+          "status": "proposed"
+        },
+        {
+          "title": "Cover v5",
+          "image": "v1782853400/understanding/understanding_book_cover_v5",
+          "status": "proposed"
+        },
+        {
+          "title": "Cover v4",
+          "image": "v1782853387/understanding/understanding_book_cover_v4",
           "status": "proposed"
         }
       ]
