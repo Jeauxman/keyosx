@@ -34,7 +34,10 @@
       ],
       "beat": "Mediterranean living: places, food, relocation and slow-life ideas.",
       "cadence": "monthly",
-      "beat_status": "inferred"
+      "beat_status": "inferred",
+      "aliases": [
+        "MEDITERRANEO"
+      ]
     },
     {
       "id": "keyosx:publication:the-libertine",

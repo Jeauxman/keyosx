@@ -24,8 +24,13 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": [],
-      "registry": "publication"
+      "flags": [
+        "Canonical name is Mediterraneano (decided by Joe). Covers print MEDITERRANEO; that spelling is an approved alias."
+      ],
+      "registry": "publication",
+      "aliases": [
+        "MEDITERRANEO"
+      ]
     },
     {
       "n": 2,
@@ -1384,7 +1389,13 @@
     "archive": "creative archive: logo studies, alternates, early identity experiments"
   },
   "open_questions": [
-    "Mediterraneano vs MEDITERRANEO: five covers literally print MEDITERRANEO (the rack covers I used all print it). Approve the alias, or rename the entity to the printed spelling?",
     "Hostelles artwork reads as promotional banners/logo: confirm it is a brand/campaign, not a magazine."
+  ],
+  "decisions": [
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Keep Mediterraneano as the canonical name; MEDITERRANEO (as printed on covers) is an approved alias for keyosx:publication:mediterraneano."
+    }
   ]
 }

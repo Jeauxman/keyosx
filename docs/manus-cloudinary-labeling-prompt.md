@@ -24,6 +24,10 @@ So open each cover and read its masthead. Record exactly what you read.
 
 If a cover shows a magazine title **not on this list**, do not force it: use `kx:pub:unlisted` and put the printed title in `masthead`. Non-magazine brands (IREFS, GoCarcassonne, FREG, HomeLink, AI Masterclass, Joe Business, etc.) use `kx:brand:<slug>` instead.
 
+## Approved alias (decided by Joe)
+
+**MEDITERRANEO** (the spelling printed on the covers) is an approved alias of **Mediterraneano**. Tag covers whose masthead reads MEDITERRANEO as `kx:pub:mediterraneano`, keep the exact printed text in `kx_masthead`, and treat them as high confidence if the masthead is clearly legible. Other spellings are not approved: flag them for review.
+
 ## What to add (additive tags and context only)
 
 For every asset, **add** these tags (keep all existing tags untouched):
