@@ -1,5 +1,5 @@
 {
-  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo).",
+  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo). Issues are cover concepts with status 'proposed' until each gets its own record, content and approval history; do not treat them as published.",
   "publications": [
     {
       "id": "keyosx:publication:mediterraneano",
@@ -8,14 +8,32 @@
       "workSlug": "mediterraneano",
       "tagline": "Mediterranean luxury lifestyle and travel.",
       "editorial_agent": "keyosx:agent:almanac",
-      "related": ["keyosx:publication:me-dia"],
+      "related": [
+        "keyosx:publication:me-dia"
+      ],
       "integration_status": "unverified",
       "requires_approval": true,
       "issues": [
-        { "title": "Mediterraneano Summer 2026", "image": "v1782237434/ChatGPT_Image_Jun_23_2026_11_16_51_AM_x6bvwg.png" },
-        { "title": "Mediterranean Slow Living", "image": "v1782237437/high-level-description-an-ultra-premium-_NMgCe8TfWl24oa2RwJpNPg_4Cf9pixkQAK3y5S67h3d5A_qqw48e.jpg" },
-        { "title": "Mediterranean Summer Escape", "image": "v1782237438/high-level-description-an-ultra-premium-_ty_lovsDWROcDuHu8XXF8A_4Cf9pixkQAK3y5S67h3d5A_cover_owbd3b.jpg" },
-        { "title": "Mediterranean Lifestyle 2026", "image": "v1782237438/ChatGPT_Image_Jun_20_2026_03_42_25_PM_hnutj5.png" }
+        {
+          "title": "Mediterraneano Summer 2026",
+          "image": "v1782237434/ChatGPT_Image_Jun_23_2026_11_16_51_AM_x6bvwg.png",
+          "status": "proposed"
+        },
+        {
+          "title": "Mediterranean Slow Living",
+          "image": "v1782237437/high-level-description-an-ultra-premium-_NMgCe8TfWl24oa2RwJpNPg_4Cf9pixkQAK3y5S67h3d5A_qqw48e.jpg",
+          "status": "proposed"
+        },
+        {
+          "title": "Mediterranean Summer Escape",
+          "image": "v1782237438/high-level-description-an-ultra-premium-_ty_lovsDWROcDuHu8XXF8A_4Cf9pixkQAK3y5S67h3d5A_cover_owbd3b.jpg",
+          "status": "proposed"
+        },
+        {
+          "title": "Mediterranean Lifestyle 2026",
+          "image": "v1782237438/ChatGPT_Image_Jun_20_2026_03_42_25_PM_hnutj5.png",
+          "status": "proposed"
+        }
       ]
     },
     {
@@ -25,12 +43,22 @@
       "workSlug": "me-dia-os",
       "tagline": "Editorial covers and creator issues.",
       "editorial_agent": "keyosx:agent:flintbill",
-      "related": ["keyosx:publication:mediterraneano"],
+      "related": [
+        "keyosx:publication:mediterraneano"
+      ],
       "integration_status": "unverified",
       "requires_approval": true,
       "issues": [
-        { "title": "The Creator Issue", "image": "v1782238900/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_52_AM.png" },
-        { "title": "Renaissance Women", "image": "v1782238748/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_15_AM.png" }
+        {
+          "title": "The Creator Issue",
+          "image": "v1782238900/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_52_AM.png",
+          "status": "proposed"
+        },
+        {
+          "title": "Renaissance Women",
+          "image": "v1782238748/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_15_AM.png",
+          "status": "proposed"
+        }
       ]
     },
     {
@@ -44,20 +72,111 @@
       "integration_status": "unverified",
       "requires_approval": true,
       "issues": [
-        { "title": "Salt Journal — Dark", "image": "v1783339711/megameed/salt-journal-cover-v1-dark.png" },
-        { "title": "Salt Journal — Market", "image": "v1783339729/megameed/salt-journal-cover-v2-market.png" },
-        { "title": "Zout Journal — Steampunk", "image": "v1783339834/megameed/zout-journal-cover-v1-steampunk.png" },
-        { "title": "Zout Journal — Modern", "image": "v1783339691/megameed/zout-journal-cover-v2-modern.png" }
+        {
+          "title": "Salt Journal — Dark",
+          "image": "v1783339711/megameed/salt-journal-cover-v1-dark.png",
+          "status": "proposed"
+        },
+        {
+          "title": "Salt Journal — Market",
+          "image": "v1783339729/megameed/salt-journal-cover-v2-market.png",
+          "status": "proposed"
+        },
+        {
+          "title": "Zout Journal — Steampunk",
+          "image": "v1783339834/megameed/zout-journal-cover-v1-steampunk.png",
+          "status": "proposed"
+        },
+        {
+          "title": "Zout Journal — Modern",
+          "image": "v1783339691/megameed/zout-journal-cover-v2-modern.png",
+          "status": "proposed"
+        }
       ]
     }
   ],
   "agents": [
-    { "id": "keyosx:agent:jack-rabbit", "name": "Jack Rabbit", "type": "guide-agent", "workSlug": "jack-rabbit", "capabilities": ["catalog-search", "status-explanation", "routing"], "integration_status": "verified", "requires_approval": false },
-    { "id": "keyosx:agent:almanac", "name": "Almanac", "type": "content-agent", "workSlug": "almanac", "capabilities": ["local-content", "editorial-queue", "retrieval-chat"], "integration_status": "unverified", "requires_approval": true },
-    { "id": "keyosx:agent:flintbill", "name": "FlintBill", "type": "media-agent", "workSlug": "flintbill-engine", "capabilities": ["asset-discovery", "media-preparation", "content-workflows"], "integration_status": "unverified", "requires_approval": true },
-    { "id": "keyosx:agent:team-builder", "name": "Team Builder", "type": "service-agent", "workSlug": "teambuilder-pro", "capabilities": ["team-assembly"], "integration_status": "unverified", "requires_approval": true },
-    { "id": "keyosx:agent:opportunity-engine", "name": "Opportunity Engine", "type": "discovery-agent", "workSlug": "opportunity-engine", "capabilities": ["opportunity-discovery"], "integration_status": "unverified", "requires_approval": true },
-    { "id": "keyosx:agent:pathfinder", "name": "Pathfinder", "type": "guide-agent", "workSlug": null, "capabilities": [], "integration_status": "unverified", "requires_approval": true },
-    { "id": "keyosx:agent:synphony", "name": "Synphony", "type": "orchestrator", "workSlug": null, "capabilities": ["agent-communication", "orchestration"], "integration_status": "unverified", "requires_approval": true }
+    {
+      "id": "keyosx:agent:jack-rabbit",
+      "name": "Jack Rabbit",
+      "type": "guide-agent",
+      "workSlug": "jack-rabbit",
+      "capabilities": [
+        "catalog-search",
+        "status-explanation",
+        "routing"
+      ],
+      "integration_status": "verified",
+      "requires_approval": false
+    },
+    {
+      "id": "keyosx:agent:almanac",
+      "name": "Almanac",
+      "type": "content-agent",
+      "workSlug": "almanac",
+      "capabilities": [
+        "local-content",
+        "editorial-queue",
+        "retrieval-chat"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true
+    },
+    {
+      "id": "keyosx:agent:flintbill",
+      "name": "FlintBill",
+      "type": "media-agent",
+      "workSlug": "flintbill-engine",
+      "capabilities": [
+        "asset-discovery",
+        "media-preparation",
+        "content-workflows"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true
+    },
+    {
+      "id": "keyosx:agent:team-builder",
+      "name": "Team Builder",
+      "type": "service-agent",
+      "workSlug": "teambuilder-pro",
+      "capabilities": [
+        "team-assembly"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true
+    },
+    {
+      "id": "keyosx:agent:opportunity-engine",
+      "name": "Opportunity Engine",
+      "type": "discovery-agent",
+      "workSlug": "opportunity-engine",
+      "capabilities": [
+        "opportunity-discovery"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true
+    },
+    {
+      "id": "keyosx:agent:pathfinder",
+      "name": "Pathfinder",
+      "type": "guide-agent",
+      "workSlug": null,
+      "capabilities": [],
+      "integration_status": "unverified",
+      "requires_approval": true
+    },
+    {
+      "id": "keyosx:agent:synphony",
+      "name": "Synphony",
+      "type": "orchestrator",
+      "workSlug": null,
+      "capabilities": [
+        "agent-communication",
+        "orchestration"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true
+    }
   ]
 }

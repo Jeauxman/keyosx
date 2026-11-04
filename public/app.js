@@ -96,7 +96,7 @@ function publicationCard(publication) {
   const agent = state.entities.agents.find((item) => item.id === publication.editorial_agent);
   const related = (publication.related || []).map((id) => state.entities.publications.find((item) => item.id === id)).filter(Boolean);
   return `<article class="content-card rack-card">
-    <div class="rack-covers">${publication.issues.map((issue) => `<figure><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><figcaption>${escapeHtml(issue.title)}</figcaption></figure>`).join("")}</div>
+    <div class="rack-covers">${publication.issues.map((issue) => `<figure><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><figcaption>${escapeHtml(issue.title)}<br><em>${escapeHtml(issue.status === "published" ? "Published" : "Proposed cover")}</em></figcaption></figure>`).join("")}</div>
     <div class="card-meta"><span>▤</span>Publication ${integrationBadge(publication)}</div>
     <h3>${escapeHtml(publication.name)}</h3>
     <p>${escapeHtml(publication.tagline)}</p>

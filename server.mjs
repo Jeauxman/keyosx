@@ -159,7 +159,7 @@ async function main() {
     const link = (entity) => ({ ...entity, work_id: entity.workSlug ? idBySlug.get(entity.workSlug) ?? null : null });
     const publications = entities.publications.map((publication) => ({
       ...link(publication),
-      issues: publication.issues.map((issue) => ({ title: issue.title, image_url: CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image })),
+      issues: publication.issues.map((issue) => ({ title: issue.title, status: issue.status || "proposed", image_url: CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image })),
     }));
     const type = String(req.query.type || "");
     res.json({
