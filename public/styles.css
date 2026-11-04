@@ -216,3 +216,9 @@ td .button { min-height: 32px; padding: 6px 8px; font-size: .76rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+.badge-live { color: #1f5d36; background: #dcf2e3; }
+.rack-covers { display: flex; gap: .6rem; overflow-x: auto; padding-bottom: .5rem; scroll-snap-type: x proximity; }
+.rack-covers figure { margin: 0; flex: 0 0 8.5rem; scroll-snap-align: start; }
+.rack-covers img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 6px; background: #e7e1d6; display: block; }
+.rack-covers figcaption { font-size: .75rem; margin-top: .25rem; line-height: 1.25; }

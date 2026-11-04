@@ -13,6 +13,7 @@ const state = {
   adminMeta: null,
   manageWorkId: null,
   manageTab: "artifacts",
+  entities: { publications: [], agents: [] },
 };
 
 const KIND_LABELS = {
@@ -86,6 +87,34 @@ function workCard(work) {
   </article>`;
 }
 
+function integrationBadge(entity) {
+  const verified = entity.integration_status === "verified";
+  return `<span class="badge ${verified ? "badge-live" : "badge-sample"}">${verified ? "Connected" : "Not yet connected"}</span>`;
+}
+
+function publicationCard(publication) {
+  const agent = state.entities.agents.find((item) => item.id === publication.editorial_agent);
+  const related = (publication.related || []).map((id) => state.entities.publications.find((item) => item.id === id)).filter(Boolean);
+  return `<article class="content-card rack-card">
+    <div class="rack-covers">${publication.issues.map((issue) => `<figure><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><figcaption>${escapeHtml(issue.title)}</figcaption></figure>`).join("")}</div>
+    <div class="card-meta"><span>▤</span>Publication ${integrationBadge(publication)}</div>
+    <h3>${escapeHtml(publication.name)}</h3>
+    <p>${escapeHtml(publication.tagline)}</p>
+    <div class="card-details">${agent ? `Editorial agent: ${escapeHtml(agent.name)}` : "No editorial agent assigned yet"}${related.length ? ` · Related: ${related.map((item) => escapeHtml(item.name)).join(", ")}` : ""}</div>
+    ${publication.work_id ? `<button class="button card-link" data-detail-id="${publication.work_id}">Open in the catalog <span aria-hidden="true">→</span></button>` : ""}
+  </article>`;
+}
+
+function agentCard(agent) {
+  return `<article class="content-card">
+    <div class="card-meta"><span>⚙</span>${escapeHtml(agent.type)} ${integrationBadge(agent)}</div>
+    <h3>${escapeHtml(agent.name)}</h3>
+    <p>${agent.capabilities.length ? escapeHtml(agent.capabilities.join(" · ")) : "Capabilities not yet defined."}</p>
+    <div class="card-details">${agent.requires_approval ? "Actions require approval" : "Read-only guide"}</div>
+    ${agent.work_id ? `<button class="button card-link" data-detail-id="${agent.work_id}">Open in the catalog <span aria-hidden="true">→</span></button>` : ""}
+  </article>`;
+}
+
 function renderMessages() {
   if (!state.messages.length) {
     return `<div class="message message-guide"><strong>${escapeHtml(state.config?.guideName || "Jack Rabbit")}</strong><br>I search KeyOSX's published catalog. Ask about a specific work, or things like "what's live right now" or "what's planned next".</div>`;
@@ -121,6 +150,18 @@ function renderPublic() {
             <div class="hero-stat"><strong>${counts.future}</strong><span>Future</span></div>
             <div class="hero-stat"><strong>${counts.old}</strong><span>Old</span></div>
           </div>
+        </div>
+      </section>
+      <section class="section" id="rack">
+        <div class="page-width">
+          <div class="section-head"><div><div class="eyebrow" style="color:var(--clay)">The publication rack</div><h2 class="section-title">Real magazines, each with its own identity.</h2><p class="section-copy">Each publication keeps its own covers, issues, editorial agent, and related titles. Connections to agents stay marked "not yet connected" until their integration is verified.</p></div></div>
+          <div class="content-grid">${state.entities.publications.map(publicationCard).join("")}</div>
+        </div>
+      </section>
+      <section class="section section-soft" id="agents">
+        <div class="page-width">
+          <div class="section-head"><div><div class="eyebrow" style="color:var(--clay)">The agent network</div><h2 class="section-title">The agents behind the kiosk.</h2></div></div>
+          <div class="content-grid">${state.entities.agents.map(agentCard).join("")}</div>
         </div>
       </section>
       <section class="section">
@@ -459,6 +500,7 @@ async function bootPublic() {
   try {
     if (!state.config) state.config = await api("/api/config");
     await loadWorks();
+    try { state.entities = await api("/api/entities"); } catch { /* rack is optional; the catalog still works */ }
     renderPublic();
   } catch (error) {
     app.innerHTML = `<main class="admin-shell"><section class="login-card"><h1 style="font-size:2rem;color:var(--ink)">The kiosk could not start.</h1><p>${escapeHtml(error.message)}</p><button class="button button-primary" id="retry">Retry</button></section></main>`;

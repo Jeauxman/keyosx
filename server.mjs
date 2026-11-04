@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import fs from "node:fs";
 import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -147,6 +148,23 @@ async function main() {
         current: all.filter((work) => work.status === "current").length,
         future: all.filter((work) => work.status === "future").length,
       },
+    });
+  }));
+
+  const CLOUDINARY_BASE = "https://res.cloudinary.com/dmsdspzbo/image/upload/";
+  const entities = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "entities.json"), "utf8"));
+  app.get("/api/entities", asyncRoute(async (req, res) => {
+    const published = await listWorks(db, { includeUnpublished: false, limit: 1000 });
+    const idBySlug = new Map(published.map((work) => [work.slug, work.id]));
+    const link = (entity) => ({ ...entity, work_id: entity.workSlug ? idBySlug.get(entity.workSlug) ?? null : null });
+    const publications = entities.publications.map((publication) => ({
+      ...link(publication),
+      issues: publication.issues.map((issue) => ({ title: issue.title, image_url: CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image })),
+    }));
+    const type = String(req.query.type || "");
+    res.json({
+      publications: type && type !== "publication" ? [] : publications,
+      agents: type && type !== "agent" ? [] : entities.agents.map(link),
     });
   }));
 
