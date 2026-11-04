@@ -1,5 +1,5 @@
 {
-  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo). Issues are cover concepts with status 'proposed' until each gets its own record, content and approval history; do not treat them as published. Covers were checked by eye against their mastheads: a cover is filed under the title printed on it, not under the Cloudinary tags. beat_status 'confirmed' = stated by Joe; 'inferred' = guessed from name/tagline, to be corrected. Issues are posted by each publication's editorial agent via POST /api/agent/issues.",
+  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo). Issues are cover concepts with status 'proposed' until each gets its own record, content and approval history; do not treat them as published. Covers were checked by eye against their mastheads: a cover is filed under the title printed on it, not under the Cloudinary tags. beat_status 'confirmed' = stated by Joe; 'inferred' = guessed from name/tagline, to be corrected. Issues are posted by each publication's editorial agent via POST /api/agent/issues. Corrected after Manus's Phase 1 dry-run: Aude covers print no masthead and are Basil Leaf Chronicles covers; Hostelles artwork is promotional banners, not periodical covers; one Troubadour cover had no Troubadour masthead.",
   "publications": [
     {
       "id": "keyosx:publication:mediterraneano",
@@ -353,11 +353,6 @@
           "title": "The Architect of Europe's Next Renaissance",
           "image": "v1782237361/ChatGPT_Image_Jun_23_2026_11_34_25_AM_nvhzhu",
           "status": "proposed"
-        },
-        {
-          "title": "Discover Carcassonne and Cathar Country",
-          "image": "v1782237323/ChatGPT_Image_Jun_23_2026_11_43_19_AM_r8sdec",
-          "status": "proposed"
         }
       ],
       "beat": "Art, travel and the new European renaissance.",
@@ -391,11 +386,11 @@
       "beat_status": "inferred"
     },
     {
-      "id": "keyosx:publication:aude-chronicles",
-      "name": "Aude Chronicles",
+      "id": "keyosx:publication:basil-leaf-chronicles",
+      "name": "Basil Leaf Chronicles",
       "type": "publication",
       "workSlug": "basil-leaf-chronicles",
-      "tagline": "Culinary summers in the Aude.",
+      "tagline": "Food, culinary stories and travel.",
       "editorial_agent": null,
       "related": [],
       "integration_status": "unverified",
@@ -412,38 +407,7 @@
           "status": "proposed"
         }
       ],
-      "beat": "Food and summer life in the Aude.",
-      "cadence": "monthly",
-      "beat_status": "inferred"
-    },
-    {
-      "id": "keyosx:publication:hostelles",
-      "name": "Hostelles",
-      "type": "publication",
-      "workSlug": "hostelles",
-      "tagline": "Travel stays for women.",
-      "editorial_agent": null,
-      "related": [],
-      "integration_status": "unverified",
-      "requires_approval": true,
-      "issues": [
-        {
-          "title": "Cover v6",
-          "image": "v1782853409/understanding/understanding_book_cover_v6",
-          "status": "proposed"
-        },
-        {
-          "title": "Cover v5",
-          "image": "v1782853400/understanding/understanding_book_cover_v5",
-          "status": "proposed"
-        },
-        {
-          "title": "Cover v4",
-          "image": "v1782853387/understanding/understanding_book_cover_v4",
-          "status": "proposed"
-        }
-      ],
-      "beat": "Travel and stays for women.",
+      "beat": "Food, culinary stories and travel.",
       "cadence": "monthly",
       "beat_status": "inferred"
     },

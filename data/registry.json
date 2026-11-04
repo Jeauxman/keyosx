@@ -1,7 +1,7 @@
 {
   "_note": "Working registry of 70 names from Joe's master list. Each name has ONE permanent KeyOSX entity id (keyosx:<entity_type>:<slug>); ids never change once published, names can. 'verified' stays false until Joe confirms the name is a real title/brand. 'flags' list overlaps and open questions. status 'on-rack' = already an entity in data/entities.json. 'registry' assigns each name to one of five registries (see 'registries'). 'known_issue_names' lists titles that are issues or cover lines of an existing publication, to avoid creating duplicate entities. Entries with class 'added-from-screenshots' come from a second pass over Joe's screenshots read by ChatGPT; Claude has not seen those images.",
   "counts": {
-    "publication": 20,
+    "publication": 28,
     "campaign": 12,
     "brand": 35,
     "archive": 8,
@@ -10,9 +10,7 @@
   "rack_entities_not_in_list": [
     "keyosx:publication:synphony-magazine",
     "keyosx:publication:troubadour-quarterly",
-    "keyosx:publication:u-man",
-    "keyosx:publication:aude-chronicles",
-    "keyosx:publication:hostelles"
+    "keyosx:publication:u-man"
   ],
   "entries": [
     {
@@ -137,11 +135,11 @@
       "entity_type": "publication",
       "focus": "Food, culinary stories and travel",
       "catalog_slug": "basil-leaf-chronicles",
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
       "flags": [
-        "Rack has 'Aude Chronicles' covers tagged Basil Leaf Chronicles: confirm whether Aude Chronicles is a separate title or an edition of this one."
+        "Rack covers titled \"Summer Treasures in Aude\" and \"Discover Aude Summer\" print no masthead; filed here (Manus: Basil Leaf Chronicles, high confidence). \"Aude Chronicles\" is treated as an issue theme, not a separate title."
       ],
       "registry": "publication"
     },
@@ -1216,6 +1214,134 @@
       "flags": [
         "Very generic title; confirm it is a real work."
       ]
+    },
+    {
+      "n": 83,
+      "id": "keyosx:publication:daily-shit",
+      "name": "Daily Shit",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Satirical newspaper; political and social humor",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (1 asset). May relate to The Honest Liar; rights/tone review needed before kiosk use."
+      ]
+    },
+    {
+      "n": 84,
+      "id": "keyosx:publication:morning-shit-press",
+      "name": "Morning Shit Press",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Satirical newspaper; crude humor",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (1 asset). May relate to The Honest Liar; tone review needed."
+      ]
+    },
+    {
+      "n": 85,
+      "id": "keyosx:publication:fansler",
+      "name": "Fansler",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Media business and culture",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (1 asset); may be a personal-brand cover."
+      ]
+    },
+    {
+      "n": 86,
+      "id": "keyosx:publication:inspirazione",
+      "name": "Inspirazione",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Art, music and creativity",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (2 assets, \"INSPIRAZIONE\"/\"ispirazione\")."
+      ]
+    },
+    {
+      "n": 87,
+      "id": "keyosx:publication:italian-real-estate-almanac",
+      "name": "Italian Real Estate Almanac",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Italian property, food and lifestyle",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (1 asset); likely related to IREFS and Almanac."
+      ]
+    },
+    {
+      "n": 88,
+      "id": "keyosx:publication:italian-real-estate-for-sale",
+      "name": "Italian Real Estate For Sale",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Italian real estate",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (1 asset); this is the IREFS brand in the catalog."
+      ]
+    },
+    {
+      "n": 89,
+      "id": "keyosx:publication:millennium-man",
+      "name": "Millennium Man",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Lifestyle, travel, business and creative identity",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (1 asset); rights check flagged."
+      ]
+    },
+    {
+      "n": 90,
+      "id": "keyosx:publication:bon-voyage",
+      "name": "Bon Voyage",
+      "class": "added-from-manus-dry-run",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Travel and road trips",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Printed masthead found by Manus (1 asset); rights check flagged."
+      ]
     }
   ],
   "known_issue_names": [
@@ -1243,6 +1369,11 @@
       "name": "The New Renaissance",
       "parent": "keyosx:publication:the-libertine",
       "evidence": "Cover story printed on several Libertine covers."
+    },
+    {
+      "name": "Aude Chronicles",
+      "parent": "keyosx:publication:basil-leaf-chronicles",
+      "evidence": "No AUDE CHRONICLES masthead was confidently identified in the Manus dry run; the covers carry Basil Leaf Chronicles tags."
     }
   ],
   "registries": {
@@ -1251,5 +1382,9 @@
     "brand": "brands, agent identities and service/business systems",
     "work": "books and idea/concept covers",
     "archive": "creative archive: logo studies, alternates, early identity experiments"
-  }
+  },
+  "open_questions": [
+    "Mediterraneano vs MEDITERRANEO: five covers literally print MEDITERRANEO (the rack covers I used all print it). Approve the alias, or rename the entity to the printed spelling?",
+    "Hostelles artwork reads as promotional banners/logo: confirm it is a brand/campaign, not a magazine."
+  ]
 }
