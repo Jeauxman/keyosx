@@ -1229,11 +1229,11 @@
       "registry": "publication",
       "focus": "Satirical newspaper; political and social humor",
       "catalog_slug": null,
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
       "flags": [
-        "Joe 2026-11-04: Daily Shit is the magazine. Current cover art is not approved; Joe is making a new one. Not on the rack until then."
+        "Joe 2026-11-04: Daily Shit is the magazine, a WSHIT Media publication. New cover supplied (Vol. 1 No. 001); the first cover was replaced."
       ]
     },
     {
@@ -1540,7 +1540,8 @@
       "intelligent-design": "intelligent-design",
       "retrofuturism": "retrofuturism",
       "pride-mediterraneo": "pride-mediterraneo",
-      "wshit": "wshit"
+      "wshit": "wshit",
+      "daily-shit": "daily-shit-001"
     },
     "asset": {
       "homelink-local-south-france": "HomeLink Local South France banner",
@@ -1565,8 +1566,8 @@
     },
     "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation.",
     "held": {
-      "daily-shit": "Joe: not nice; replacing with a new cover. File kept, not displayed.",
-      "morning-shit-press": "Joe: not nice; replacing with a new cover. File kept, not displayed."
+      "daily-shit (old cover)": "Replaced by daily-shit-001. File kept, not displayed.",
+      "morning-shit-press": "Joe: not nice; making a new cover. File kept, not displayed."
     }
   }
 }

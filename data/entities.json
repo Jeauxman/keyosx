@@ -711,7 +711,8 @@
       "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:noize",
-        "keyosx:publication:au-contraire"
+        "keyosx:publication:au-contraire",
+        "keyosx:publication:daily-shit"
       ],
       "integration_status": "unverified",
       "requires_approval": true,
@@ -725,6 +726,30 @@
         {
           "title": "Launch poster",
           "image": "/covers/wshit.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:daily-shit",
+      "name": "Daily Shit",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [
+        "keyosx:publication:wshit"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "confirmed",
+      "tagline": "The daily dose of what everyone's talking about.",
+      "beat": "Quick-hit daily magazine from WSHIT Media: news, culture, media, ideas, business and weird news.",
+      "cadence": "daily",
+      "series": "Satire",
+      "page": "/daily-shit.html",
+      "issues": [
+        {
+          "title": "Vol. 1 · No. 001",
+          "image": "/covers/daily-shit-001.webp",
           "status": "proposed"
         }
       ]
