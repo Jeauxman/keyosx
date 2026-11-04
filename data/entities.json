@@ -1,5 +1,5 @@
 {
-  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo). Issues are cover concepts with status 'proposed' until each gets its own record, content and approval history; do not treat them as published.",
+  "_note": "Machine-readable identities for the Publication Rack and Agent Network. integration_status is 'unverified' until an endpoint and permissions are confirmed; Synphony may only connect capabilities after that. Cover art is existing Cloudinary assets (cloud dmsdspzbo). Issues are cover concepts with status 'proposed' until each gets its own record, content and approval history; do not treat them as published. Covers were checked by eye against their mastheads: a cover is filed under the title printed on it, not under the Cloudinary tags.",
   "publications": [
     {
       "id": "keyosx:publication:mediterraneano",
@@ -9,6 +9,8 @@
       "tagline": "Mediterranean luxury lifestyle and travel.",
       "editorial_agent": "keyosx:agent:almanac",
       "related": [
+        "keyosx:publication:the-libertine",
+        "keyosx:publication:matriarch",
         "keyosx:publication:me-dia"
       ],
       "integration_status": "unverified",
@@ -18,20 +20,60 @@
           "title": "Mediterraneano Summer 2026",
           "image": "v1782237434/ChatGPT_Image_Jun_23_2026_11_16_51_AM_x6bvwg.png",
           "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:the-libertine",
+      "name": "The Libertine",
+      "type": "publication",
+      "workSlug": "the-libertine",
+      "tagline": "Freedom, passion, intelligence.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:mediterraneano"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "The New Renaissance",
+          "image": "v1782237438/high-level-description-an-ultra-premium-_scpECWipUoCSQkb-V-o07w_4Cf9pixkQAK3y5S67h3d5A_ky0yqy.jpg",
+          "status": "proposed"
         },
         {
-          "title": "Mediterranean Slow Living",
+          "title": "The Art of Living Well",
           "image": "v1782237437/high-level-description-an-ultra-premium-_NMgCe8TfWl24oa2RwJpNPg_4Cf9pixkQAK3y5S67h3d5A_qqw48e.jpg",
           "status": "proposed"
         },
         {
-          "title": "Mediterranean Summer Escape",
+          "title": "Europe's Last Great Villages",
           "image": "v1782237438/high-level-description-an-ultra-premium-_ty_lovsDWROcDuHu8XXF8A_4Cf9pixkQAK3y5S67h3d5A_cover_owbd3b.jpg",
           "status": "proposed"
         },
         {
-          "title": "Mediterranean Lifestyle 2026",
-          "image": "v1782237438/ChatGPT_Image_Jun_20_2026_03_42_25_PM_hnutj5.png",
+          "title": "Luxury Lifestyle Issue",
+          "image": "v1782238762/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_20_AM.png",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:matriarch",
+      "name": "Matriarch",
+      "type": "publication",
+      "workSlug": null,
+      "tagline": "Women, wisdom, freedom.",
+      "editorial_agent": null,
+      "related": [
+        "keyosx:publication:mediterraneano"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "issues": [
+        {
+          "title": "Summer 2026",
+          "image": "v1782238623/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_16_37_AM.png",
           "status": "proposed"
         }
       ]
@@ -44,7 +86,7 @@
       "tagline": "Editorial covers and creator issues.",
       "editorial_agent": "keyosx:agent:flintbill",
       "related": [
-        "keyosx:publication:mediterraneano"
+        "keyosx:publication:the-libertine"
       ],
       "integration_status": "unverified",
       "requires_approval": true,
@@ -55,8 +97,8 @@
           "status": "proposed"
         },
         {
-          "title": "Renaissance Women",
-          "image": "v1782238748/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_15_AM.png",
+          "title": "ME+DÍA Brand Launch",
+          "image": "v1782238853/joe-asset-engine/ChatGPT_Image_Jun_23_2026_11_18_40_AM.png",
           "status": "proposed"
         }
       ]
