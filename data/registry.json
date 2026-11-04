@@ -1229,7 +1229,7 @@
       "registry": "publication",
       "focus": "Satirical newspaper; political and social humor",
       "catalog_slug": null,
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
       "flags": [
@@ -1363,6 +1363,86 @@
       "flags": [
         "Cover supplied by Joe 2026-11-04 (Issue 01, May 2025). Confirm relation to AI Masterclass / education brands."
       ]
+    },
+    {
+      "n": 92,
+      "id": "keyosx:publication:ispirazione",
+      "name": "ispirazione",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Music, art and life (Italian)",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Cover supplied by Joe 2026-11-04."
+      ]
+    },
+    {
+      "n": 93,
+      "id": "keyosx:publication:engineered",
+      "name": "Engineered",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Past culture, future technologies",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Cover supplied by Joe 2026-11-04."
+      ]
+    },
+    {
+      "n": 94,
+      "id": "keyosx:publication:intelligent-design",
+      "name": "Intelligent Design",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Science, nature and spirit",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Cover supplied by Joe 2026-11-04."
+      ]
+    },
+    {
+      "n": 95,
+      "id": "keyosx:publication:retrofuturism",
+      "name": "Retrofuturism",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Ancient wisdom, tomorrow's civilization",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Cover supplied by Joe 2026-11-04."
+      ]
+    },
+    {
+      "n": 96,
+      "id": "keyosx:publication:pride-mediterraneo",
+      "name": "Pride Mediterraneo",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "LGBTQ+ Mediterranean travel",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Cover supplied by Joe 2026-11-04."
+      ]
     }
   ],
   "known_issue_names": [
@@ -1405,28 +1485,42 @@
     "archive": "creative archive: logo studies, alternates, early identity experiments"
   },
   "open_questions": [
-    "Hostelles artwork reads as promotional banners/logo: confirm it is a brand/campaign, not a magazine."
+    "Hostelles artwork reads as promotional banners/logo: confirm it is a brand/campaign, not a magazine. Joe has since supplied Hostelles banners that read as a brand (a network of places for women, part of the ME+DÍA family): kept off the rack as a brand."
   ],
   "decisions": [
     {
       "date": "2026-11-04",
       "by": "Joe",
       "decision": "Keep Mediterraneano as the canonical name; MEDITERRANEO (as printed on covers) is an approved alias for keyosx:publication:mediterraneano."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Daily Shit is the magazine and Morning Shit Press is the podcast; built as the page /daily-shit.html, with Daily Shit on the rack."
     }
   ],
   "cover_assets": {
     "_note": "Cover and brand art Joe supplied 2026-11-04, stored in public/covers. 'rack' = used as the one rack cover; 'asset' = brand art kept for its own entry; 'held' = not shown until Joe confirms.",
     "rack": {
-      "mediterraneano": "mediterraneano",
+      "mediterraneano": "mediterraneano-summer-2026",
       "cinebon": "cinebon",
       "au-contraire": "au-contraire-the-move",
-      "eat-stay-love-carcassonne": "eat-stay-love-carcassonne",
+      "eat-stay-love-carcassonne": "eat-stay-love-carcassonne-poster",
       "troubadour-quarterly": "joe-troubadour",
       "dolce-far-niente": "dolce-far-niente",
       "lern": "lern",
       "heroes": "heroes",
       "simultanism": "simultanism-poster",
-      "jack-rabbit": "jack-rabbit"
+      "jack-rabbit": "jack-rabbit",
+      "noize": "noize",
+      "zout-salt-journal": "zout",
+      "ispirazione": "ispirazione",
+      "engineered": "engineered",
+      "intelligent-design": "intelligent-design",
+      "retrofuturism": "retrofuturism",
+      "pride-mediterraneo": "pride-mediterraneo",
+      "daily-shit": "daily-shit",
+      "morning-shit-press (page only)": "morning-shit-press"
     },
     "asset": {
       "homelink-local-south-france": "HomeLink Local South France banner",
@@ -1436,11 +1530,19 @@
       "gods-create": "Make No Mistake, Gods Create (work)",
       "lets-grow": "Let's Grow (GoCarcassonne at your service)",
       "taste-and-travel": "Taste & Travel, Basil Leaf affiliate logo",
-      "simultanism-philosophy": "Simultanism philosophy poster (alternate)"
+      "simultanism-philosophy": "Simultanism philosophy poster (alternate)",
+      "life-cycle": "Life Cycle poster (Observe, Choose, Accept, Be): a work or concept, kind not yet confirmed",
+      "gaem": "GA2M / GAEM logo, 'Five Engines' sub-brand art",
+      "taste-of-carcassonne": "The Taste of Carcassonne weekly market plan",
+      "carcassonne-3000": "Carcassonne 3000 urban revitalization plan",
+      "gocarcassonne-fun-pack": "GoCarcassonne Carcassonne Fun Pack",
+      "carcassonne-cash-flow-opportunity": "Real-estate listing ad (EUR 400,000 property, Carcassonne): a listing, not a cover",
+      "megameed": "MEGAMEED / MEED reward-economy banner",
+      "hostelles-banner": "Hostelles banner",
+      "hostelles-poster": "Hostelles poster",
+      "salt": "SALT cover (alternate to Zout, held back on the Zout / Salt Journal card)",
+      "eat-stay-love-carcassonne": "Earlier Eat Stay Love promo (alternate)"
     },
-    "held": {
-      "daily-shit": "Satire newspaper with explicit headline: not on the public rack until Joe confirms",
-      "morning-shit-press": "Satire broadcast, same reason"
-    }
+    "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation."
   }
 }

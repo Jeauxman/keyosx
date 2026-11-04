@@ -103,6 +103,7 @@ function publicationCard(publication) {
     <p>${escapeHtml(publication.tagline)}</p>
     ${publication.issues.length > 1 ? `<div class="card-details">${publication.issues.length - 1} more proposed cover(s) held back. One cover per series on the rack; the Almanac makes the next ones once it goes live.</div>` : ""}
     <div class="card-details">${agent ? `Editorial agent: ${escapeHtml(agent.name)}` : "No editorial agent assigned yet"}${related.length ? ` · Related: ${related.map((item) => escapeHtml(item.name)).join(", ")}` : ""}</div>
+    ${publication.page ? `<a class="button card-link" href="${escapeHtml(publication.page)}">Open the page <span aria-hidden="true">→</span></a>` : ""}
     ${publication.work_id ? `<button class="button card-link" data-detail-id="${publication.work_id}">Open in the catalog <span aria-hidden="true">→</span></button>` : ""}
   </article>`;
 }

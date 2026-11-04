@@ -17,6 +17,11 @@
       "requires_approval": true,
       "issues": [
         {
+          "title": "Summer 2026 · Issue 01",
+          "image": "/covers/mediterraneano-summer-2026.webp",
+          "status": "proposed"
+        },
+        {
           "title": "Summer 2024 · La Mia Mediterraneo",
           "image": "/covers/mediterraneano.webp",
           "status": "proposed"
@@ -218,6 +223,11 @@
       "requires_approval": true,
       "issues": [
         {
+          "title": "Issue 01 · I Am Rising Above the Noise",
+          "image": "/covers/noize.webp",
+          "status": "proposed"
+        },
+        {
           "title": "NOIZE Magazine Feature",
           "image": "v1782237403/ChatGPT_Image_Jun_23_2026_11_27_23_AM_zivbpe",
           "status": "proposed"
@@ -356,6 +366,11 @@
       "requires_approval": true,
       "issues": [
         {
+          "title": "Eat. Stay. Love. Carcassonne",
+          "image": "/covers/eat-stay-love-carcassonne-poster.webp",
+          "status": "proposed"
+        },
+        {
           "title": "Early Summer Promo",
           "image": "/covers/eat-stay-love-carcassonne.webp",
           "status": "proposed"
@@ -464,6 +479,16 @@
       "requires_approval": true,
       "issues": [
         {
+          "title": "Vol. I · Spring 1975 · Issue 001",
+          "image": "/covers/zout.webp",
+          "status": "proposed"
+        },
+        {
+          "title": "SALT · Vol. 1 Issue 01",
+          "image": "/covers/salt.webp",
+          "status": "proposed"
+        },
+        {
           "title": "Salt Journal — Dark",
           "image": "v1783339711/megameed/salt-journal-cover-v1-dark.png",
           "status": "proposed"
@@ -570,6 +595,135 @@
         {
           "title": "Liar's Quill Press · 2026",
           "image": "/covers/simultanism-poster.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:ispirazione",
+      "name": "ispirazione",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "Crea. Senti. Vivi.",
+      "beat": "Music, art and life in Italian: interviews, reviews, creative travel and true stories.",
+      "cadence": "monthly",
+      "series": "Music & Art",
+      "issues": [
+        {
+          "title": "Anno 1 · Numero 1",
+          "image": "/covers/ispirazione.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:engineered",
+      "name": "Engineered",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "History inspires. Innovation builds.",
+      "beat": "Past culture, future technologies: architecture, transport, energy, communication, discovery.",
+      "cadence": "monthly",
+      "series": "Technology",
+      "issues": [
+        {
+          "title": "Poster issue",
+          "image": "/covers/engineered.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:intelligent-design",
+      "name": "Intelligent Design",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "Where science, nature and spirit are one.",
+      "beat": "Nature, purpose, consciousness and creation: the pattern behind all that exists.",
+      "cadence": "quarterly",
+      "series": "Science",
+      "issues": [
+        {
+          "title": "Issue 01 · Summer 2026",
+          "image": "/covers/intelligent-design.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:retrofuturism",
+      "name": "Retrofuturism",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "Ancient wisdom. Tomorrow's civilization.",
+      "beat": "The future we forgot to imagine: living architecture, Human 2.0, philosophy reimagined.",
+      "cadence": "quarterly",
+      "series": "Future",
+      "issues": [
+        {
+          "title": "Issue 01 · Summer 2026",
+          "image": "/covers/retrofuturism.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:pride-mediterraneo",
+      "name": "Pride Mediterraneo",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "The LGBTQ+ travel magazine of the Mediterranean.",
+      "beat": "Travel, culture, style, food and community for LGBTQ+ travelers.",
+      "cadence": "quarterly",
+      "series": "Travel",
+      "issues": [
+        {
+          "title": "Issue 01 · Summer 2025",
+          "image": "/covers/pride-mediterraneo.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:daily-shit",
+      "name": "Daily Shit",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [
+        "keyosx:publication:au-contraire"
+      ],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "We post news. Stays a sh!t that could be true. Podcast: Morning Shit Press.",
+      "beat": "Satire: the daily paper, read out loud by the Morning Shit Press podcast.",
+      "cadence": "daily",
+      "series": "Satire",
+      "page": "/daily-shit.html",
+      "issues": [
+        {
+          "title": "Vol. 1 · No. 001",
+          "image": "/covers/daily-shit.webp",
           "status": "proposed"
         }
       ]
