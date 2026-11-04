@@ -1239,7 +1239,7 @@
     {
       "n": 84,
       "id": "keyosx:publication:morning-shit-press",
-      "name": "Morning Shit Press",
+      "name": "Morning Shit",
       "class": "added-from-manus-dry-run",
       "entity_type": "publication",
       "registry": "publication",
@@ -1249,7 +1249,7 @@
       "rack_priority": "later",
       "verified": false,
       "flags": [
-        "Joe 2026-11-04: Morning Shit Press is the podcast. Current art is not approved; Joe is making a new one. The WSHIT poster says 'Morning Shit Gazette': confirm which name is canonical."
+        "Joe 2026-11-04: Morning Shit is the podcast (confirmed name; the old 'Morning Shit Press' and 'Gazette' variants are retired). Cover not yet received as a file. Permanent id keeps the old slug."
       ]
     },
     {
@@ -1518,6 +1518,11 @@
       "date": "2026-11-04",
       "by": "Joe",
       "decision": "WSHIT is the radio show; Daily Shit (magazine) and Morning Shit Press (podcast) get new covers made by Joe. Old covers are off the page and the rack."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Names: Morning Shit = podcast, Daily Shit = media (magazine), WSHIT = radio. 'Morning Shit Press' and 'Gazette' are not used."
     }
   ],
   "cover_assets": {
@@ -1567,7 +1572,7 @@
     "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation.",
     "held": {
       "daily-shit (old cover)": "Replaced by daily-shit-001. File kept, not displayed.",
-      "morning-shit-press": "Joe: not nice; making a new cover. File kept, not displayed."
+      "morning-shit-press": "Old art, replaced; new Morning Shit cover still to be sent as a file."
     }
   }
 }
