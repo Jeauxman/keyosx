@@ -1447,7 +1447,7 @@
     {
       "n": 97,
       "id": "keyosx:publication:wshit",
-      "name": "WSHIT",
+      "name": "WSHIT Radio",
       "class": "added-from-covers",
       "entity_type": "publication",
       "registry": "publication",
@@ -1457,7 +1457,7 @@
       "rack_priority": "start",
       "verified": false,
       "flags": [
-        "Joe 2026-11-04: WSHIT is the radio show with many shit talkers. Poster lists brands: Morning Shit Gazette, NOIZE, Au Contraire, Almanac, Troubadour."
+        "Joe 2026-11-04: WSHIT is the radio show with many shit talkers. WSHIT Radio poster supplied; the original brand poster lists Morning Shit Gazette, NOIZE, Au Contraire, Almanac, Troubadour."
       ]
     }
   ],
@@ -1540,7 +1540,7 @@
       "intelligent-design": "intelligent-design",
       "retrofuturism": "retrofuturism",
       "pride-mediterraneo": "pride-mediterraneo",
-      "wshit": "wshit",
+      "wshit": "wshit-radio",
       "daily-shit": "daily-shit-001"
     },
     "asset": {

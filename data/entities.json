@@ -706,7 +706,7 @@
     },
     {
       "id": "keyosx:publication:wshit",
-      "name": "WSHIT",
+      "name": "WSHIT Radio",
       "type": "publication",
       "editorial_agent": "keyosx:agent:almanac",
       "related": [
@@ -717,12 +717,17 @@
       "integration_status": "unverified",
       "requires_approval": true,
       "beat_status": "confirmed",
-      "tagline": "A new media company. Same old bullshit.",
-      "beat": "The radio show with many shit talkers: satirical news, shows and podcasts, with Daily Shit (magazine) and Morning Shit Press (podcast).",
+      "tagline": "The radio channel for a sane(ish) world.",
+      "beat": "Radio and podcasts, live and on demand: daily talks, bold interviews, culture debates and news with context. Home of Daily Shit (magazine) and Morning Shit (podcast).",
       "cadence": "daily",
       "series": "Radio",
       "page": "/daily-shit.html",
       "issues": [
+        {
+          "title": "WSHIT Radio · Tune in",
+          "image": "/covers/wshit-radio.webp",
+          "status": "proposed"
+        },
         {
           "title": "Launch poster",
           "image": "/covers/wshit.webp",
