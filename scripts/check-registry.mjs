@@ -11,7 +11,7 @@ const slugs = new Set(seed.works.map((work) => work.slug));
 const problems = [];
 const ids = new Set();
 for (const entry of registry.entries) {
-  if (!/^keyosx:(publication|agent|brand):[a-z0-9-]+$/.test(entry.id)) problems.push(`bad id format: ${entry.id}`);
+  if (!/^keyosx:(publication|agent|brand|work):[a-z0-9-]+$/.test(entry.id)) problems.push(`bad id format: ${entry.id}`);
   if (ids.has(entry.id)) problems.push(`duplicate id: ${entry.id}`);
   ids.add(entry.id);
   if (entry.catalog_slug && !slugs.has(entry.catalog_slug)) problems.push(`${entry.name}: catalog slug not found: ${entry.catalog_slug}`);

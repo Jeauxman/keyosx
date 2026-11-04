@@ -20,7 +20,7 @@ So open each cover and read its masthead. Record exactly what you read.
 ## Publications (use these slugs)
 
 `mediterraneano`, `the-libertine`, `matriarch`, `me-dia` (printed ME+DÍA), `au-contraire`, `noize`, `synphony-magazine`, `cinebon` (printed CinéBon), `carcassonne-monthly`, `eat-stay-love-carcassonne`, `troubadour-quarterly`, `u-man`, `aude-chronicles`, `hostelles`, `zout-salt-journal` (Zout / Salt Journal).
-**Fuller registry:** Joe's master list of 70 names is in the attached `registry.json`. Every entry has one permanent `id` (`keyosx:<type>:<slug>`); use that **slug** in your tags (e.g. `keyosx:publication:the-honest-liar` -> `kx:pub:the-honest-liar`; agents and brands -> `kx:brand:<slug>`). Many names there (Heroes, Audacity, Dolce Far Niente, Spinster, True America, Nîmes in France, Cité Films, etc.) may have artwork under tags that do not match; find it by the printed title. Names with no artwork simply get no assets. Entries with a `flags` note (possible duplicates or renames) should be tagged with the entry they most likely belong to and called out in the manifest, not silently merged.
+**Fuller registry:** Joe's master list of 70 names is in the attached `registry.json`. Every entry has one permanent `id` (`keyosx:<type>:<slug>`); use that **slug** in your tags (e.g. `keyosx:publication:the-honest-liar` -> `kx:pub:the-honest-liar`; agents and brands -> `kx:brand:<slug>`). Many names there (Heroes, Audacity, Dolce Far Niente, Spinster, True America, Nîmes in France, Cité Films, etc.) may have artwork under tags that do not match; find it by the printed title. Names with no artwork simply get no assets. `known_issue_names` in the registry lists titles that are **issues or cover lines of an existing publication** (e.g. La Mia Mediterraneo, The Move): tag those with the parent publication and put the name in `kx:issue:`, never as a new publication. Entries with a `flags` note (possible duplicates or renames) should be tagged with the entry they most likely belong to and called out in the manifest, not silently merged.
 
 If a cover shows a magazine title **not on this list**, do not force it: use `kx:pub:unlisted` and put the printed title in `masthead`. Non-magazine brands (IREFS, GoCarcassonne, FREG, HomeLink, AI Masterclass, Joe Business, etc.) use `kx:brand:<slug>` instead.
 
@@ -28,6 +28,7 @@ If a cover shows a magazine title **not on this list**, do not force it: use `kx
 
 For every asset, **add** these tags (keep all existing tags untouched):
 - `kx:pub:<slug>` or `kx:brand:<slug>` (one primary; use `kx:related:<slug>` for secondary)
+- `kx:registry:<one of>` `publication` | `campaign` | `brand` | `work` | `archive` (use the entry's `registry` from `registry.json`; logo studies, alternates and abandoned directions are `archive`)
 - `kx:type:<one of>` `cover` | `book-cover` | `social-graphic` | `poster` | `logo` | `album-art` | `infographic` | `screenshot` | `photo` | `video` | `other`
 - `kx:issue:<short issue/cover title>` for covers (e.g. `kx:issue:summer-2026`), lowercase-hyphenated
 - `kx:status:<one of>` `candidate` | `needs-review` | `do-not-use`

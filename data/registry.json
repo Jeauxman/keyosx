@@ -1,10 +1,11 @@
 {
-  "_note": "Working registry of 70 names from Joe's master list. Each name has ONE permanent KeyOSX entity id (keyosx:<entity_type>:<slug>); ids never change once published, names can. 'verified' stays false until Joe confirms the name is a real title/brand. 'flags' list overlaps and open questions. status 'on-rack' = already an entity in data/entities.json.",
+  "_note": "Working registry of 70 names from Joe's master list. Each name has ONE permanent KeyOSX entity id (keyosx:<entity_type>:<slug>); ids never change once published, names can. 'verified' stays false until Joe confirms the name is a real title/brand. 'flags' list overlaps and open questions. status 'on-rack' = already an entity in data/entities.json. 'registry' assigns each name to one of five registries (see 'registries'). 'known_issue_names' lists titles that are issues or cover lines of an existing publication, to avoid creating duplicate entities. Entries with class 'added-from-screenshots' come from a second pass over Joe's screenshots read by ChatGPT; Claude has not seen those images.",
   "counts": {
-    "magazine": 20,
-    "local": 15,
-    "agent": 15,
-    "brand": 20
+    "publication": 20,
+    "campaign": 12,
+    "brand": 35,
+    "archive": 8,
+    "work": 7
   },
   "rack_entities_not_in_list": [
     "keyosx:publication:synphony-magazine",
@@ -25,7 +26,8 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 2,
@@ -38,7 +40,8 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 3,
@@ -51,7 +54,8 @@
       "status": "candidate",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 4,
@@ -64,7 +68,8 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 5,
@@ -77,7 +82,8 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 6,
@@ -90,7 +96,8 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 7,
@@ -103,7 +110,8 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 8,
@@ -118,7 +126,8 @@
       "verified": false,
       "flags": [
         "Rack has 'The Troubadour Quarterly' (id troubadour-quarterly), whose cover masthead I read at low resolution. Confirm whether this is the same title, a rename, or two titles."
-      ]
+      ],
+      "registry": "publication"
     },
     {
       "n": 9,
@@ -133,7 +142,8 @@
       "verified": false,
       "flags": [
         "Rack has 'Aude Chronicles' covers tagged Basil Leaf Chronicles: confirm whether Aude Chronicles is a separate title or an edition of this one."
-      ]
+      ],
+      "registry": "publication"
     },
     {
       "n": 10,
@@ -146,7 +156,8 @@
       "status": "candidate",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 11,
@@ -159,7 +170,8 @@
       "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 12,
@@ -172,7 +184,8 @@
       "status": "candidate",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 13,
@@ -185,7 +198,8 @@
       "status": "candidate",
       "rack_priority": "start",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 14,
@@ -200,7 +214,8 @@
       "verified": false,
       "flags": [
         "Catalog lists Simultanism as Joe's core philosophical movement (a concept), not a magazine. Confirm it is also a publication."
-      ]
+      ],
+      "registry": "publication"
     },
     {
       "n": 15,
@@ -215,7 +230,8 @@
       "verified": false,
       "flags": [
         "Cloudinary has assets tagged true-americans-excluded / do-not-promote; check before any use."
-      ]
+      ],
+      "registry": "publication"
     },
     {
       "n": 16,
@@ -228,7 +244,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 17,
@@ -243,7 +260,8 @@
       "verified": false,
       "flags": [
         "Possible overlap with Matriarch and Cat Ladies."
-      ]
+      ],
+      "registry": "publication"
     },
     {
       "n": 18,
@@ -258,7 +276,8 @@
       "verified": false,
       "flags": [
         "A 'Cat Ladies' cover exists with a LIBERTINE masthead: may be an issue of The Libertine, not its own title. Possible overlap with Spinster."
-      ]
+      ],
+      "registry": "publication"
     },
     {
       "n": 19,
@@ -271,7 +290,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "campaign"
     },
     {
       "n": 20,
@@ -286,7 +306,8 @@
       "verified": false,
       "flags": [
         "Probable duplicate of Mediterraneano."
-      ]
+      ],
+      "registry": "publication"
     },
     {
       "n": 21,
@@ -299,7 +320,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "campaign"
     },
     {
       "n": 22,
@@ -314,7 +336,8 @@
       "verified": false,
       "flags": [
         "Possible duplicate of Carcassonne Monthly."
-      ]
+      ],
+      "registry": "campaign"
     },
     {
       "n": 23,
@@ -327,7 +350,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "publication"
     },
     {
       "n": 24,
@@ -340,7 +364,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "campaign"
     },
     {
       "n": 25,
@@ -355,7 +380,8 @@
       "verified": false,
       "flags": [
         "Probable duplicate of Eat Stay Love Carcassonne."
-      ]
+      ],
+      "registry": "campaign"
     },
     {
       "n": 26,
@@ -368,7 +394,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "campaign"
     },
     {
       "n": 27,
@@ -383,7 +410,8 @@
       "verified": false,
       "flags": [
         "A cover line 'Discover Carcassonne and Cathar Country' appears on the Troubadour title: may be a feature, not a title."
-      ]
+      ],
+      "registry": "campaign"
     },
     {
       "n": 28,
@@ -398,7 +426,8 @@
       "verified": false,
       "flags": [
         "Appears as a cover line on the eatstaylove/Carcassonne covers: may be an issue title."
-      ]
+      ],
+      "registry": "campaign"
     },
     {
       "n": 29,
@@ -411,7 +440,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "campaign"
     },
     {
       "n": 30,
@@ -426,7 +456,8 @@
       "verified": false,
       "flags": [
         "Almanac is the knowledge engine; confirm Aude Almanac is a regional edition of it, not a separate entity."
-      ]
+      ],
+      "registry": "brand"
     },
     {
       "n": 31,
@@ -439,7 +470,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "campaign"
     },
     {
       "n": 32,
@@ -452,7 +484,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "campaign"
     },
     {
       "n": 33,
@@ -465,7 +498,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 34,
@@ -478,7 +512,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 35,
@@ -491,7 +526,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 36,
@@ -504,7 +540,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 37,
@@ -517,7 +554,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 38,
@@ -532,7 +570,8 @@
       "verified": false,
       "flags": [
         "Synphony is also a magazine on the rack (publication id synphony-magazine). Two entities, one name: confirm."
-      ]
+      ],
+      "registry": "brand"
     },
     {
       "n": 39,
@@ -545,7 +584,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 40,
@@ -558,7 +598,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 41,
@@ -571,7 +612,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 42,
@@ -584,7 +626,8 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 43,
@@ -597,7 +640,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 44,
@@ -610,7 +654,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 45,
@@ -623,7 +668,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 46,
@@ -636,7 +682,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 47,
@@ -649,7 +696,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 48,
@@ -662,7 +710,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 49,
@@ -675,7 +724,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 50,
@@ -688,7 +738,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 51,
@@ -701,7 +752,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 52,
@@ -714,7 +766,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 53,
@@ -727,7 +780,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 54,
@@ -740,7 +794,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 55,
@@ -755,7 +810,8 @@
       "verified": false,
       "flags": [
         "Catalog also has 'global-connect-enterprise' (no s): confirm which spelling is the canonical entity."
-      ]
+      ],
+      "registry": "brand"
     },
     {
       "n": 56,
@@ -768,7 +824,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 57,
@@ -781,7 +838,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 58,
@@ -794,7 +852,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 59,
@@ -807,7 +866,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 60,
@@ -820,7 +880,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "brand"
     },
     {
       "n": 61,
@@ -835,7 +896,8 @@
       "verified": false,
       "flags": [
         "Catalog calls Crow's Quill a publishing imprint for philosophy/lifestyle books."
-      ]
+      ],
+      "registry": "brand"
     },
     {
       "n": 62,
@@ -850,7 +912,8 @@
       "verified": false,
       "flags": [
         "Possibly the same as Carcassonne Studios in the catalog; confirm."
-      ]
+      ],
+      "registry": "brand"
     },
     {
       "n": 63,
@@ -863,7 +926,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "archive"
     },
     {
       "n": 64,
@@ -876,7 +940,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "archive"
     },
     {
       "n": 65,
@@ -889,7 +954,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "archive"
     },
     {
       "n": 66,
@@ -902,7 +968,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "archive"
     },
     {
       "n": 67,
@@ -915,7 +982,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "archive"
     },
     {
       "n": 68,
@@ -928,7 +996,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "archive"
     },
     {
       "n": 69,
@@ -941,7 +1010,8 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
-      "flags": []
+      "flags": [],
+      "registry": "archive"
     },
     {
       "n": 70,
@@ -954,7 +1024,232 @@
       "status": "candidate",
       "rack_priority": "later",
       "verified": false,
+      "flags": [],
+      "registry": "brand"
+    },
+    {
+      "n": 71,
+      "id": "keyosx:brand:carcassonne-the-place-to-be",
+      "name": "Carcassonne The Place To Be",
+      "class": "added-from-screenshots",
+      "entity_type": "brand",
+      "registry": "campaign",
+      "focus": "Destination promotion",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Seen as a tourism/promo title in screenshots; may be a slogan."
+      ]
+    },
+    {
+      "n": 72,
+      "id": "keyosx:brand:global-entrepreneur",
+      "name": "Global Entrepreneur",
+      "class": "added-from-screenshots",
+      "entity_type": "brand",
+      "registry": "brand",
+      "focus": "Business collateral",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
       "flags": []
+    },
+    {
+      "n": 73,
+      "id": "keyosx:brand:global-vision-local-impact",
+      "name": "Global Vision, Local Impact",
+      "class": "added-from-screenshots",
+      "entity_type": "brand",
+      "registry": "brand",
+      "focus": "Business collateral",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "May be a tagline, not a brand."
+      ]
+    },
+    {
+      "n": 74,
+      "id": "keyosx:brand:ai-enterprise",
+      "name": "AI Enterprise",
+      "class": "added-from-screenshots",
+      "entity_type": "brand",
+      "registry": "brand",
+      "focus": "AI business",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "May be a vertical or tagline of AI Masters Class / GAEM."
+      ]
+    },
+    {
+      "n": 75,
+      "id": "keyosx:brand:chaos",
+      "name": "Chaos",
+      "class": "added-from-screenshots",
+      "entity_type": "brand",
+      "registry": "archive",
+      "focus": "Early identity experiment",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "From the 2024 identity studies; not a publication."
+      ]
+    },
+    {
+      "n": 76,
+      "id": "keyosx:work:reading-in-the-rain",
+      "name": "Reading in the Rain",
+      "class": "added-from-screenshots",
+      "entity_type": "work",
+      "registry": "work",
+      "focus": "Book",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "A Joseph Fansler book exists in Cloudinary (cover and 'book launch' assets)."
+      ]
+    },
+    {
+      "n": 77,
+      "id": "keyosx:work:the-empty-glass",
+      "name": "The Empty Glass",
+      "class": "added-from-screenshots",
+      "entity_type": "work",
+      "registry": "work",
+      "focus": "Book / concept",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "A book promo graphic exists in Cloudinary (Joe Troubadour group)."
+      ]
+    },
+    {
+      "n": 78,
+      "id": "keyosx:work:vive-le-love",
+      "name": "Vive le Love",
+      "class": "added-from-screenshots",
+      "entity_type": "work",
+      "registry": "work",
+      "focus": "Concept / song / book?",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Unclear what kind of work this is."
+      ]
+    },
+    {
+      "n": 79,
+      "id": "keyosx:work:lonely-brilliance",
+      "name": "Lonely Brilliance",
+      "class": "added-from-screenshots",
+      "entity_type": "work",
+      "registry": "work",
+      "focus": "Concept / song / book?",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "A 'Lonely Brilliant' cover exists in Cloudinary that looks like song/album art, not a book."
+      ]
+    },
+    {
+      "n": 80,
+      "id": "keyosx:work:gods-create",
+      "name": "Gods Create",
+      "class": "added-from-screenshots",
+      "entity_type": "work",
+      "registry": "work",
+      "focus": "Concept / book?",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Also seen as 'Make No Mistake Gods Create'. Unclear what kind of work this is."
+      ]
+    },
+    {
+      "n": 81,
+      "id": "keyosx:work:stop-the-hype",
+      "name": "Stop the Hype",
+      "class": "added-from-screenshots",
+      "entity_type": "work",
+      "registry": "work",
+      "focus": "Concept / book?",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Unclear what kind of work this is."
+      ]
+    },
+    {
+      "n": 82,
+      "id": "keyosx:work:the-future",
+      "name": "The Future",
+      "class": "added-from-screenshots",
+      "entity_type": "work",
+      "registry": "work",
+      "focus": "Concept / book?",
+      "catalog_slug": null,
+      "status": "candidate",
+      "rack_priority": "later",
+      "verified": false,
+      "flags": [
+        "Very generic title; confirm it is a real work."
+      ]
     }
-  ]
+  ],
+  "known_issue_names": [
+    {
+      "name": "La Mia Mediterraneo",
+      "parent": "keyosx:publication:mediterraneano",
+      "evidence": "Printed on Mediterraneano covers (Amalfi coast issue) in Cloudinary."
+    },
+    {
+      "name": "The Move",
+      "parent": "keyosx:publication:au-contraire",
+      "evidence": "Cover line 'The Move From Miami to the Mediterranean' on an Au Contraire cover."
+    },
+    {
+      "name": "Carcassonne Summer 2026",
+      "parent": "keyosx:publication:au-contraire",
+      "evidence": "Printed as an edition on Au Contraire covers."
+    },
+    {
+      "name": "Cat Ladies",
+      "parent": "keyosx:publication:the-libertine",
+      "evidence": "Cover carries a LIBERTINE masthead with an ME+DÍA badge; treat as an issue until Joe says otherwise."
+    },
+    {
+      "name": "The New Renaissance",
+      "parent": "keyosx:publication:the-libertine",
+      "evidence": "Cover story printed on several Libertine covers."
+    }
+  ],
+  "registries": {
+    "publication": "magazines, journals and editorial imprints (the publication rack)",
+    "campaign": "local tourism, concierge, real-estate and hospitality promo media",
+    "brand": "brands, agent identities and service/business systems",
+    "work": "books and idea/concept covers",
+    "archive": "creative archive: logo studies, alternates, early identity experiments"
+  }
 }
