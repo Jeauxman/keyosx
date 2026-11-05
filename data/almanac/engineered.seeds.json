@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for engineered, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-take-something-apart-that-is-already-broken",
+      "kind": "tip",
+      "title": "Take something apart that is already broken",
+      "summary": "Nothing teaches design like a failure you can see inside."
+    },
+    {
+      "id": "idea-trace-one-invention-back-to-the-problem-it-first",
+      "kind": "idea",
+      "title": "Trace one invention back to the problem it first solved",
+      "summary": "Most technology started as a fix."
+    },
+    {
+      "id": "tip-ask-what-a-tool-does-with-your-data-before-you-a",
+      "kind": "tip",
+      "title": "Ask what a tool does with your data before you adopt it",
+      "summary": "Read the privacy page for ten minutes. It tells you the real price."
+    },
+    {
+      "id": "tip-read-the-abstract-and-conclusion-before-the-head",
+      "kind": "tip",
+      "title": "Read the abstract and conclusion before the headline",
+      "summary": "Most hype lives in the gap between the two."
+    },
+    {
+      "id": "tip-test-a-new-tool-on-a-task-you-already-know-well",
+      "kind": "tip",
+      "title": "Test a new tool on a task you already know well",
+      "summary": "You can judge the result when you know what good looks like."
+    },
+    {
+      "id": "idea-build-a-tiny-project-with-a-tool-you-do-not-unde",
+      "kind": "idea",
+      "title": "Build a tiny project with a tool you do not understand yet",
+      "summary": "A weekend project teaches more than a month of reading."
+    },
+    {
+      "id": "idea-collect-predictions-from-ten-years-ago-and-score",
+      "kind": "idea",
+      "title": "Collect predictions from ten years ago and score them",
+      "summary": "It is humbling and it sharpens your view of today's claims."
+    },
+    {
+      "id": "idea-ask-an-expert-in-another-field-how-they-use-the-",
+      "kind": "idea",
+      "title": "Ask an expert in another field how they use the same technology",
+      "summary": "Different fields find different uses."
+    },
+    {
+      "id": "app-hugging-face",
+      "kind": "app",
+      "title": "Hugging Face",
+      "summary": "A hub for open machine-learning models and datasets.",
+      "url": "https://huggingface.co"
+    },
+    {
+      "id": "app-arxiv",
+      "kind": "app",
+      "title": "arXiv",
+      "summary": "Free preprints of research papers in science and computing.",
+      "url": "https://arxiv.org"
+    },
+    {
+      "id": "app-our-world-in-data",
+      "kind": "app",
+      "title": "Our World in Data",
+      "summary": "Charts and data on global problems and progress.",
+      "url": "https://ourworldindata.org"
+    },
+    {
+      "id": "opportunity-join-an-open-source-project",
+      "kind": "opportunity",
+      "title": "Join an open-source project",
+      "summary": "Documentation fixes are a friendly first contribution."
+    },
+    {
+      "id": "opportunity-visit-a-maker-space-or-hack-night",
+      "kind": "opportunity",
+      "title": "Visit a maker space or hack night",
+      "summary": "Hands-on tinkering beside people who like the same things."
+    },
+    {
+      "id": "tip-look-at-one-artwork-for-ten-full-minutes",
+      "kind": "tip",
+      "title": "Look at one artwork for ten full minutes",
+      "summary": "Past the first reaction, a picture keeps giving."
+    },
+    {
+      "id": "tip-visit-a-gallery-on-its-quiet-day",
+      "kind": "tip",
+      "title": "Visit a gallery on its quiet day",
+      "summary": "You can stand where you like and look as long as you like."
+    },
+    {
+      "id": "idea-start-a-small-collection-of-postcards-or-prints",
+      "kind": "idea",
+      "title": "Start a small collection of postcards or prints",
+      "summary": "Cheap, personal and a good reason to visit museum shops."
+    },
+    {
+      "id": "idea-trade-a-drawing-a-week-with-a-friend",
+      "kind": "idea",
+      "title": "Trade a drawing a week with a friend",
+      "summary": "A low-pressure habit that adds up."
+    },
+    {
+      "id": "app-google-arts-culture",
+      "kind": "app",
+      "title": "Google Arts & Culture",
+      "summary": "Explore artworks and exhibitions from museums around the world.",
+      "url": "https://artsandculture.google.com"
+    },
+    {
+      "id": "app-europeana",
+      "kind": "app",
+      "title": "Europeana",
+      "summary": "Millions of digitized artworks, books and recordings from European institutions.",
+      "url": "https://www.europeana.eu"
+    },
+    {
+      "id": "opportunity-volunteer-at-a-gallery-or-arts-festival",
+      "kind": "opportunity",
+      "title": "Volunteer at a gallery or arts festival",
+      "summary": "Volunteers see behind the scenes and often get free entry."
+    }
+  ]
+}

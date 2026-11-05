@@ -1,0 +1,50 @@
+{
+  "_note": "noize editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "NOIZE",
+    "masthead": "NOIZE"
+  },
+  "voice": "Loud on ideas, never on hype. Music and culture with an anti-noise edge.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "noize",
+    "feeds": [
+      {
+        "name": "Pitchfork",
+        "url": "https://pitchfork.com/feed/feed-news/rss",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Music",
+        "url": "https://www.theguardian.com/music/rss",
+        "enabled": true
+      },
+      {
+        "name": "NPR Music",
+        "url": "https://feeds.npr.org/1039/rss.xml",
+        "enabled": true
+      },
+      {
+        "name": "Stereogum",
+        "url": "https://www.stereogum.com/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

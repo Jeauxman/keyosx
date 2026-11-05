@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for noize, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-mute-the-algorithm-for-a-week",
+      "kind": "tip",
+      "title": "Mute the algorithm for a week",
+      "summary": "Pick music by hand: record shops, friends, radio."
+    },
+    {
+      "id": "idea-start-a-zine-or-newsletter-about-one-scene",
+      "kind": "idea",
+      "title": "Start a zine or newsletter about one scene",
+      "summary": "Document what is happening near you."
+    },
+    {
+      "id": "tip-listen-to-a-whole-album-before-you-judge-a-singl",
+      "kind": "tip",
+      "title": "Listen to a whole album before you judge a single",
+      "summary": "Albums are built to be heard in order. Give the full thing one uninterrupted listen first."
+    },
+    {
+      "id": "tip-follow-the-credits-not-just-the-artist",
+      "kind": "tip",
+      "title": "Follow the credits, not just the artist",
+      "summary": "Find the producers, writers and session players behind a song you love and listen to what else they made."
+    },
+    {
+      "id": "tip-go-to-a-gig-for-a-band-you-have-never-heard",
+      "kind": "tip",
+      "title": "Go to a gig for a band you have never heard",
+      "summary": "Small rooms reward curiosity. Go early and stay for the support act."
+    },
+    {
+      "id": "idea-start-a-listening-club-that-plays-one-album-a-we",
+      "kind": "idea",
+      "title": "Start a listening club that plays one album a week",
+      "summary": "One album, one evening, one rule: no phones. Talk about it after."
+    },
+    {
+      "id": "idea-build-a-playlist-that-tells-the-story-of-one-cit",
+      "kind": "idea",
+      "title": "Build a playlist that tells the story of one city",
+      "summary": "Pick ten songs that sound like where you live and sequence them like a walk."
+    },
+    {
+      "id": "idea-swap-three-songs-with-someone-who-hates-your-tas",
+      "kind": "idea",
+      "title": "Swap three songs with someone who hates your taste",
+      "summary": "Each of you picks three songs for the other. You both have to finish them."
+    },
+    {
+      "id": "app-bandcamp",
+      "kind": "app",
+      "title": "Bandcamp",
+      "summary": "Buy and stream music straight from artists and labels.",
+      "url": "https://bandcamp.com"
+    },
+    {
+      "id": "app-discogs",
+      "kind": "app",
+      "title": "Discogs",
+      "summary": "A database and marketplace for releases, pressings and credits.",
+      "url": "https://www.discogs.com"
+    },
+    {
+      "id": "app-songkick",
+      "kind": "app",
+      "title": "Songkick",
+      "summary": "Follow artists and get alerts when they play near you.",
+      "url": "https://www.songkick.com"
+    },
+    {
+      "id": "opportunity-play-an-open-mic-night",
+      "kind": "opportunity",
+      "title": "Play an open mic night",
+      "summary": "Most towns have one. Sign up for one song and see how it feels."
+    },
+    {
+      "id": "opportunity-volunteer-at-a-local-venue-or-festival",
+      "kind": "opportunity",
+      "title": "Volunteer at a local venue or festival",
+      "summary": "Volunteers often get in free and meet the people who run the scene."
+    }
+  ]
+}

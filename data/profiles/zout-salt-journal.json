@@ -1,0 +1,45 @@
+{
+  "_note": "zout-salt-journal editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Zout / Salt Journal",
+    "masthead": "Zout / Salt Journal"
+  },
+  "voice": "Sober and curious about money, commodities and the economy, with a long memory. No get-rich talk.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "zout-salt-journal",
+    "feeds": [
+      {
+        "name": "The Guardian, Business",
+        "url": "https://www.theguardian.com/business/rss",
+        "enabled": true
+      },
+      {
+        "name": "Economist, Finance",
+        "url": "https://www.economist.com/finance-and-economics/rss.xml",
+        "enabled": true
+      },
+      {
+        "name": "NPR Planet Money",
+        "url": "https://feeds.npr.org/510289/podcast.xml",
+        "enabled": true
+      }
+    ]
+  }
+}

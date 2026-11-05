@@ -1,0 +1,50 @@
+{
+  "_note": "think editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "THINK",
+    "masthead": "THINK"
+  },
+  "voice": "Question everything. First principles, clarity and slow thinking in a noisy world.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "think",
+    "feeds": [
+      {
+        "name": "Aeon",
+        "url": "https://aeon.co/feed.rss",
+        "enabled": true
+      },
+      {
+        "name": "Daily Nous",
+        "url": "https://dailynous.com/feed/",
+        "enabled": true
+      },
+      {
+        "name": "Philosophy Now",
+        "url": "https://philosophynow.org/rss",
+        "enabled": true
+      },
+      {
+        "name": "The Marginalian",
+        "url": "https://www.themarginalian.org/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

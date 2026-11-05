@@ -58,14 +58,13 @@ request is made per publication per period.
   (`.almanac-state/spend.json`, git-ignored). Over the cap, an API error, or an unusable answer falls back to the free writer so the issue still posts.
   Cheap model by default (`claude-haiku-5-5`, override with `ALMANAC_MODEL`). `GET :8787/health` shows today's spend. Tested against a fake API only; not yet run with a real key.
 
-## Adding a brand
+## Adding a brand (the 29 existing ones are already done)
 
 1. `data/profiles/<slug>.json` (identity, voice, mix, cover policy, `sources`).
 2. Its evergreen pool in `data/almanac/<name>.seeds.json`, and/or feeds in the profile. Without either, the engine will not compose for it.
 3. Set the entity's `editorial_agent` to `keyosx:agent:almanac`. No new service, no new database.
 
-Only **CinéBon** is configured. Its four feeds (Letterboxd Journal, IndieWire, Film Comment, The Guardian Film) were switched **on by Joe on 2026-11-04**, and CinéBon is listed in
-`data/live-feed.json`, so its **Live feed** tab is public. Feeds supply a title, link, source and date only; no article text is copied and the summary says who reported it and when.
+**Every publication on the rack is configured** (29 brands, 2026-11-05): each has a profile, a seed pool and, where it fits, enabled feeds. The full list, with the feeds that were tested and the ones that failed, is in `docs/almanac-sources.md`. CinéBon's four feeds (Letterboxd Journal, IndieWire, Film Comment, The Guardian Film) were switched on by Joe on 2026-11-04; the rest were switched on 2026-11-05 under the same rule (headline, link, source and date only, no article text). Daily Shit has no feeds on purpose (satire).
 
 ## Run it locally
 
@@ -86,6 +85,6 @@ revision 4, a draft, while revision 3 stayed published.
 
 - Media stage (audio/video) and generated artwork (FlintBill): the seam exists, nothing is generated.
 - Per-item source records inside issue revisions; a real-key run of the Claude writer.
-- Other brands' profiles and seeds (CinéBon is the proof; each brand needs its own sources).
+- Review of the generated seed pools by the owner (they are Claude's first draft) and clearing the feeds' terms of use.
 - Jack Rabbit supplying from Almanac knowledge directly (it still answers only from approved issue items).
 - Hosting for the service and any deploy: needs your approval.

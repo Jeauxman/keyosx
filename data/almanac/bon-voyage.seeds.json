@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for bon-voyage, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-keep-one-day-with-no-plan",
+      "kind": "tip",
+      "title": "Keep one day with no plan",
+      "summary": "Leave a gap for the detour that becomes the story."
+    },
+    {
+      "id": "idea-make-a-playlist-for-the-long-drive",
+      "kind": "idea",
+      "title": "Make a playlist for the long drive",
+      "summary": "Pick songs from every place the road passes."
+    },
+    {
+      "id": "tip-travel-a-week-slower-than-you-planned",
+      "kind": "tip",
+      "title": "Travel a week slower than you planned",
+      "summary": "Fewer stops, longer stays. You remember places you had time to be bored in."
+    },
+    {
+      "id": "tip-learn-ten-phrases-before-you-land",
+      "kind": "tip",
+      "title": "Learn ten phrases before you land",
+      "summary": "Greetings, thank you and please open more doors than a phrasebook full of grammar."
+    },
+    {
+      "id": "tip-book-the-first-night-only",
+      "kind": "tip",
+      "title": "Book the first night only",
+      "summary": "Keep the rest loose. Plans made on the ground are often better than plans made at home."
+    },
+    {
+      "id": "idea-plan-a-trip-around-one-meal",
+      "kind": "idea",
+      "title": "Plan a trip around one meal",
+      "summary": "Choose a dish, find where it is best, and build the route backwards."
+    },
+    {
+      "id": "idea-take-the-train-for-one-leg-instead-of-the-plane",
+      "kind": "idea",
+      "title": "Take the train for one leg instead of the plane",
+      "summary": "The in-between places are the part of the trip you usually never see."
+    },
+    {
+      "id": "idea-spend-a-day-the-way-a-local-would",
+      "kind": "idea",
+      "title": "Spend a day the way a local would",
+      "summary": "Market in the morning, a café, the library, a walk after dinner."
+    },
+    {
+      "id": "app-rome2rio",
+      "kind": "app",
+      "title": "Rome2Rio",
+      "summary": "Compare how to get anywhere by train, bus, ferry, car or plane.",
+      "url": "https://www.rome2rio.com"
+    },
+    {
+      "id": "app-wikivoyage",
+      "kind": "app",
+      "title": "Wikivoyage",
+      "summary": "A free, community-written travel guide to places worldwide.",
+      "url": "https://www.wikivoyage.org"
+    },
+    {
+      "id": "app-tripit",
+      "kind": "app",
+      "title": "TripIt",
+      "summary": "Turn booking emails into one organized itinerary.",
+      "url": "https://www.tripit.com"
+    },
+    {
+      "id": "opportunity-join-a-walking-tour-led-by-a-resident",
+      "kind": "opportunity",
+      "title": "Join a walking tour led by a resident",
+      "summary": "Local guides share what guidebooks skip. Tip them well."
+    },
+    {
+      "id": "opportunity-trade-your-home-or-your-time",
+      "kind": "opportunity",
+      "title": "Trade your home or your time",
+      "summary": "House swaps and volunteer stays can make a long trip affordable."
+    }
+  ]
+}

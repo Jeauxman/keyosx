@@ -1,0 +1,45 @@
+{
+  "_note": "the-new-troubadour editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "The New Troubadour",
+    "masthead": "The New Troubadour"
+  },
+  "voice": "People, stories, music, film and ideas for a more creative tomorrow. Human, curious and generous.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "the-new-troubadour",
+    "feeds": [
+      {
+        "name": "The Guardian, Books",
+        "url": "https://www.theguardian.com/books/rss",
+        "enabled": true
+      },
+      {
+        "name": "NPR Music",
+        "url": "https://feeds.npr.org/1039/rss.xml",
+        "enabled": true
+      },
+      {
+        "name": "Colossal",
+        "url": "https://www.thisiscolossal.com/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

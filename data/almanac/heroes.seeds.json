@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for heroes, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-notice-who-is-already-doing-the-work-in-your-com",
+      "kind": "tip",
+      "title": "Notice who is already doing the work in your community",
+      "summary": "Heroes are usually too busy to be loud."
+    },
+    {
+      "id": "idea-nominate-someone-and-write-why-in-three-sentence",
+      "kind": "idea",
+      "title": "Nominate someone and write why in three sentences",
+      "summary": "Recognition costs nothing and means a lot."
+    },
+    {
+      "id": "tip-ask-one-more-question-than-feels-polite",
+      "kind": "tip",
+      "title": "Ask one more question than feels polite",
+      "summary": "The best story is usually in the second answer."
+    },
+    {
+      "id": "tip-write-down-a-story-the-day-you-hear-it",
+      "kind": "tip",
+      "title": "Write down a story the day you hear it",
+      "summary": "Details fade quickly."
+    },
+    {
+      "id": "tip-thank-a-person-specifically-not-generally",
+      "kind": "tip",
+      "title": "Thank a person specifically, not generally",
+      "summary": "Say exactly what they did and why it mattered."
+    },
+    {
+      "id": "idea-record-a-family-member-s-story",
+      "kind": "idea",
+      "title": "Record a family member's story",
+      "summary": "Ten questions and a phone are enough to keep a life on record."
+    },
+    {
+      "id": "idea-start-a-neighbor-spotlight",
+      "kind": "idea",
+      "title": "Start a neighbor spotlight",
+      "summary": "One short profile a month of someone doing good work nearby."
+    },
+    {
+      "id": "idea-collect-ten-small-acts-of-kindness-in-a-month",
+      "kind": "idea",
+      "title": "Collect ten small acts of kindness in a month",
+      "summary": "Notice them and write them down."
+    },
+    {
+      "id": "app-storycorps",
+      "kind": "app",
+      "title": "StoryCorps",
+      "summary": "Record and preserve conversations with the people who matter to you.",
+      "url": "https://storycorps.org"
+    },
+    {
+      "id": "app-humans-of-new-york",
+      "kind": "app",
+      "title": "Humans of New York",
+      "summary": "Portraits and short stories of everyday people.",
+      "url": "https://www.humansofnewyork.com"
+    },
+    {
+      "id": "app-audacity",
+      "kind": "app",
+      "title": "Audacity",
+      "summary": "A free, open-source audio recorder and editor.",
+      "url": "https://www.audacityteam.org"
+    },
+    {
+      "id": "opportunity-volunteer-for-a-cause-you-keep-talking-about",
+      "kind": "opportunity",
+      "title": "Volunteer for a cause you keep talking about",
+      "summary": "Move from commenting to doing, even for a few hours."
+    },
+    {
+      "id": "opportunity-run-a-story-night-at-a-local-cafe",
+      "kind": "opportunity",
+      "title": "Run a story night at a local café",
+      "summary": "Five tellers, five minutes each."
+    }
+  ]
+}

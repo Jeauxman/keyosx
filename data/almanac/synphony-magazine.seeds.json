@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for synphony-magazine, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-read-one-international-news-source-every-day",
+      "kind": "tip",
+      "title": "Read one international news source every day",
+      "summary": "A second vantage point changes the picture."
+    },
+    {
+      "id": "idea-start-a-pen-pal-exchange-with-someone-in-another",
+      "kind": "idea",
+      "title": "Start a pen-pal exchange with someone in another country",
+      "summary": "A real person beats an average of headlines."
+    },
+    {
+      "id": "tip-ask-what-a-tool-does-with-your-data-before-you-a",
+      "kind": "tip",
+      "title": "Ask what a tool does with your data before you adopt it",
+      "summary": "Read the privacy page for ten minutes. It tells you the real price."
+    },
+    {
+      "id": "tip-read-the-abstract-and-conclusion-before-the-head",
+      "kind": "tip",
+      "title": "Read the abstract and conclusion before the headline",
+      "summary": "Most hype lives in the gap between the two."
+    },
+    {
+      "id": "tip-test-a-new-tool-on-a-task-you-already-know-well",
+      "kind": "tip",
+      "title": "Test a new tool on a task you already know well",
+      "summary": "You can judge the result when you know what good looks like."
+    },
+    {
+      "id": "idea-build-a-tiny-project-with-a-tool-you-do-not-unde",
+      "kind": "idea",
+      "title": "Build a tiny project with a tool you do not understand yet",
+      "summary": "A weekend project teaches more than a month of reading."
+    },
+    {
+      "id": "idea-collect-predictions-from-ten-years-ago-and-score",
+      "kind": "idea",
+      "title": "Collect predictions from ten years ago and score them",
+      "summary": "It is humbling and it sharpens your view of today's claims."
+    },
+    {
+      "id": "idea-ask-an-expert-in-another-field-how-they-use-the-",
+      "kind": "idea",
+      "title": "Ask an expert in another field how they use the same technology",
+      "summary": "Different fields find different uses."
+    },
+    {
+      "id": "app-hugging-face",
+      "kind": "app",
+      "title": "Hugging Face",
+      "summary": "A hub for open machine-learning models and datasets.",
+      "url": "https://huggingface.co"
+    },
+    {
+      "id": "app-arxiv",
+      "kind": "app",
+      "title": "arXiv",
+      "summary": "Free preprints of research papers in science and computing.",
+      "url": "https://arxiv.org"
+    },
+    {
+      "id": "app-our-world-in-data",
+      "kind": "app",
+      "title": "Our World in Data",
+      "summary": "Charts and data on global problems and progress.",
+      "url": "https://ourworldindata.org"
+    },
+    {
+      "id": "opportunity-join-an-open-source-project",
+      "kind": "opportunity",
+      "title": "Join an open-source project",
+      "summary": "Documentation fixes are a friendly first contribution."
+    },
+    {
+      "id": "opportunity-visit-a-maker-space-or-hack-night",
+      "kind": "opportunity",
+      "title": "Visit a maker space or hack night",
+      "summary": "Hands-on tinkering beside people who like the same things."
+    },
+    {
+      "id": "tip-ask-one-more-question-than-feels-polite",
+      "kind": "tip",
+      "title": "Ask one more question than feels polite",
+      "summary": "The best story is usually in the second answer."
+    },
+    {
+      "id": "tip-write-down-a-story-the-day-you-hear-it",
+      "kind": "tip",
+      "title": "Write down a story the day you hear it",
+      "summary": "Details fade quickly."
+    },
+    {
+      "id": "idea-record-a-family-member-s-story",
+      "kind": "idea",
+      "title": "Record a family member's story",
+      "summary": "Ten questions and a phone are enough to keep a life on record."
+    },
+    {
+      "id": "idea-start-a-neighbor-spotlight",
+      "kind": "idea",
+      "title": "Start a neighbor spotlight",
+      "summary": "One short profile a month of someone doing good work nearby."
+    },
+    {
+      "id": "app-storycorps",
+      "kind": "app",
+      "title": "StoryCorps",
+      "summary": "Record and preserve conversations with the people who matter to you.",
+      "url": "https://storycorps.org"
+    },
+    {
+      "id": "app-humans-of-new-york",
+      "kind": "app",
+      "title": "Humans of New York",
+      "summary": "Portraits and short stories of everyday people.",
+      "url": "https://www.humansofnewyork.com"
+    },
+    {
+      "id": "opportunity-volunteer-for-a-cause-you-keep-talking-about",
+      "kind": "opportunity",
+      "title": "Volunteer for a cause you keep talking about",
+      "summary": "Move from commenting to doing, even for a few hours."
+    }
+  ]
+}

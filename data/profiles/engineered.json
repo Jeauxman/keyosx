@@ -1,0 +1,50 @@
+{
+  "_note": "engineered editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Engineered",
+    "masthead": "Engineered"
+  },
+  "voice": "History inspires, innovation builds. Curious about how things are made, past and future.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "engineered",
+    "feeds": [
+      {
+        "name": "Ars Technica",
+        "url": "https://feeds.arstechnica.com/arstechnica/index",
+        "enabled": true
+      },
+      {
+        "name": "IEEE Spectrum",
+        "url": "https://spectrum.ieee.org/feeds/feed.rss",
+        "enabled": true
+      },
+      {
+        "name": "MIT Technology Review",
+        "url": "https://www.technologyreview.com/feed/",
+        "enabled": true
+      },
+      {
+        "name": "Dezeen",
+        "url": "https://www.dezeen.com/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

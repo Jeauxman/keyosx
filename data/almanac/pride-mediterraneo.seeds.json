@@ -1,0 +1,123 @@
+{
+  "_note": "Evergreen editorial seed pool for pride-mediterraneo, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-read-recent-reviews-from-lgbtq-travelers",
+      "kind": "tip",
+      "title": "Read recent reviews from LGBTQ+ travelers",
+      "summary": "Recent firsthand accounts beat any brochure."
+    },
+    {
+      "id": "idea-pick-one-city-and-learn-its-queer-history-before",
+      "kind": "idea",
+      "title": "Pick one city and learn its queer history before you go",
+      "summary": "It changes what you notice when you arrive."
+    },
+    {
+      "id": "tip-check-local-laws-and-local-reports-before-you-bo",
+      "kind": "tip",
+      "title": "Check local laws and local reports before you book",
+      "summary": "Rules and attitudes vary widely by country and region."
+    },
+    {
+      "id": "tip-choose-places-with-clear-welcome-policies",
+      "kind": "tip",
+      "title": "Choose places with clear welcome policies",
+      "summary": "Written policies and reviews from people like you are worth checking."
+    },
+    {
+      "id": "tip-save-an-embassy-number-and-a-trusted-local-conta",
+      "kind": "tip",
+      "title": "Save an embassy number and a trusted local contact",
+      "summary": "Keep them offline in case your phone is lost."
+    },
+    {
+      "id": "idea-plan-a-trip-around-a-pride-festival",
+      "kind": "idea",
+      "title": "Plan a trip around a Pride festival",
+      "summary": "A festival gives you a ready-made community and calendar."
+    },
+    {
+      "id": "idea-support-a-queer-owned-cafe-or-guesthouse-in-each",
+      "kind": "idea",
+      "title": "Support a queer-owned café or guesthouse in each stop",
+      "summary": "A small way to put money into the community you are visiting."
+    },
+    {
+      "id": "idea-ask-local-community-centers-about-walking-tours",
+      "kind": "idea",
+      "title": "Ask local community centers about walking tours",
+      "summary": "Local groups know the history guidebooks skip."
+    },
+    {
+      "id": "app-equaldex",
+      "kind": "app",
+      "title": "Equaldex",
+      "summary": "A crowd-sourced map of LGBT rights and laws by country.",
+      "url": "https://www.equaldex.com"
+    },
+    {
+      "id": "app-ilga-world",
+      "kind": "app",
+      "title": "ILGA World",
+      "summary": "A global federation that publishes research on laws affecting LGBTI people.",
+      "url": "https://ilga.org"
+    },
+    {
+      "id": "app-rome2rio",
+      "kind": "app",
+      "title": "Rome2Rio",
+      "summary": "Compare ways to get anywhere by train, bus, ferry, car or plane.",
+      "url": "https://www.rome2rio.com"
+    },
+    {
+      "id": "opportunity-volunteer-at-a-pride-event",
+      "kind": "opportunity",
+      "title": "Volunteer at a Pride event",
+      "summary": "Organizers always need help and it is a quick way to meet people."
+    },
+    {
+      "id": "opportunity-join-a-local-lgbtq-travel-meetup",
+      "kind": "opportunity",
+      "title": "Join a local LGBTQ+ travel meetup",
+      "summary": "Travel stories and tips from people who have been there."
+    },
+    {
+      "id": "tip-travel-a-week-slower-than-you-planned",
+      "kind": "tip",
+      "title": "Travel a week slower than you planned",
+      "summary": "Fewer stops, longer stays. You remember places you had time to be bored in."
+    },
+    {
+      "id": "tip-learn-ten-phrases-before-you-land",
+      "kind": "tip",
+      "title": "Learn ten phrases before you land",
+      "summary": "Greetings, thank you and please open more doors than a phrasebook full of grammar."
+    },
+    {
+      "id": "idea-plan-a-trip-around-one-meal",
+      "kind": "idea",
+      "title": "Plan a trip around one meal",
+      "summary": "Choose a dish, find where it is best, and build the route backwards."
+    },
+    {
+      "id": "idea-take-the-train-for-one-leg-instead-of-the-plane",
+      "kind": "idea",
+      "title": "Take the train for one leg instead of the plane",
+      "summary": "The in-between places are the part of the trip you usually never see."
+    },
+    {
+      "id": "app-wikivoyage",
+      "kind": "app",
+      "title": "Wikivoyage",
+      "summary": "A free, community-written travel guide to places worldwide.",
+      "url": "https://www.wikivoyage.org"
+    },
+    {
+      "id": "opportunity-join-a-walking-tour-led-by-a-resident",
+      "kind": "opportunity",
+      "title": "Join a walking tour led by a resident",
+      "summary": "Local guides share what guidebooks skip. Tip them well."
+    }
+  ]
+}

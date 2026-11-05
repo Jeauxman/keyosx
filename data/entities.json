@@ -56,7 +56,7 @@
       "type": "publication",
       "workSlug": "the-libertine",
       "tagline": "Freedom, passion, intelligence.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:mediterraneano",
         "keyosx:publication:matriarch"
@@ -106,7 +106,7 @@
       "type": "publication",
       "workSlug": null,
       "tagline": "Women, wisdom, freedom.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:mediterraneano"
       ],
@@ -135,7 +135,7 @@
       "type": "publication",
       "workSlug": "me-dia-os",
       "tagline": "Made by people, powered by stories.",
-      "editorial_agent": "keyosx:agent:flintbill",
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:noize",
         "keyosx:publication:synphony-magazine"
@@ -170,7 +170,7 @@
       "type": "publication",
       "workSlug": "au-contraire",
       "tagline": "Media brand.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:carcassonne-monthly"
       ],
@@ -214,7 +214,7 @@
       "type": "publication",
       "workSlug": "noizeos",
       "tagline": "Media and audio brand.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:me-dia",
         "keyosx:publication:cinebon"
@@ -254,7 +254,7 @@
       "type": "publication",
       "workSlug": null,
       "tagline": "Going global.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:me-dia",
         "keyosx:publication:noize"
@@ -318,7 +318,7 @@
       "type": "publication",
       "workSlug": "gocarcassonne",
       "tagline": "Local gems and culinary lifestyle.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:eat-stay-love-carcassonne",
         "keyosx:publication:au-contraire"
@@ -368,7 +368,7 @@
       "type": "publication",
       "workSlug": "gocarcassonne",
       "tagline": "Carcassonne local gems.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:carcassonne-monthly"
       ],
@@ -402,7 +402,7 @@
       "type": "publication",
       "workSlug": "joe-troubadour",
       "tagline": "The architect of Europe’s next renaissance.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [],
       "integration_status": "unverified",
       "requires_approval": true,
@@ -434,7 +434,7 @@
       "type": "publication",
       "workSlug": "travel-buddy",
       "tagline": "Where’s the next hotspot?",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [],
       "integration_status": "unverified",
       "requires_approval": true,
@@ -461,7 +461,7 @@
       "type": "publication",
       "workSlug": "basil-leaf-chronicles",
       "tagline": "Food, culinary stories and travel.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [],
       "integration_status": "unverified",
       "requires_approval": true,
@@ -488,7 +488,7 @@
       "type": "publication",
       "workSlug": null,
       "tagline": "Finance and the organic economy (MegaMeed).",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [],
       "integration_status": "unverified",
       "requires_approval": true,

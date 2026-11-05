@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for intelligent-design, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-separate-what-is-measured-from-what-is-meant",
+      "kind": "tip",
+      "title": "Separate what is measured from what is meant",
+      "summary": "Both matter. Do not confuse them."
+    },
+    {
+      "id": "idea-spend-an-evening-watching-one-natural-system-a-t",
+      "kind": "idea",
+      "title": "Spend an evening watching one natural system, a tide pool or an anthill",
+      "summary": "Describe the design you see, then ask how it came to be."
+    },
+    {
+      "id": "tip-look-for-the-original-study-behind-a-news-story",
+      "kind": "tip",
+      "title": "Look for the original study behind a news story",
+      "summary": "The paper is almost always more careful than the headline."
+    },
+    {
+      "id": "tip-note-what-a-result-does-not-show",
+      "kind": "tip",
+      "title": "Note what a result does not show",
+      "summary": "Limits are part of the finding."
+    },
+    {
+      "id": "tip-learn-the-difference-between-correlation-and-cau",
+      "kind": "tip",
+      "title": "Learn the difference between correlation and cause",
+      "summary": "It is the most useful idea in everyday statistics."
+    },
+    {
+      "id": "idea-keep-a-nature-journal-for-a-month",
+      "kind": "idea",
+      "title": "Keep a nature journal for a month",
+      "summary": "One observation a day. By the end you will see a season change."
+    },
+    {
+      "id": "idea-visit-a-lab-or-observatory-open-day",
+      "kind": "idea",
+      "title": "Visit a lab or observatory open day",
+      "summary": "Scientists are often delighted to be asked questions."
+    },
+    {
+      "id": "idea-read-one-paper-a-week-from-outside-your-field",
+      "kind": "idea",
+      "title": "Read one paper a week from outside your field",
+      "summary": "Even partial understanding opens new connections."
+    },
+    {
+      "id": "app-inaturalist",
+      "kind": "app",
+      "title": "iNaturalist",
+      "summary": "Identify plants and animals and share observations with scientists.",
+      "url": "https://www.inaturalist.org"
+    },
+    {
+      "id": "app-stellarium",
+      "kind": "app",
+      "title": "Stellarium",
+      "summary": "A free planetarium that shows the sky from where you are.",
+      "url": "https://stellarium.org"
+    },
+    {
+      "id": "app-arxiv",
+      "kind": "app",
+      "title": "arXiv",
+      "summary": "Free preprints of research papers.",
+      "url": "https://arxiv.org"
+    },
+    {
+      "id": "opportunity-join-a-citizen-science-project",
+      "kind": "opportunity",
+      "title": "Join a citizen-science project",
+      "summary": "Count birds, classify galaxies or log rainfall for real researchers."
+    },
+    {
+      "id": "opportunity-volunteer-at-a-science-museum",
+      "kind": "opportunity",
+      "title": "Volunteer at a science museum",
+      "summary": "Explaining an idea is the best way to learn it."
+    },
+    {
+      "id": "tip-write-the-opposite-of-your-opinion-as-fairly-as-",
+      "kind": "tip",
+      "title": "Write the opposite of your opinion as fairly as you can",
+      "summary": "If you cannot state the other side so its holders agree, you do not understand it yet."
+    },
+    {
+      "id": "tip-read-one-primary-text-instead-of-three-summaries",
+      "kind": "tip",
+      "title": "Read one primary text instead of three summaries",
+      "summary": "Original voices surprise you in ways summaries cannot."
+    },
+    {
+      "id": "idea-start-a-one-chapter-reading-group",
+      "kind": "idea",
+      "title": "Start a one-chapter reading group",
+      "summary": "Small enough to finish, deep enough to argue about."
+    },
+    {
+      "id": "idea-hold-a-debate-where-each-side-argues-the-positio",
+      "kind": "idea",
+      "title": "Hold a debate where each side argues the position they reject",
+      "summary": "It is the fastest way to find the weak spots in your own view."
+    },
+    {
+      "id": "app-stanford-encyclopedia-of-philosophy",
+      "kind": "app",
+      "title": "Stanford Encyclopedia of Philosophy",
+      "summary": "Free, peer-reviewed articles on philosophical topics.",
+      "url": "https://plato.stanford.edu"
+    },
+    {
+      "id": "app-project-gutenberg",
+      "kind": "app",
+      "title": "Project Gutenberg",
+      "summary": "Free ebooks of classic works whose copyright has expired.",
+      "url": "https://www.gutenberg.org"
+    },
+    {
+      "id": "opportunity-audit-a-free-philosophy-or-history-course",
+      "kind": "opportunity",
+      "title": "Audit a free philosophy or history course",
+      "summary": "Many universities publish full courses at no cost."
+    }
+  ]
+}

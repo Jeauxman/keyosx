@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for the-libertine, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-spend-one-evening-a-week-without-a-screen",
+      "kind": "tip",
+      "title": "Spend one evening a week without a screen",
+      "summary": "Freedom starts with where your attention goes."
+    },
+    {
+      "id": "idea-host-a-dinner-where-the-only-rule-is-no-small-ta",
+      "kind": "idea",
+      "title": "Host a dinner where the only rule is no small talk",
+      "summary": "Ask a real question and let it run."
+    },
+    {
+      "id": "tip-write-the-opposite-of-your-opinion-as-fairly-as-",
+      "kind": "tip",
+      "title": "Write the opposite of your opinion as fairly as you can",
+      "summary": "If you cannot state the other side so its holders agree, you do not understand it yet."
+    },
+    {
+      "id": "tip-read-one-primary-text-instead-of-three-summaries",
+      "kind": "tip",
+      "title": "Read one primary text instead of three summaries",
+      "summary": "Original voices surprise you in ways summaries cannot."
+    },
+    {
+      "id": "tip-keep-a-question-list-not-just-a-to-do-list",
+      "kind": "tip",
+      "title": "Keep a question list, not just a to-do list",
+      "summary": "Questions you carry around get answered in unexpected places."
+    },
+    {
+      "id": "idea-start-a-one-chapter-reading-group",
+      "kind": "idea",
+      "title": "Start a one-chapter reading group",
+      "summary": "Small enough to finish, deep enough to argue about."
+    },
+    {
+      "id": "idea-hold-a-debate-where-each-side-argues-the-positio",
+      "kind": "idea",
+      "title": "Hold a debate where each side argues the position they reject",
+      "summary": "It is the fastest way to find the weak spots in your own view."
+    },
+    {
+      "id": "idea-write-a-letter-to-a-thinker-who-disagrees-with-y",
+      "kind": "idea",
+      "title": "Write a letter to a thinker who disagrees with you",
+      "summary": "You do not have to send it. Writing it clarifies what you actually believe."
+    },
+    {
+      "id": "app-stanford-encyclopedia-of-philosophy",
+      "kind": "app",
+      "title": "Stanford Encyclopedia of Philosophy",
+      "summary": "Free, peer-reviewed articles on philosophical topics.",
+      "url": "https://plato.stanford.edu"
+    },
+    {
+      "id": "app-project-gutenberg",
+      "kind": "app",
+      "title": "Project Gutenberg",
+      "summary": "Free ebooks of classic works whose copyright has expired.",
+      "url": "https://www.gutenberg.org"
+    },
+    {
+      "id": "app-internet-archive",
+      "kind": "app",
+      "title": "Internet Archive",
+      "summary": "A free library of books, recordings and web history.",
+      "url": "https://archive.org"
+    },
+    {
+      "id": "opportunity-audit-a-free-philosophy-or-history-course",
+      "kind": "opportunity",
+      "title": "Audit a free philosophy or history course",
+      "summary": "Many universities publish full courses at no cost."
+    },
+    {
+      "id": "opportunity-join-or-start-a-philosophy-cafe",
+      "kind": "opportunity",
+      "title": "Join or start a philosophy café",
+      "summary": "Cafés and libraries often host open discussion nights."
+    },
+    {
+      "id": "tip-look-at-one-artwork-for-ten-full-minutes",
+      "kind": "tip",
+      "title": "Look at one artwork for ten full minutes",
+      "summary": "Past the first reaction, a picture keeps giving."
+    },
+    {
+      "id": "tip-visit-a-gallery-on-its-quiet-day",
+      "kind": "tip",
+      "title": "Visit a gallery on its quiet day",
+      "summary": "You can stand where you like and look as long as you like."
+    },
+    {
+      "id": "idea-start-a-small-collection-of-postcards-or-prints",
+      "kind": "idea",
+      "title": "Start a small collection of postcards or prints",
+      "summary": "Cheap, personal and a good reason to visit museum shops."
+    },
+    {
+      "id": "idea-trade-a-drawing-a-week-with-a-friend",
+      "kind": "idea",
+      "title": "Trade a drawing a week with a friend",
+      "summary": "A low-pressure habit that adds up."
+    },
+    {
+      "id": "app-google-arts-culture",
+      "kind": "app",
+      "title": "Google Arts & Culture",
+      "summary": "Explore artworks and exhibitions from museums around the world.",
+      "url": "https://artsandculture.google.com"
+    },
+    {
+      "id": "app-europeana",
+      "kind": "app",
+      "title": "Europeana",
+      "summary": "Millions of digitized artworks, books and recordings from European institutions.",
+      "url": "https://www.europeana.eu"
+    },
+    {
+      "id": "opportunity-volunteer-at-a-gallery-or-arts-festival",
+      "kind": "opportunity",
+      "title": "Volunteer at a gallery or arts festival",
+      "summary": "Volunteers see behind the scenes and often get free entry."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_note": "eat-stay-love-carcassonne editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Eat Stay Love Carcassonne",
+    "masthead": "Eat Stay Love Carcassonne"
+  },
+  "voice": "Welcoming and local: where to eat, where to stay and how to fall for Carcassonne.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "eat-stay-love-carcassonne",
+    "feeds": [
+      {
+        "name": "The Local France",
+        "url": "https://feeds.thelocal.com/rss/fr",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Food",
+        "url": "https://www.theguardian.com/food/rss",
+        "enabled": true
+      }
+    ]
+  }
+}

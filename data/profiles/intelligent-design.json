@@ -1,0 +1,50 @@
+{
+  "_note": "intelligent-design editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Intelligent Design",
+    "masthead": "Intelligent Design"
+  },
+  "voice": "Where science, nature and spirit meet. Curious and careful, keeping evidence and wonder side by side.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "intelligent-design",
+    "feeds": [
+      {
+        "name": "Quanta Magazine",
+        "url": "https://www.quantamagazine.org/feed/",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Science",
+        "url": "https://www.theguardian.com/science/rss",
+        "enabled": true
+      },
+      {
+        "name": "Nature News",
+        "url": "https://www.nature.com/nature.rss",
+        "enabled": true
+      },
+      {
+        "name": "Science Daily",
+        "url": "https://www.sciencedaily.com/rss/all.xml",
+        "enabled": true
+      }
+    ]
+  }
+}

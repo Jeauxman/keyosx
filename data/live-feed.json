@@ -1,6 +1,33 @@
 {
   "_note": "Brands whose VERIFIED live headlines may be shown publicly (a Live feed tab beside Cover stories). Empty by default: Joe adds a publication id here to switch it on. It shows only what Almanac has verified from the brand's listed sources: title, source, date and a link to the original. LIVE_FEED=on shows it for every brand on a local copy only. It is only as fresh as Almanac's last research (see docs/paid-refresh-design.md for on-demand refresh).",
   "public": [
-    "keyosx:publication:cinebon"
+    "keyosx:publication:cinebon",
+    "keyosx:publication:mediterraneano",
+    "keyosx:publication:u-man",
+    "keyosx:publication:bon-voyage",
+    "keyosx:publication:pride-mediterraneo",
+    "keyosx:publication:noize",
+    "keyosx:publication:ispirazione",
+    "keyosx:publication:basil-leaf-chronicles",
+    "keyosx:publication:eat-stay-love-carcassonne",
+    "keyosx:publication:carcassonne-monthly",
+    "keyosx:publication:dolce-far-niente",
+    "keyosx:publication:zout-salt-journal",
+    "keyosx:publication:the-libertine",
+    "keyosx:publication:au-contraire",
+    "keyosx:publication:think",
+    "keyosx:publication:simultanism",
+    "keyosx:publication:synphony-magazine",
+    "keyosx:publication:matriarch",
+    "keyosx:publication:me-dia",
+    "keyosx:publication:troubadour-quarterly",
+    "keyosx:publication:the-new-troubadour",
+    "keyosx:publication:heroes",
+    "keyosx:publication:audacity",
+    "keyosx:publication:lern",
+    "keyosx:publication:engineered",
+    "keyosx:publication:retrofuturism",
+    "keyosx:publication:intelligent-design",
+    "keyosx:publication:wshit"
   ]
 }

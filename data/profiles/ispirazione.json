@@ -1,0 +1,45 @@
+{
+  "_note": "ispirazione editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "ispirazione",
+    "masthead": "ispirazione"
+  },
+  "voice": "Poetic and Italian in spirit: music, art and life, with a sketchbook in hand.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "ispirazione",
+    "feeds": [
+      {
+        "name": "NPR Music",
+        "url": "https://feeds.npr.org/1039/rss.xml",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Art and design",
+        "url": "https://www.theguardian.com/artanddesign/rss",
+        "enabled": true
+      },
+      {
+        "name": "Colossal",
+        "url": "https://www.thisiscolossal.com/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

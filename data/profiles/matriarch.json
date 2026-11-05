@@ -1,0 +1,40 @@
+{
+  "_note": "matriarch editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Matriarch",
+    "masthead": "Matriarch"
+  },
+  "voice": "Women, wisdom and leadership. Confident, warm and practical.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "matriarch",
+    "feeds": [
+      {
+        "name": "The 19th",
+        "url": "https://19thnews.org/feed/",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Women",
+        "url": "https://www.theguardian.com/lifeandstyle/women/rss",
+        "enabled": true
+      }
+    ]
+  }
+}

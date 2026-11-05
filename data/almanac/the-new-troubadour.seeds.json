@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for the-new-troubadour, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-share-one-thing-you-love-every-week",
+      "kind": "tip",
+      "title": "Share one thing you love every week",
+      "summary": "Taste is a gift when you give it away."
+    },
+    {
+      "id": "idea-start-a-village-square-newsletter-for-your-neigh",
+      "kind": "idea",
+      "title": "Start a village-square newsletter for your neighborhood",
+      "summary": "Local culture, shared."
+    },
+    {
+      "id": "tip-look-at-one-artwork-for-ten-full-minutes",
+      "kind": "tip",
+      "title": "Look at one artwork for ten full minutes",
+      "summary": "Past the first reaction, a picture keeps giving."
+    },
+    {
+      "id": "tip-visit-a-gallery-on-its-quiet-day",
+      "kind": "tip",
+      "title": "Visit a gallery on its quiet day",
+      "summary": "You can stand where you like and look as long as you like."
+    },
+    {
+      "id": "tip-sketch-what-you-cannot-photograph",
+      "kind": "tip",
+      "title": "Sketch what you cannot photograph",
+      "summary": "Drawing makes you look properly."
+    },
+    {
+      "id": "idea-start-a-small-collection-of-postcards-or-prints",
+      "kind": "idea",
+      "title": "Start a small collection of postcards or prints",
+      "summary": "Cheap, personal and a good reason to visit museum shops."
+    },
+    {
+      "id": "idea-trade-a-drawing-a-week-with-a-friend",
+      "kind": "idea",
+      "title": "Trade a drawing a week with a friend",
+      "summary": "A low-pressure habit that adds up."
+    },
+    {
+      "id": "idea-map-the-murals-and-sculptures-in-your-town",
+      "kind": "idea",
+      "title": "Map the murals and sculptures in your town",
+      "summary": "Turn your walk home into a small public art tour."
+    },
+    {
+      "id": "app-google-arts-culture",
+      "kind": "app",
+      "title": "Google Arts & Culture",
+      "summary": "Explore artworks and exhibitions from museums around the world.",
+      "url": "https://artsandculture.google.com"
+    },
+    {
+      "id": "app-europeana",
+      "kind": "app",
+      "title": "Europeana",
+      "summary": "Millions of digitized artworks, books and recordings from European institutions.",
+      "url": "https://www.europeana.eu"
+    },
+    {
+      "id": "app-the-met-collection",
+      "kind": "app",
+      "title": "The Met Collection",
+      "summary": "Browse and download open-access images from The Metropolitan Museum of Art.",
+      "url": "https://www.metmuseum.org/art/collection"
+    },
+    {
+      "id": "opportunity-volunteer-at-a-gallery-or-arts-festival",
+      "kind": "opportunity",
+      "title": "Volunteer at a gallery or arts festival",
+      "summary": "Volunteers see behind the scenes and often get free entry."
+    },
+    {
+      "id": "opportunity-join-a-life-drawing-session",
+      "kind": "opportunity",
+      "title": "Join a life-drawing session",
+      "summary": "Many studios run affordable open sessions."
+    },
+    {
+      "id": "tip-ask-one-more-question-than-feels-polite",
+      "kind": "tip",
+      "title": "Ask one more question than feels polite",
+      "summary": "The best story is usually in the second answer."
+    },
+    {
+      "id": "tip-write-down-a-story-the-day-you-hear-it",
+      "kind": "tip",
+      "title": "Write down a story the day you hear it",
+      "summary": "Details fade quickly."
+    },
+    {
+      "id": "idea-record-a-family-member-s-story",
+      "kind": "idea",
+      "title": "Record a family member's story",
+      "summary": "Ten questions and a phone are enough to keep a life on record."
+    },
+    {
+      "id": "idea-start-a-neighbor-spotlight",
+      "kind": "idea",
+      "title": "Start a neighbor spotlight",
+      "summary": "One short profile a month of someone doing good work nearby."
+    },
+    {
+      "id": "app-storycorps",
+      "kind": "app",
+      "title": "StoryCorps",
+      "summary": "Record and preserve conversations with the people who matter to you.",
+      "url": "https://storycorps.org"
+    },
+    {
+      "id": "app-humans-of-new-york",
+      "kind": "app",
+      "title": "Humans of New York",
+      "summary": "Portraits and short stories of everyday people.",
+      "url": "https://www.humansofnewyork.com"
+    },
+    {
+      "id": "opportunity-volunteer-for-a-cause-you-keep-talking-about",
+      "kind": "opportunity",
+      "title": "Volunteer for a cause you keep talking about",
+      "summary": "Move from commenting to doing, even for a few hours."
+    }
+  ]
+}

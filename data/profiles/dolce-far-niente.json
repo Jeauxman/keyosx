@@ -1,0 +1,40 @@
+{
+  "_note": "dolce-far-niente editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Dolce Far Niente",
+    "masthead": "Dolce Far Niente"
+  },
+  "voice": "Italian living, property and the sweetness of doing nothing. Elegant, practical and unhurried.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "dolce-far-niente",
+    "feeds": [
+      {
+        "name": "The Local Italy",
+        "url": "https://feeds.thelocal.com/rss/it",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Property",
+        "url": "https://www.theguardian.com/money/property/rss",
+        "enabled": true
+      }
+    ]
+  }
+}

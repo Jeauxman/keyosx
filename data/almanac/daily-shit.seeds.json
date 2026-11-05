@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for daily-shit, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-make-the-joke-obvious-enough-that-it-cannot-be-m",
+      "kind": "tip",
+      "title": "Make the joke obvious enough that it cannot be mistaken for news",
+      "summary": "The label is part of the craft."
+    },
+    {
+      "id": "idea-write-a-fake-headline-for-each-real-story-you-re",
+      "kind": "idea",
+      "title": "Write a fake headline for each real story you read today",
+      "summary": "Then check which one was harder to believe."
+    },
+    {
+      "id": "tip-label-satire-clearly-so-nobody-mistakes-it-for-n",
+      "kind": "tip",
+      "title": "Label satire clearly so nobody mistakes it for news",
+      "summary": "Good satire is obvious to the reader. If it might fool someone, add a label."
+    },
+    {
+      "id": "tip-punch-up-not-down",
+      "kind": "tip",
+      "title": "Punch up, not down",
+      "summary": "Aim at the powerful, the pompous and the absurd, not at people who have little power."
+    },
+    {
+      "id": "tip-record-the-same-segment-twice-and-keep-the-bette",
+      "kind": "tip",
+      "title": "Record the same segment twice and keep the better take",
+      "summary": "The second take is almost always calmer and clearer."
+    },
+    {
+      "id": "idea-start-a-weekly-show-with-a-fixed-three-part-form",
+      "kind": "idea",
+      "title": "Start a weekly show with a fixed three-part format",
+      "summary": "Structure frees you to be spontaneous inside it."
+    },
+    {
+      "id": "idea-invite-a-guest-who-disagrees-with-you",
+      "kind": "idea",
+      "title": "Invite a guest who disagrees with you",
+      "summary": "Good disagreement makes good radio."
+    },
+    {
+      "id": "idea-turn-each-episode-into-a-one-page-newsletter",
+      "kind": "idea",
+      "title": "Turn each episode into a one-page newsletter",
+      "summary": "A second life for the same work."
+    },
+    {
+      "id": "app-obs-studio",
+      "kind": "app",
+      "title": "OBS Studio",
+      "summary": "Free software for recording and live streaming.",
+      "url": "https://obsproject.com"
+    },
+    {
+      "id": "app-audacity",
+      "kind": "app",
+      "title": "Audacity",
+      "summary": "A free, open-source audio recorder and editor.",
+      "url": "https://www.audacityteam.org"
+    },
+    {
+      "id": "app-descript",
+      "kind": "app",
+      "title": "Descript",
+      "summary": "Edit audio and video by editing the transcript.",
+      "url": "https://www.descript.com"
+    },
+    {
+      "id": "opportunity-pitch-a-guest-spot-on-a-local-station-or-podcast",
+      "kind": "opportunity",
+      "title": "Pitch a guest spot on a local station or podcast",
+      "summary": "Small shows always need good guests."
+    },
+    {
+      "id": "opportunity-join-a-community-radio-group",
+      "kind": "opportunity",
+      "title": "Join a community radio group",
+      "summary": "Training and airtime are often free for volunteers."
+    }
+  ]
+}

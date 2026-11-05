@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for mediterraneano, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-eat-where-the-menu-is-short",
+      "kind": "tip",
+      "title": "Eat where the menu is short",
+      "summary": "A short, local menu usually means fresh, seasonal cooking."
+    },
+    {
+      "id": "idea-spend-a-week-in-one-small-harbor-town",
+      "kind": "idea",
+      "title": "Spend a week in one small harbor town",
+      "summary": "Stay long enough to be recognized at the café."
+    },
+    {
+      "id": "tip-travel-a-week-slower-than-you-planned",
+      "kind": "tip",
+      "title": "Travel a week slower than you planned",
+      "summary": "Fewer stops, longer stays. You remember places you had time to be bored in."
+    },
+    {
+      "id": "tip-learn-ten-phrases-before-you-land",
+      "kind": "tip",
+      "title": "Learn ten phrases before you land",
+      "summary": "Greetings, thank you and please open more doors than a phrasebook full of grammar."
+    },
+    {
+      "id": "tip-book-the-first-night-only",
+      "kind": "tip",
+      "title": "Book the first night only",
+      "summary": "Keep the rest loose. Plans made on the ground are often better than plans made at home."
+    },
+    {
+      "id": "idea-plan-a-trip-around-one-meal",
+      "kind": "idea",
+      "title": "Plan a trip around one meal",
+      "summary": "Choose a dish, find where it is best, and build the route backwards."
+    },
+    {
+      "id": "idea-take-the-train-for-one-leg-instead-of-the-plane",
+      "kind": "idea",
+      "title": "Take the train for one leg instead of the plane",
+      "summary": "The in-between places are the part of the trip you usually never see."
+    },
+    {
+      "id": "idea-spend-a-day-the-way-a-local-would",
+      "kind": "idea",
+      "title": "Spend a day the way a local would",
+      "summary": "Market in the morning, a café, the library, a walk after dinner."
+    },
+    {
+      "id": "app-rome2rio",
+      "kind": "app",
+      "title": "Rome2Rio",
+      "summary": "Compare how to get anywhere by train, bus, ferry, car or plane.",
+      "url": "https://www.rome2rio.com"
+    },
+    {
+      "id": "app-wikivoyage",
+      "kind": "app",
+      "title": "Wikivoyage",
+      "summary": "A free, community-written travel guide to places worldwide.",
+      "url": "https://www.wikivoyage.org"
+    },
+    {
+      "id": "app-tripit",
+      "kind": "app",
+      "title": "TripIt",
+      "summary": "Turn booking emails into one organized itinerary.",
+      "url": "https://www.tripit.com"
+    },
+    {
+      "id": "opportunity-join-a-walking-tour-led-by-a-resident",
+      "kind": "opportunity",
+      "title": "Join a walking tour led by a resident",
+      "summary": "Local guides share what guidebooks skip. Tip them well."
+    },
+    {
+      "id": "opportunity-trade-your-home-or-your-time",
+      "kind": "opportunity",
+      "title": "Trade your home or your time",
+      "summary": "House swaps and volunteer stays can make a long trip affordable."
+    },
+    {
+      "id": "tip-shop-what-is-in-season-then-decide-what-to-cook",
+      "kind": "tip",
+      "title": "Shop what is in season, then decide what to cook",
+      "summary": "Start at the market, not the recipe. Seasonal food tastes better and costs less."
+    },
+    {
+      "id": "tip-salt-in-layers-while-you-cook",
+      "kind": "tip",
+      "title": "Salt in layers while you cook",
+      "summary": "A pinch at each stage builds flavor. Salt only at the end and it just sits on top."
+    },
+    {
+      "id": "idea-cook-a-dish-from-a-region-you-have-never-visited",
+      "kind": "idea",
+      "title": "Cook a dish from a region you have never visited",
+      "summary": "Read about where it comes from first, then cook it, then eat it slowly."
+    },
+    {
+      "id": "idea-host-a-potluck-where-every-dish-has-a-story",
+      "kind": "idea",
+      "title": "Host a potluck where every dish has a story",
+      "summary": "Everyone brings a dish and says why it matters to them."
+    },
+    {
+      "id": "app-paprika",
+      "kind": "app",
+      "title": "Paprika",
+      "summary": "Save recipes from the web, plan meals and build shopping lists.",
+      "url": "https://www.paprikaapp.com"
+    },
+    {
+      "id": "app-vivino",
+      "kind": "app",
+      "title": "Vivino",
+      "summary": "Scan a wine label to see ratings and tasting notes.",
+      "url": "https://www.vivino.com"
+    },
+    {
+      "id": "opportunity-take-a-class-from-a-local-cook",
+      "kind": "opportunity",
+      "title": "Take a class from a local cook",
+      "summary": "A few hours with a home cook teaches more than a shelf of books."
+    }
+  ]
+}

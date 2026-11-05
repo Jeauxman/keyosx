@@ -1,0 +1,45 @@
+{
+  "_note": "bon-voyage editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "bon voyage",
+    "masthead": "bon voyage"
+  },
+  "voice": "Open-road and free-spirited. Go your own way, with enough practical help to make it work.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "bon-voyage",
+    "feeds": [
+      {
+        "name": "Matador Network",
+        "url": "https://matadornetwork.com/feed/",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Travel",
+        "url": "https://www.theguardian.com/travel/rss",
+        "enabled": true
+      },
+      {
+        "name": "Skift",
+        "url": "https://skift.com/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

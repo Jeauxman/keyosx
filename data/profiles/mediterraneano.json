@@ -1,0 +1,45 @@
+{
+  "_note": "mediterraneano editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Mediterraneano",
+    "masthead": "Mediterraneano"
+  },
+  "voice": "Warm, sun-lit and unhurried. Places, tables and slow living around the Mediterranean.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "mediterraneano",
+    "feeds": [
+      {
+        "name": "The Guardian, Travel",
+        "url": "https://www.theguardian.com/travel/rss",
+        "enabled": true
+      },
+      {
+        "name": "Atlas Obscura",
+        "url": "https://www.atlasobscura.com/feeds/latest",
+        "enabled": true
+      },
+      {
+        "name": "Matador Network",
+        "url": "https://matadornetwork.com/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

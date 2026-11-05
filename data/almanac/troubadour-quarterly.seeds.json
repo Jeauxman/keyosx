@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for troubadour-quarterly, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-keep-a-quarterly-review-of-what-you-built-and-wh",
+      "kind": "tip",
+      "title": "Keep a quarterly review of what you built and what you learned",
+      "summary": "Four pages: wins, mistakes, lessons and the next bet."
+    },
+    {
+      "id": "idea-design-one-system-that-runs-without-you",
+      "kind": "idea",
+      "title": "Design one system that runs without you",
+      "summary": "Write it down so someone else could run it."
+    },
+    {
+      "id": "tip-look-at-one-artwork-for-ten-full-minutes",
+      "kind": "tip",
+      "title": "Look at one artwork for ten full minutes",
+      "summary": "Past the first reaction, a picture keeps giving."
+    },
+    {
+      "id": "tip-visit-a-gallery-on-its-quiet-day",
+      "kind": "tip",
+      "title": "Visit a gallery on its quiet day",
+      "summary": "You can stand where you like and look as long as you like."
+    },
+    {
+      "id": "tip-sketch-what-you-cannot-photograph",
+      "kind": "tip",
+      "title": "Sketch what you cannot photograph",
+      "summary": "Drawing makes you look properly."
+    },
+    {
+      "id": "idea-start-a-small-collection-of-postcards-or-prints",
+      "kind": "idea",
+      "title": "Start a small collection of postcards or prints",
+      "summary": "Cheap, personal and a good reason to visit museum shops."
+    },
+    {
+      "id": "idea-trade-a-drawing-a-week-with-a-friend",
+      "kind": "idea",
+      "title": "Trade a drawing a week with a friend",
+      "summary": "A low-pressure habit that adds up."
+    },
+    {
+      "id": "idea-map-the-murals-and-sculptures-in-your-town",
+      "kind": "idea",
+      "title": "Map the murals and sculptures in your town",
+      "summary": "Turn your walk home into a small public art tour."
+    },
+    {
+      "id": "app-google-arts-culture",
+      "kind": "app",
+      "title": "Google Arts & Culture",
+      "summary": "Explore artworks and exhibitions from museums around the world.",
+      "url": "https://artsandculture.google.com"
+    },
+    {
+      "id": "app-europeana",
+      "kind": "app",
+      "title": "Europeana",
+      "summary": "Millions of digitized artworks, books and recordings from European institutions.",
+      "url": "https://www.europeana.eu"
+    },
+    {
+      "id": "app-the-met-collection",
+      "kind": "app",
+      "title": "The Met Collection",
+      "summary": "Browse and download open-access images from The Metropolitan Museum of Art.",
+      "url": "https://www.metmuseum.org/art/collection"
+    },
+    {
+      "id": "opportunity-volunteer-at-a-gallery-or-arts-festival",
+      "kind": "opportunity",
+      "title": "Volunteer at a gallery or arts festival",
+      "summary": "Volunteers see behind the scenes and often get free entry."
+    },
+    {
+      "id": "opportunity-join-a-life-drawing-session",
+      "kind": "opportunity",
+      "title": "Join a life-drawing session",
+      "summary": "Many studios run affordable open sessions."
+    },
+    {
+      "id": "tip-read-the-footnotes-of-any-financial-claim",
+      "kind": "tip",
+      "title": "Read the footnotes of any financial claim",
+      "summary": "The caveats that matter are rarely in the headline."
+    },
+    {
+      "id": "tip-track-what-you-own-and-owe-once-a-month",
+      "kind": "tip",
+      "title": "Track what you own and owe once a month",
+      "summary": "A simple list beats a vague feeling about money."
+    },
+    {
+      "id": "idea-follow-one-commodity-for-a-month",
+      "kind": "idea",
+      "title": "Follow one commodity for a month",
+      "summary": "Salt, wheat or copper. Note what moves it and what does not."
+    },
+    {
+      "id": "idea-build-a-one-page-model-of-a-small-business-you-a",
+      "kind": "idea",
+      "title": "Build a one-page model of a small business you admire",
+      "summary": "Where does the money come in and where does it go?"
+    },
+    {
+      "id": "app-fred",
+      "kind": "app",
+      "title": "FRED",
+      "summary": "Free economic data from the Federal Reserve Bank of St. Louis.",
+      "url": "https://fred.stlouisfed.org"
+    },
+    {
+      "id": "app-world-bank-open-data",
+      "kind": "app",
+      "title": "World Bank Open Data",
+      "summary": "Free global development data by country and topic.",
+      "url": "https://data.worldbank.org"
+    },
+    {
+      "id": "opportunity-take-a-free-personal-finance-course",
+      "kind": "opportunity",
+      "title": "Take a free personal-finance course",
+      "summary": "Libraries and universities publish good ones."
+    }
+  ]
+}

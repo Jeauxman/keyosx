@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for matriarch, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-take-the-seat-at-the-table",
+      "kind": "tip",
+      "title": "Take the seat at the table",
+      "summary": "Choose the chair you would give to someone you want to see lead."
+    },
+    {
+      "id": "idea-write-a-short-letter-to-your-younger-self-about-",
+      "kind": "idea",
+      "title": "Write a short letter to your younger self about work",
+      "summary": "Then share it."
+    },
+    {
+      "id": "tip-say-the-ask-out-loud-before-the-meeting",
+      "kind": "tip",
+      "title": "Say the ask out loud before the meeting",
+      "summary": "Practice it once to someone else. It makes the real conversation easier."
+    },
+    {
+      "id": "tip-share-credit-by-name-in-public",
+      "kind": "tip",
+      "title": "Share credit by name, in public",
+      "summary": "Naming people builds trust and makes your own work more visible."
+    },
+    {
+      "id": "tip-keep-a-record-of-your-wins",
+      "kind": "tip",
+      "title": "Keep a record of your wins",
+      "summary": "A simple list makes reviews and negotiations far easier."
+    },
+    {
+      "id": "idea-start-a-mentoring-circle-of-three-women",
+      "kind": "idea",
+      "title": "Start a mentoring circle of three women",
+      "summary": "Meet monthly. Each brings one problem and one offer."
+    },
+    {
+      "id": "idea-host-a-book-night-on-a-woman-s-memoir",
+      "kind": "idea",
+      "title": "Host a book night on a woman's memoir",
+      "summary": "Pick one and talk about what you would do differently."
+    },
+    {
+      "id": "idea-interview-a-woman-older-than-you-about-her-caree",
+      "kind": "idea",
+      "title": "Interview a woman older than you about her career",
+      "summary": "Ask about the decision she would take back and the one she is proudest of."
+    },
+    {
+      "id": "app-meetup",
+      "kind": "app",
+      "title": "Meetup",
+      "summary": "Find local groups and events built around shared interests.",
+      "url": "https://www.meetup.com"
+    },
+    {
+      "id": "app-eventbrite",
+      "kind": "app",
+      "title": "Eventbrite",
+      "summary": "Discover and organize events near you.",
+      "url": "https://www.eventbrite.com"
+    },
+    {
+      "id": "app-trello",
+      "kind": "app",
+      "title": "Trello",
+      "summary": "Simple boards for organizing projects and goals.",
+      "url": "https://trello.com"
+    },
+    {
+      "id": "opportunity-join-a-local-professional-women-s-network",
+      "kind": "opportunity",
+      "title": "Join a local professional women's network",
+      "summary": "Look for chambers of commerce and industry groups."
+    },
+    {
+      "id": "opportunity-mentor-or-be-mentored",
+      "kind": "opportunity",
+      "title": "Mentor or be mentored",
+      "summary": "Many organizations run free matching programs."
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for carcassonne-monthly, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-check-the-town-s-events-calendar-before-the-week",
+      "kind": "tip",
+      "title": "Check the town's events calendar before the weekend",
+      "summary": "Markets, concerts and festivals are easy to miss."
+    },
+    {
+      "id": "idea-interview-a-long-time-shopkeeper-about-how-the-t",
+      "kind": "idea",
+      "title": "Interview a long-time shopkeeper about how the town has changed",
+      "summary": "A local story worth printing."
+    },
+    {
+      "id": "tip-say-bonjour-before-anything-else",
+      "kind": "tip",
+      "title": "Say bonjour before anything else",
+      "summary": "In shops and cafés the greeting comes before the question. It changes the whole exchange."
+    },
+    {
+      "id": "tip-learn-the-market-days",
+      "kind": "tip",
+      "title": "Learn the market days",
+      "summary": "In a small French town the week is organized around them. Ask at the tourist office or town hall."
+    },
+    {
+      "id": "tip-check-opening-hours-before-you-set-out",
+      "kind": "tip",
+      "title": "Check opening hours before you set out",
+      "summary": "Many places close at midday and on Sundays or Mondays."
+    },
+    {
+      "id": "idea-walk-the-old-walls-at-the-quiet-end-of-the-day",
+      "kind": "idea",
+      "title": "Walk the old walls at the quiet end of the day",
+      "summary": "Early morning and late evening show a place before and after the crowds."
+    },
+    {
+      "id": "idea-follow-one-canal-or-river-path-for-a-whole-after",
+      "kind": "idea",
+      "title": "Follow one canal or river path for a whole afternoon",
+      "summary": "Take a picnic and no plan."
+    },
+    {
+      "id": "idea-taste-one-regional-dish-in-three-places-and-comp",
+      "kind": "idea",
+      "title": "Taste one regional dish in three places and compare",
+      "summary": "A small, delicious study of how a place cooks."
+    },
+    {
+      "id": "app-meteo-france",
+      "kind": "app",
+      "title": "Météo-France",
+      "summary": "The national weather service, with local forecasts and alerts.",
+      "url": "https://meteofrance.com"
+    },
+    {
+      "id": "app-sncf-connect",
+      "kind": "app",
+      "title": "SNCF Connect",
+      "summary": "Plan and book trains across France.",
+      "url": "https://www.sncf-connect.com"
+    },
+    {
+      "id": "app-service-public",
+      "kind": "app",
+      "title": "Service-Public",
+      "summary": "The official guide to French administration and procedures.",
+      "url": "https://www.service-public.fr"
+    },
+    {
+      "id": "opportunity-join-a-local-association",
+      "kind": "opportunity",
+      "title": "Join a local association",
+      "summary": "Choirs, walking clubs and conversation groups are the fastest way into village life."
+    },
+    {
+      "id": "opportunity-volunteer-at-a-village-festival",
+      "kind": "opportunity",
+      "title": "Volunteer at a village festival",
+      "summary": "Festivals run on volunteers and neighbors welcome help."
+    }
+  ]
+}

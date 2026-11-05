@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for zout-salt-journal, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-before-salt-was-a-commodity-it-was-currency",
+      "kind": "tip",
+      "title": "Before salt was a commodity, it was currency",
+      "summary": "A good reminder that value is a shared agreement."
+    },
+    {
+      "id": "idea-trace-one-everyday-product-back-to-its-raw-mater",
+      "kind": "idea",
+      "title": "Trace one everyday product back to its raw material",
+      "summary": "The supply chain is a map of the economy."
+    },
+    {
+      "id": "tip-read-the-footnotes-of-any-financial-claim",
+      "kind": "tip",
+      "title": "Read the footnotes of any financial claim",
+      "summary": "The caveats that matter are rarely in the headline."
+    },
+    {
+      "id": "tip-track-what-you-own-and-owe-once-a-month",
+      "kind": "tip",
+      "title": "Track what you own and owe once a month",
+      "summary": "A simple list beats a vague feeling about money."
+    },
+    {
+      "id": "tip-translate-a-price-into-hours-of-work",
+      "kind": "tip",
+      "title": "Translate a price into hours of work",
+      "summary": "It changes how much a purchase really costs."
+    },
+    {
+      "id": "idea-follow-one-commodity-for-a-month",
+      "kind": "idea",
+      "title": "Follow one commodity for a month",
+      "summary": "Salt, wheat or copper. Note what moves it and what does not."
+    },
+    {
+      "id": "idea-build-a-one-page-model-of-a-small-business-you-a",
+      "kind": "idea",
+      "title": "Build a one-page model of a small business you admire",
+      "summary": "Where does the money come in and where does it go?"
+    },
+    {
+      "id": "idea-read-a-central-bank-s-own-explainer-on-inflation",
+      "kind": "idea",
+      "title": "Read a central bank's own explainer on inflation",
+      "summary": "The primary source is plainer than most commentary."
+    },
+    {
+      "id": "app-fred",
+      "kind": "app",
+      "title": "FRED",
+      "summary": "Free economic data from the Federal Reserve Bank of St. Louis.",
+      "url": "https://fred.stlouisfed.org"
+    },
+    {
+      "id": "app-world-bank-open-data",
+      "kind": "app",
+      "title": "World Bank Open Data",
+      "summary": "Free global development data by country and topic.",
+      "url": "https://data.worldbank.org"
+    },
+    {
+      "id": "app-investopedia",
+      "kind": "app",
+      "title": "Investopedia",
+      "summary": "Plain-language explanations of financial terms and concepts.",
+      "url": "https://www.investopedia.com"
+    },
+    {
+      "id": "opportunity-take-a-free-personal-finance-course",
+      "kind": "opportunity",
+      "title": "Take a free personal-finance course",
+      "summary": "Libraries and universities publish good ones."
+    },
+    {
+      "id": "opportunity-start-a-monthly-money-talk-group",
+      "kind": "opportunity",
+      "title": "Start a monthly money-talk group",
+      "summary": "Friends who talk openly about money make better decisions."
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for lern, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-pair-every-lesson-with-one-action",
+      "kind": "tip",
+      "title": "Pair every lesson with one action",
+      "summary": "Learning that does not change what you do is only entertainment."
+    },
+    {
+      "id": "idea-start-a-local-learning-circle",
+      "kind": "idea",
+      "title": "Start a local learning circle",
+      "summary": "Neighbors teaching neighbors builds a network."
+    },
+    {
+      "id": "tip-teach-what-you-learned-to-someone-within-a-day",
+      "kind": "tip",
+      "title": "Teach what you learned to someone within a day",
+      "summary": "Explaining is the fastest test of understanding."
+    },
+    {
+      "id": "tip-space-your-review-a-day-a-week-a-month",
+      "kind": "tip",
+      "title": "Space your review: a day, a week, a month",
+      "summary": "Spaced repetition beats cramming."
+    },
+    {
+      "id": "tip-write-the-question-before-you-read-the-answer",
+      "kind": "tip",
+      "title": "Write the question before you read the answer",
+      "summary": "Predicting makes the answer stick."
+    },
+    {
+      "id": "idea-run-a-30-day-challenge-on-one-skill",
+      "kind": "idea",
+      "title": "Run a 30-day challenge on one skill",
+      "summary": "Small daily practice builds more than occasional bursts."
+    },
+    {
+      "id": "idea-start-a-weekly-study-group",
+      "kind": "idea",
+      "title": "Start a weekly study group",
+      "summary": "The commitment keeps everyone going."
+    },
+    {
+      "id": "idea-swap-skills-with-a-friend",
+      "kind": "idea",
+      "title": "Swap skills with a friend",
+      "summary": "You teach one thing and they teach another."
+    },
+    {
+      "id": "app-khan-academy",
+      "kind": "app",
+      "title": "Khan Academy",
+      "summary": "Free lessons and practice in maths, science and more.",
+      "url": "https://www.khanacademy.org"
+    },
+    {
+      "id": "app-anki",
+      "kind": "app",
+      "title": "Anki",
+      "summary": "Free flashcards that use spaced repetition.",
+      "url": "https://apps.ankiweb.net"
+    },
+    {
+      "id": "app-mit-opencourseware",
+      "kind": "app",
+      "title": "MIT OpenCourseWare",
+      "summary": "Free course materials from MIT.",
+      "url": "https://ocw.mit.edu"
+    },
+    {
+      "id": "opportunity-audit-a-free-university-course",
+      "kind": "opportunity",
+      "title": "Audit a free university course",
+      "summary": "Many universities share lectures and notes at no cost."
+    },
+    {
+      "id": "opportunity-find-an-adult-learning-class-near-you",
+      "kind": "opportunity",
+      "title": "Find an adult-learning class near you",
+      "summary": "Libraries and community colleges run affordable ones."
+    },
+    {
+      "id": "tip-read-the-footnotes-of-any-financial-claim",
+      "kind": "tip",
+      "title": "Read the footnotes of any financial claim",
+      "summary": "The caveats that matter are rarely in the headline."
+    },
+    {
+      "id": "tip-track-what-you-own-and-owe-once-a-month",
+      "kind": "tip",
+      "title": "Track what you own and owe once a month",
+      "summary": "A simple list beats a vague feeling about money."
+    },
+    {
+      "id": "idea-follow-one-commodity-for-a-month",
+      "kind": "idea",
+      "title": "Follow one commodity for a month",
+      "summary": "Salt, wheat or copper. Note what moves it and what does not."
+    },
+    {
+      "id": "idea-build-a-one-page-model-of-a-small-business-you-a",
+      "kind": "idea",
+      "title": "Build a one-page model of a small business you admire",
+      "summary": "Where does the money come in and where does it go?"
+    },
+    {
+      "id": "app-fred",
+      "kind": "app",
+      "title": "FRED",
+      "summary": "Free economic data from the Federal Reserve Bank of St. Louis.",
+      "url": "https://fred.stlouisfed.org"
+    },
+    {
+      "id": "app-world-bank-open-data",
+      "kind": "app",
+      "title": "World Bank Open Data",
+      "summary": "Free global development data by country and topic.",
+      "url": "https://data.worldbank.org"
+    },
+    {
+      "id": "opportunity-take-a-free-personal-finance-course",
+      "kind": "opportunity",
+      "title": "Take a free personal-finance course",
+      "summary": "Libraries and universities publish good ones."
+    }
+  ]
+}

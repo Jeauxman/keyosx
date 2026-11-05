@@ -1,0 +1,45 @@
+{
+  "_note": "wshit editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "WSHIT Radio",
+    "masthead": "WSHIT Radio"
+  },
+  "voice": "Talk, noise, culture and commentary. Sharp, irreverent and honest about what it is.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "wshit",
+    "feeds": [
+      {
+        "name": "Podnews",
+        "url": "https://podnews.net/rss",
+        "enabled": true
+      },
+      {
+        "name": "Nieman Lab",
+        "url": "https://www.niemanlab.org/feed/",
+        "enabled": true
+      },
+      {
+        "name": "NPR Media",
+        "url": "https://feeds.npr.org/1020/rss.xml",
+        "enabled": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "_note": "daily-shit editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Daily Shit",
+    "masthead": "Daily Shit"
+  },
+  "voice": "Satire, labeled as satire. Sharp, funny and aimed at the powerful.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 0,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "tip",
+      "idea",
+      "app",
+      "opportunity"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "daily-shit",
+    "feeds": []
+  }
+}

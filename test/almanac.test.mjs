@@ -23,9 +23,12 @@ test("a profile merges defaults, the publication's own file and the entity", () 
   assert.equal(loadProfile("keyosx:publication:nope"), null);
 });
 
-test("only publications with real sources can be composed", () => {
+test("only a profile with real sources can be composed", () => {
   assert.equal(canCompose(loadProfile(CB)), true);
-  assert.equal(canCompose(loadProfile("keyosx:publication:noize")), false); // no seeds, no feeds: the engine refuses instead of inventing
+  const bare = { ...loadProfile(CB), sources: { seeds: null, feeds: [] } };
+  assert.equal(canCompose(bare), false);                                    // no seeds, no feeds: the engine refuses instead of inventing
+  const feedsOff = { ...bare, sources: { seeds: null, feeds: [{ name: "x", url: "https://x.example/rss", enabled: false }] } };
+  assert.equal(canCompose(feedsOff), false);                                // a switched-off feed is not a source
 });
 
 test("a feed counts only when it is enabled in the profile or switched on for the service", () => {
@@ -240,12 +243,10 @@ test("the CinéBon cycle: Almanac supplies, the agent selects, three draft stage
   assert.ok(reply.items.some((i) => /silent film night/i.test(i.title)));
 });
 
-test("the engine refuses a publication with no editorial sources instead of padding an issue", () => {
+test("the engine answers 404 for a publication that is not on the rack", () => {
   const engine = createEngine({ env: {}, fetchImpl: async () => ({ ok: true }), log: () => {} });
-  const refused = engine.readiness("keyosx:publication:noize");
-  assert.equal(refused.ok, false);
-  assert.equal(refused.status, 422);
   assert.equal(engine.readiness("keyosx:publication:nope").status, 404);
+  assert.equal(engine.readiness(CB).ok, true);
 });
 
 // ---- The capped Claude writer, against a fake Anthropic API (no key, no network, no cost) ----

@@ -1,0 +1,130 @@
+{
+  "_note": "Evergreen editorial seed pool for ispirazione, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-carry-a-small-notebook-for-lines-and-sketches",
+      "kind": "tip",
+      "title": "Carry a small notebook for lines and sketches",
+      "summary": "Inspiration is gone in minutes unless you catch it."
+    },
+    {
+      "id": "idea-hold-a-salon-night-with-music-drawing-and-wine",
+      "kind": "idea",
+      "title": "Hold a salon night with music, drawing and wine",
+      "summary": "One song, one sketch and one story each."
+    },
+    {
+      "id": "tip-look-at-one-artwork-for-ten-full-minutes",
+      "kind": "tip",
+      "title": "Look at one artwork for ten full minutes",
+      "summary": "Past the first reaction, a picture keeps giving."
+    },
+    {
+      "id": "tip-visit-a-gallery-on-its-quiet-day",
+      "kind": "tip",
+      "title": "Visit a gallery on its quiet day",
+      "summary": "You can stand where you like and look as long as you like."
+    },
+    {
+      "id": "tip-sketch-what-you-cannot-photograph",
+      "kind": "tip",
+      "title": "Sketch what you cannot photograph",
+      "summary": "Drawing makes you look properly."
+    },
+    {
+      "id": "idea-start-a-small-collection-of-postcards-or-prints",
+      "kind": "idea",
+      "title": "Start a small collection of postcards or prints",
+      "summary": "Cheap, personal and a good reason to visit museum shops."
+    },
+    {
+      "id": "idea-trade-a-drawing-a-week-with-a-friend",
+      "kind": "idea",
+      "title": "Trade a drawing a week with a friend",
+      "summary": "A low-pressure habit that adds up."
+    },
+    {
+      "id": "idea-map-the-murals-and-sculptures-in-your-town",
+      "kind": "idea",
+      "title": "Map the murals and sculptures in your town",
+      "summary": "Turn your walk home into a small public art tour."
+    },
+    {
+      "id": "app-google-arts-culture",
+      "kind": "app",
+      "title": "Google Arts & Culture",
+      "summary": "Explore artworks and exhibitions from museums around the world.",
+      "url": "https://artsandculture.google.com"
+    },
+    {
+      "id": "app-europeana",
+      "kind": "app",
+      "title": "Europeana",
+      "summary": "Millions of digitized artworks, books and recordings from European institutions.",
+      "url": "https://www.europeana.eu"
+    },
+    {
+      "id": "app-the-met-collection",
+      "kind": "app",
+      "title": "The Met Collection",
+      "summary": "Browse and download open-access images from The Metropolitan Museum of Art.",
+      "url": "https://www.metmuseum.org/art/collection"
+    },
+    {
+      "id": "opportunity-volunteer-at-a-gallery-or-arts-festival",
+      "kind": "opportunity",
+      "title": "Volunteer at a gallery or arts festival",
+      "summary": "Volunteers see behind the scenes and often get free entry."
+    },
+    {
+      "id": "opportunity-join-a-life-drawing-session",
+      "kind": "opportunity",
+      "title": "Join a life-drawing session",
+      "summary": "Many studios run affordable open sessions."
+    },
+    {
+      "id": "tip-listen-to-a-whole-album-before-you-judge-a-singl",
+      "kind": "tip",
+      "title": "Listen to a whole album before you judge a single",
+      "summary": "Albums are built to be heard in order. Give the full thing one uninterrupted listen first."
+    },
+    {
+      "id": "tip-follow-the-credits-not-just-the-artist",
+      "kind": "tip",
+      "title": "Follow the credits, not just the artist",
+      "summary": "Find the producers, writers and session players behind a song you love and listen to what else they made."
+    },
+    {
+      "id": "idea-start-a-listening-club-that-plays-one-album-a-we",
+      "kind": "idea",
+      "title": "Start a listening club that plays one album a week",
+      "summary": "One album, one evening, one rule: no phones. Talk about it after."
+    },
+    {
+      "id": "idea-build-a-playlist-that-tells-the-story-of-one-cit",
+      "kind": "idea",
+      "title": "Build a playlist that tells the story of one city",
+      "summary": "Pick ten songs that sound like where you live and sequence them like a walk."
+    },
+    {
+      "id": "app-bandcamp",
+      "kind": "app",
+      "title": "Bandcamp",
+      "summary": "Buy and stream music straight from artists and labels.",
+      "url": "https://bandcamp.com"
+    },
+    {
+      "id": "app-discogs",
+      "kind": "app",
+      "title": "Discogs",
+      "summary": "A database and marketplace for releases, pressings and credits.",
+      "url": "https://www.discogs.com"
+    },
+    {
+      "id": "opportunity-play-an-open-mic-night",
+      "kind": "opportunity",
+      "title": "Play an open mic night",
+      "summary": "Most towns have one. Sign up for one song and see how it feels."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "_note": "basil-leaf-chronicles editorial profile. Feeds were tested on 2026-11-05 (reachable, dated items) and are enabled; set enabled:false on any feed to switch it off. Headline, link, source and date only.",
+  "identity": {
+    "name": "Basil Leaf Chronicles",
+    "masthead": "Basil Leaf Chronicles"
+  },
+  "voice": "Food, travel and culture told through a good table. Warm, curious and specific.",
+  "issue": {
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
+    "featured_count": 3
+  },
+  "sources": {
+    "seeds": "basil-leaf-chronicles",
+    "feeds": [
+      {
+        "name": "The Guardian, Food",
+        "url": "https://www.theguardian.com/food/rss",
+        "enabled": true
+      },
+      {
+        "name": "Eater",
+        "url": "https://www.eater.com/rss/index.xml",
+        "enabled": true
+      },
+      {
+        "name": "Smitten Kitchen",
+        "url": "https://smittenkitchen.com/feed/",
+        "enabled": true
+      }
+    ]
+  }
+}

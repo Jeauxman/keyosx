@@ -1,0 +1,86 @@
+{
+  "_note": "Evergreen editorial seed pool for me-dia, written by Claude on 2026-11-05 for owner review. Tips, ideas, real tools (homepage links only) and generic opportunities. No news: news only comes from the brand's listed feeds. Edit freely.",
+  "items": [
+    {
+      "id": "tip-publish-before-you-feel-ready",
+      "kind": "tip",
+      "title": "Publish before you feel ready",
+      "summary": "A finished imperfect thing teaches more than a perfect draft."
+    },
+    {
+      "id": "idea-pair-up-with-a-creator-in-a-different-medium",
+      "kind": "idea",
+      "title": "Pair up with a creator in a different medium",
+      "summary": "A musician and a writer will make something neither expected."
+    },
+    {
+      "id": "tip-record-the-same-segment-twice-and-keep-the-bette",
+      "kind": "tip",
+      "title": "Record the same segment twice and keep the better take",
+      "summary": "The second take is almost always calmer and clearer."
+    },
+    {
+      "id": "tip-write-the-headline-last",
+      "kind": "tip",
+      "title": "Write the headline last",
+      "summary": "You will know what the piece is really about by then."
+    },
+    {
+      "id": "tip-check-one-fact-twice-before-it-goes-out",
+      "kind": "tip",
+      "title": "Check one fact twice before it goes out",
+      "summary": "One careful check is worth more than a correction."
+    },
+    {
+      "id": "idea-start-a-weekly-show-with-a-fixed-three-part-form",
+      "kind": "idea",
+      "title": "Start a weekly show with a fixed three-part format",
+      "summary": "Structure frees you to be spontaneous inside it."
+    },
+    {
+      "id": "idea-invite-a-guest-who-disagrees-with-you",
+      "kind": "idea",
+      "title": "Invite a guest who disagrees with you",
+      "summary": "Good disagreement makes good radio."
+    },
+    {
+      "id": "idea-turn-each-episode-into-a-one-page-newsletter",
+      "kind": "idea",
+      "title": "Turn each episode into a one-page newsletter",
+      "summary": "A second life for the same work."
+    },
+    {
+      "id": "app-obs-studio",
+      "kind": "app",
+      "title": "OBS Studio",
+      "summary": "Free software for recording and live streaming.",
+      "url": "https://obsproject.com"
+    },
+    {
+      "id": "app-audacity",
+      "kind": "app",
+      "title": "Audacity",
+      "summary": "A free, open-source audio recorder and editor.",
+      "url": "https://www.audacityteam.org"
+    },
+    {
+      "id": "app-descript",
+      "kind": "app",
+      "title": "Descript",
+      "summary": "Edit audio and video by editing the transcript.",
+      "url": "https://www.descript.com"
+    },
+    {
+      "id": "opportunity-pitch-a-guest-spot-on-a-local-station-or-podcast",
+      "kind": "opportunity",
+      "title": "Pitch a guest spot on a local station or podcast",
+      "summary": "Small shows always need good guests."
+    },
+    {
+      "id": "opportunity-join-a-community-radio-group",
+      "kind": "opportunity",
+      "title": "Join a community radio group",
+      "summary": "Training and airtime are often free for volunteers."
+    }
+  ]
+}
