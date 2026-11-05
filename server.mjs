@@ -71,6 +71,10 @@ if (!process.env.ADMIN_PASSWORD) {
 }
 
 app.disable("x-powered-by");
+// Behind a host's reverse proxy req.ip is the proxy, so every visitor would share one rate-limit bucket. In production trust one proxy hop
+// (override with TRUST_PROXY=<hops>, or 0 to turn off).
+const trustHops = Number(process.env.TRUST_PROXY ?? (isProduction ? 1 : 0));
+if (trustHops > 0) app.set("trust proxy", trustHops);
 app.use(express.json({ limit: "1mb" }));
 // No long-lived cache on static assets yet: the site is still in active development and
 // browsers/CDNs holding a stale app.js or styles.css after a deploy has caused confusing
@@ -144,6 +148,13 @@ async function databaseExport(db) {
 }
 
 async function main() {
+  // ALMANAC_INLINE=on runs the shared Almanac inside this one Node app (one hosted app instead of two). It answers the same webhook at
+  // /api/almanac/webhook and defaults the URLs to this app's own loopback address.
+  const almanacInline = String(process.env.ALMANAC_INLINE || "").toLowerCase() === "on";
+  if (almanacInline) {
+    process.env.KEYOSX_ORIGIN ||= `http://127.0.0.1:${port}`;
+    process.env.ISSUE_GENERATOR_URL ||= `http://127.0.0.1:${port}/api/almanac/webhook`;
+  }
   const db = await openDatabase();
   const seedResult = await seedDatabase(db);
   if (seedResult.seeded) console.log("[KeyOSX] Catalog seeded:", seedResult);
@@ -649,6 +660,25 @@ async function main() {
     console.error("[KeyOSX] Unhandled request error:", error);
     res.status(500).json({ error: "An unexpected error occurred." });
   });
+
+  if (almanacInline) {
+    const { createEngine } = await import("./almanac/engine.mjs");
+    const engine = createEngine();
+    app.post("/api/almanac/webhook", (req, res) => {
+      if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+      const job = req.body || {};
+      if (!job.publication_id || !job.period_key) return res.status(400).json({ error: "publication_id and period_key are required" });
+      const ready = engine.readiness(job.publication_id);
+      if (!ready.ok) return res.status(ready.status).json({ error: ready.reason });
+      res.status(202).json({ accepted: true });
+      engine.handle(job).catch((error) => console.error("[almanac] job failed:", error.message));
+    });
+    app.get("/api/almanac/health", (req, res) => {
+      if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+      res.json({ ok: true, writer: engine.writerName, spend_today: engine.spend() });
+    });
+    console.log("[KeyOSX] The Almanac is running inside this app (ALMANAC_INLINE=on).");
+  }
 
   app.listen(port, () => {
     console.log(`[KeyOSX] Living kiosk listening on http://localhost:${port}`);
