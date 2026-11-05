@@ -322,3 +322,18 @@ html, :root { background: #0c191a; }
 .admin-top .brand-subtitle { color: #b9ad8f; }
 .admin-top > div > p { color: #b9ad8f !important; }
 .login-card h1, .login-card .eyebrow { color: var(--ink); }
+
+/* Jack Rabbit's trail */
+.trail-steps { list-style: none; margin: .6rem 0 1rem; padding: 0; display: grid; gap: .8rem; }
+.trail-step { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; }
+.trail-mark { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--brass); color: var(--brass); font-weight: 800; }
+.trail-step.is-visited .trail-mark { background: var(--moss-dark); border-color: var(--moss-dark); color: #fff; }
+.trail-note { display: grid; gap: 3px; margin-top: 6px; font-size: .8rem; font-weight: 700; color: var(--ink-soft); }
+.trail-note input { width: 100%; }
+.trail-text { white-space: pre-wrap; margin: 0 0 8px; padding: 12px; border-radius: 8px; background: #fffaf0; border: 1px solid var(--line); font: .85rem/1.5 ui-monospace, Consolas, monospace; }
+.trail-past { margin-top: 1rem; font-size: .88rem; }
+.trail-back { margin: 0 0 8px; }
+.header-actions #trail-link { display: inline-flex; }
+
+.jack-banner { margin: 10px 0 12px; }
+.jack-banner video { aspect-ratio: 16 / 9; max-height: 230px; object-position: 30% 38%; }

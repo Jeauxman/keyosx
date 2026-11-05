@@ -6,3 +6,5 @@ data/*.db-shm
 data/*.db-wal
 .almanac-state/
 .env.almanac
+# 18.9 MB clip: compress or host it (Cloudinary) before it goes in git
+public/media/follow-jack.mp4

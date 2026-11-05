@@ -1,3 +1,5 @@
+import { archiveCurrent, counts, emptyTrails, markVisited, progress, setNote, startTrail, summarize } from "./trail.js";
+
 const app = document.querySelector("#app");
 const toastRegion = document.querySelector("#toast-region");
 
@@ -149,15 +151,55 @@ function pathAskHtml(message) {
 
 function pathHtml(path) {
   const steps = path.steps.length
-    ? `<ol class="path-steps">${path.steps.map((step) => `<li><span class="badge">${escapeHtml(ITEM_KIND_LABELS[step.kind] || step.kind)}</span> <strong>${escapeHtml(step.title)}</strong><div class="path-meta">${escapeHtml(step.publication_name)} · ${escapeHtml(step.why)}</div><div class="match-chips"><button class="match-chip" data-rack-open="${escapeHtml(step.publication_id)}" data-issue-id="${step.issue_id}">Open in ${escapeHtml(step.publication_name)}</button>${step.url ? `<a class="match-chip" href="${escapeHtml(step.url)}" target="_blank" rel="noopener noreferrer">Go to the source</a>` : ""}</div></li>`).join("")}</ol>`
+    ? `<ol class="path-steps">${path.steps.map((step) => `<li><span class="badge">${escapeHtml(ITEM_KIND_LABELS[step.kind] || step.kind)}</span> <strong>${escapeHtml(step.title)}</strong><div class="path-meta">${escapeHtml(step.publication_name)} · ${escapeHtml(step.why)}</div><div class="match-chips"><button class="match-chip" data-rack-open="${escapeHtml(step.publication_id)}" data-issue-id="${step.issue_id}" data-path-step="${step.item_id}">Open in ${escapeHtml(step.publication_name)}</button>${step.url ? `<a class="match-chip" href="${escapeHtml(step.url)}" target="_blank" rel="noopener noreferrer" data-path-step="${step.item_id}" data-path-pub="${escapeHtml(step.publication_id)}">Go to the source</a>` : ""}</div></li>`).join("")}</ol>`
     : `<p class="rack-note">Nothing approved fits that yet.</p>`;
   const gap = path.gap ? `<p class="rack-note">${path.steps.length ? "That is what is ready so far." : ""} I can ask ${escapeHtml(path.gap.publication_name)}'s editor for more. It only appears after the editor approves it.</p><button class="match-chip" data-rack-ask="${escapeHtml(path.gap.publication_id)}" data-intent="${escapeHtml(path.gap.intent)}">Ask ${escapeHtml(path.gap.publication_name)}'s editor to cover this</button>` : "";
   return `<div class="rack-suggest">${adHtml(path.ad)}${steps}${gap}</div>`;
 }
 
+// Jack's own clip ("Follow the rabbit. Come back with something."). Optional: if the file is not deployed the banner simply disappears.
+function jackBannerHtml() {
+  return `<figure class="filler jack-banner"><video data-optional src="/media/follow-jack.mp4#t=0.3" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at his desk, looking out over Carcassonne"></video><figcaption>Jack takes you there, and brings you back.</figcaption></figure>`;
+}
+
+// ---- Jack Rabbit's trail: kept on this device only ----
+const TRAIL_KEY = "keyosx.trail.v1";
+function loadTrails() {
+  try { const stored = JSON.parse(localStorage.getItem(TRAIL_KEY)); if (stored && Array.isArray(stored.past)) return stored; } catch { /* private mode or blocked storage: the trail lives for this visit only */ }
+  return emptyTrails();
+}
+function saveTrails() { try { localStorage.setItem(TRAIL_KEY, JSON.stringify(state.trails)); } catch { /* not saved */ } }
+function trackVisit(ref) { state.trails = markVisited(state.trails, ref); saveTrails(); const link = document.querySelector("#trail-link"); if (link) link.textContent = trailLabel(); }
+function trailLabel() { const c = counts(state.trails.current); return c.visited ? `My trail (${c.visited})` : "My trail"; }
+
+function openTrail() {
+  const { current, past } = state.trails;
+  const KIND = ITEM_KIND_LABELS;
+  const stepHtml = (step) => `<li class="trail-step${step.visited_at ? " is-visited" : ""}"><span class="trail-mark" aria-label="${step.visited_at ? (step.planned ? "visited" : "found along the way") : "still ahead"}">${step.visited_at ? (step.planned ? "✓" : "★") : "○"}</span><div class="trail-body"><span class="badge">${escapeHtml(KIND[step.kind] || step.kind)}</span> <strong>${escapeHtml(step.title)}</strong><div class="path-meta">${escapeHtml(step.publication_name)}${step.visited_at ? "" : " · still ahead"}${!step.planned ? " · found along the way" : ""}</div><div class="match-chips"><button class="match-chip" data-trail-open="${escapeHtml(step.publication_id)}" data-issue-id="${step.issue_id ?? ""}" data-step-key="${escapeHtml(step.key)}">Open in ${escapeHtml(step.publication_name || "the kiosk")}</button>${step.url ? `<a class="match-chip" href="${escapeHtml(step.url)}" target="_blank" rel="noopener noreferrer" data-step-key="${escapeHtml(step.key)}">Go to the source</a>` : ""}</div>${step.visited_at ? `<label class="trail-note">What did you learn? <input data-trail-note="${escapeHtml(step.key)}" maxlength="200" value="${escapeHtml(step.note)}" placeholder="One line, in your own words"></label>` : ""}</div></li>`;
+  const c = counts(current);
+  const body = current
+    ? `<p class="rack-note">You set out to: <strong>${escapeHtml(current.intent)}</strong>. Looked at ${progress(current)}.</p><ol class="trail-steps">${current.steps.map(stepHtml).join("")}</ol><div class="issue-actions"><button class="button button-primary" data-trail-wrap>Wrap up: what I found and learned</button><button class="button button-secondary" data-trail-new>Start a new trail</button></div><div id="trail-summary"></div>`
+    : `<p>Nothing on your trail yet. Ask Jack Rabbit where to go and he will build you a path, then keep track of what you find here, so you can always find your way back.</p>`;
+  const earlier = past.length ? `<details class="trail-past"><summary>Earlier trails (${past.length})</summary><ul>${past.map((trail) => `<li><strong>${escapeHtml(trail.intent)}</strong> <span class="path-meta">${escapeHtml(trail.started.slice(0, 10))} · ${counts(trail).visited} looked at${counts(trail).notes ? ` · ${counts(trail).notes} notes` : ""}</span></li>`).join("")}</ul></details>` : "";
+  const { backdrop } = showModal(`<div class="modal-head"><div><div class="card-meta"><span>🐇</span>My trail · kept on this device only</div><h2>Where you have been</h2></div><button class="button button-secondary" data-trail-close>Close</button></div>${jackBannerHtml()}${body}${earlier}`);
+  backdrop.querySelector("[data-trail-close]")?.addEventListener("click", () => backdrop.remove());
+  backdrop.querySelectorAll("[data-trail-open]").forEach((button) => button.addEventListener("click", () => { backdrop.remove(); openIssue(button.dataset.trailOpen, button.dataset.issueId || undefined); }));
+  backdrop.querySelectorAll("a[data-step-key]").forEach((link) => link.addEventListener("click", () => {
+    const step = state.trails.current?.steps.find((entry) => entry.key === link.dataset.stepKey);
+    if (step) { trackVisit(step); }
+  }));
+  backdrop.querySelectorAll("[data-trail-note]").forEach((input) => input.addEventListener("change", () => { state.trails = setNote(state.trails, input.dataset.trailNote, input.value); saveTrails(); }));
+  backdrop.querySelector("[data-trail-wrap]")?.addEventListener("click", () => {
+    const text = summarize(state.trails.current);
+    backdrop.querySelector("#trail-summary").innerHTML = `<h4>What I found and learned</h4><pre class="trail-text">${escapeHtml(text)}</pre><div class="issue-actions"><button class="button button-secondary" data-trail-copy>Copy this summary</button></div>`;
+    backdrop.querySelector("[data-trail-copy]").addEventListener("click", async () => { try { await navigator.clipboard.writeText(text); showToast("Summary copied."); } catch { showToast("Select the text to copy it.", true); } });
+  });
+  backdrop.querySelector("[data-trail-new]")?.addEventListener("click", () => { state.trails = archiveCurrent(state.trails); saveTrails(); backdrop.remove(); renderPublic(); showToast("Started fresh. The old trail is kept under Earlier trails."); });
+}
+
 function renderMessages() {
   if (!state.messages.length) {
-    return `<div class="message message-guide"><strong>${escapeHtml(state.config?.guideName || "Jack Rabbit")}</strong><br>I search KeyOSX's published catalog. Ask about a specific work, or things like "what's live right now" or "what's planned next".</div>`;
+    return `<div class="message message-guide"><strong>${escapeHtml(state.config?.guideName || "Jack Rabbit")}</strong><br>My one job: take you somewhere when you do not know where to go, then bring you back and keep track of what you found. Tell me what you are after, or ask about a specific work.</div>`;
   }
   return state.messages.map((message) => `<div class="message ${message.role === "user" ? "message-user" : "message-guide"}">${message.role === "guide" ? markdownLite(message.content) : escapeHtml(message.content)}${message.rack ? rackHtml(message.rack) : ""}${message.pathAsk ? pathAskHtml(message) : ""}${message.path ? pathHtml(message.path) : ""}${message.role === "guide" && message.rack && !message.pathAsk && !message.path ? `<div class="match-chips"><button class="match-chip make-path" data-make-path="${escapeHtml(message.rack.intent)}">Make me a path</button></div>` : ""}${message.matches?.length ? `<div class="match-chips">${message.matches.map((match) => `<button class="match-chip" data-detail-id="${match.id}">${escapeHtml(match.name)}</button>`).join("")}</div>` : ""}</div>`).join("");
 }
@@ -173,6 +215,7 @@ function renderPublic() {
           <span class="brand-mark">KX</span><span><span class="brand-title">${escapeHtml(state.config.brandName)}</span><span class="brand-subtitle">Living kiosk</span></span>
         </a>
         <div class="header-actions">
+          <button class="button button-quiet" id="trail-link" type="button">${trailLabel()}</button>
           <a class="button button-quiet" href="/media.html">Media</a>
           <a class="button button-quiet" href="#guide">Ask ${escapeHtml(state.config.guideName)}</a>
           <button class="button button-secondary" id="admin-link">Administrator</button>
@@ -221,7 +264,7 @@ function renderPublic() {
       <section class="section section-soft" id="guide">
         <div class="page-width guide-layout">
           <section class="guide-panel"><div class="guide-mark">🐇</div><div class="eyebrow" style="color:var(--clay)">Universal guide</div><h2>${escapeHtml(state.config.guideName)} searches the whole catalog.</h2><p>${escapeHtml(state.config.guideName)} finds related works, explains status and history, and points to the correct active site, application, document, or future concept. It works without an external AI service; an optional OpenAI connection can improve wording while staying grounded in the same published records.</p><div class="prompt-grid"><button class="prompt-button" data-prompt="What's live and current right now?">What's current?</button><button class="prompt-button" data-prompt="What is planned for the future?">What's planned?</button><button class="prompt-button" data-prompt="What is FlintBill?">What is FlintBill?</button><button class="prompt-button" data-prompt="What's old or retired?">What's old?</button></div></section>
-          <section class="chat-panel" aria-label="Ask Jack Rabbit"><div class="card-meta"><span>✦</span>${escapeHtml(state.config.guideName)} · catalog guide</div><div id="chat-history" class="chat-history">${renderMessages()}</div><form class="chat-form" id="chat-form"><input id="chat-input" maxlength="600" placeholder="Ask about any work in the catalog" aria-label="Ask Jack Rabbit a catalog question"><button class="button button-primary" type="submit">Ask</button></form></section>
+          <section class="chat-panel" aria-label="Ask Jack Rabbit"><div class="card-meta"><span>✦</span>${escapeHtml(state.config.guideName)} · catalog guide</div>${jackBannerHtml()}<div id="chat-history" class="chat-history">${renderMessages()}</div><form class="chat-form" id="chat-form"><input id="chat-input" maxlength="600" placeholder="Ask about any work in the catalog" aria-label="Ask Jack Rabbit a catalog question"><button class="button button-primary" type="submit">Ask</button></form></section>
         </div>
       </section>
     </main>
@@ -277,14 +320,23 @@ function bindPublicEvents() {
       const body = skip ? { message: message.pathAsk.intent, skip: true } : { message: message.pathAsk.intent, answers: message.pathAsk.chosen };
       const result = await api("/api/jack/path", { method: "POST", body: JSON.stringify(body) });
       message.pathAsk = null;
-      state.messages.push({ role: "guide", content: result.steps.length ? "Here is your path." : "I could not build a path from what is approved yet.", path: result });
+      if (result.steps.length) { state.trails = startTrail(state.trails, message.pathAsk ? result.intent : result.intent, result.steps); saveTrails(); }
+      state.messages.push({ role: "guide", content: result.steps.length ? "Here is your path. I will keep track of it under My trail, so you can always find your way back." : "I could not build a path from what is approved yet.", path: result });
       renderPublic();
       document.querySelector("#guide")?.scrollIntoView({ behavior: "smooth", block: "center" });
     } catch (error) { showToast(error.message, true); }
   };
   document.querySelectorAll("[data-path-build]").forEach((button) => button.addEventListener("click", () => deliverPath(false)));
   document.querySelectorAll("[data-path-skip]").forEach((button) => button.addEventListener("click", () => deliverPath(true)));
-  document.querySelectorAll("[data-rack-open]").forEach((button) => button.addEventListener("click", () => openIssue(button.dataset.rackOpen, button.dataset.issueId)));
+  document.querySelectorAll("[data-rack-open]").forEach((button) => button.addEventListener("click", () => {
+    if (button.dataset.pathStep) { const step = state.trails.current?.steps.find((entry) => String(entry.item_id) === button.dataset.pathStep && entry.publication_id === button.dataset.rackOpen); if (step) trackVisit(step); }
+    openIssue(button.dataset.rackOpen, button.dataset.issueId);
+  }));
+  document.querySelectorAll("a[data-path-step]").forEach((link) => link.addEventListener("click", () => {
+    const step = state.trails.current?.steps.find((entry) => String(entry.item_id) === link.dataset.pathStep && entry.publication_id === link.dataset.pathPub);
+    if (step) trackVisit(step);
+  }));
+  document.querySelector("#trail-link")?.addEventListener("click", openTrail);
   document.querySelectorAll("[data-rack-ask]").forEach((button) => button.addEventListener("click", async () => {
     button.disabled = true;
     try {
@@ -297,6 +349,7 @@ function bindPublicEvents() {
   }));
   document.querySelectorAll("[data-open-issue]").forEach((button) => button.addEventListener("click", () => openIssue(button.dataset.openIssue, button.dataset.issueId)));
   document.querySelector("#admin-link").addEventListener("click", showAdmin);
+  document.querySelector("#trail-link")?.addEventListener("click", openTrail);
   document.querySelector("#footer-admin").addEventListener("click", showAdmin);
   document.querySelectorAll("[data-prompt]").forEach((button) => button.addEventListener("click", () => askGuide(button.dataset.prompt)));
   document.querySelector("#chat-form").addEventListener("submit", async (event) => {
@@ -428,9 +481,14 @@ async function openIssue(publicationId, issueId) {
       : `${adHtml(ad)}<p class="issue-guide"><strong>${guide}:</strong> You looked, so ${escapeHtml(publication.name)}'s ${escapeHtml(publication.cadence || "")} issue has been requested. ${generator_configured ? "It will appear here once the editorial agent posts it and the editor approves it." : "No editorial agent is connected yet, so nothing is listed."}</p>`;
     const { backdrop } = showModal(`<div class="modal-head"><div><div class="card-meta"><span>▤</span>${escapeHtml(publication.cadence || "")} · ${escapeHtml(publication.beat || "")}</div><h2>${escapeHtml(publication.name)}${current ? ` — ${escapeHtml(current.title)}` : ""}</h2></div><button class="button button-secondary icon-button" data-close-modal aria-label="Close">×</button></div>${body}${archive.length > 1 ? `<div class="detail-section"><h4>Back issues</h4><div class="issue-list">${archive.map((issue) => `<button class="issue-item" data-back-issue="${issue.id}"><strong>${escapeHtml(issue.title)}</strong><span>${escapeHtml(issue.issue_date)}</span></button>`).join("")}</div></div>` : ""}`, true);
     void shelfCover;
+    if (state.trails.current) {
+      backdrop.querySelector(".modal-head > div")?.insertAdjacentHTML("afterbegin", '<button class="match-chip trail-back" type="button" data-back-trail>← Back to my trail</button>');
+      backdrop.querySelector("[data-back-trail]")?.addEventListener("click", () => { backdrop.remove(); openTrail(); });
+    }
     const byId = new Map(items.map((item) => [String(item.id), item]));
     backdrop.querySelectorAll("[data-pick]").forEach((button) => button.addEventListener("click", () => {
       const item = byId.get(button.dataset.pick);
+      trackVisit({ publication_id: publication.id, publication_name: publication.name, issue_id: current?.id ?? null, item_id: item.id, kind: item.kind, title: item.title, url: item.url });
       const sameKind = items.filter((other) => other.kind === item.kind && other.id !== item.id);
       const detail = backdrop.querySelector("#issue-detail");
       detail.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.summary || "Details are still being written.")}</p><div class="issue-actions">${item.url ? `<a class="button button-primary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Go to the source →</a>` : ""}${sameKind.length ? `<button class="button button-secondary" data-similar>More ${escapeHtml((ITEM_KIND_LABELS[item.kind] || item.kind).toLowerCase())}s like this (${sameKind.length})</button>` : ""}<button class="button button-secondary" data-ask>Ask ${guide} about this</button></div><div class="issue-similar"></div>`;
@@ -720,6 +778,8 @@ function bindManageEvents(backdrop) {
 }
 
 async function bootPublic() {
+  document.addEventListener("error", (event) => { if (event.target?.tagName === "VIDEO" && "optional" in event.target.dataset) event.target.closest("figure")?.remove(); }, true);
+  state.trails = loadTrails();
   // Respect reduced motion: any autoplaying filler is paused on its first frame.
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) new MutationObserver(() => document.querySelectorAll("video[autoplay]").forEach((video) => { video.removeAttribute("autoplay"); video.pause(); })).observe(document.body, { childList: true, subtree: true });
   try {
