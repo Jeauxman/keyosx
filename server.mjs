@@ -281,26 +281,52 @@ async function main() {
     });
   }));
 
-  // ---- Media page: headlines and the latest APPROVED issue of every publication. Nothing unapproved is ever returned. ----
+  // ---- Live feed: verified headlines Almanac remembers for a brand. Shown publicly ONLY for brands the owner lists in data/live-feed.json
+  // (LIVE_FEED=on shows it for every brand on a local copy). Title, source, date and link only; the link goes to the original source. ----
+  const livePublic = () => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, "data", "live-feed.json"), "utf8")).public || []; } catch { return []; } };
+  const liveEnabled = (id) => String(process.env.LIVE_FEED || "").toLowerCase() === "on" || livePublic().includes(id);
+  async function liveHeadlines(brandId, limit = 12) {
+    const publication = knownPublication(brandId);
+    const rows = await listKnowledge(db, { brand: brandId, status: "active", verified: true, kinds: ["news"], limit });
+    return {
+      items: rows.map((row) => ({ title: row.title, url: row.url, source: row.source_name, date: String(row.published_at || "").slice(0, 10), publication_id: brandId, publication_name: publication?.name || "" })),
+      updated: rows.reduce((latest, row) => (String(row.last_checked_at) > latest ? String(row.last_checked_at) : latest), ""),
+    };
+  }
+  app.get("/api/publications/:id/live", asyncRoute(async (req, res) => {
+    if (!knownPublication(req.params.id)) return res.status(404).json({ error: "That publication is not on the rack." });
+    if (!liveEnabled(req.params.id)) return res.json({ enabled: false, items: [], updated: "" });
+    res.json({ enabled: true, ...(await liveHeadlines(req.params.id)) });
+  }));
+
+  // ---- Media page: the cover stories (each brand's featured items, approved only) and, where enabled, the live feed. ----
   app.get("/api/media", asyncRoute(async (req, res) => {
     const latest = await latestIssueByPublication(db);
-    const brands = []; const headlines = [];
+    const brands = []; const stories = []; const live = []; let updated = ""; let anyLive = false;
     for (const publication of entities.publications) {
-      const live = latest.get(publication.id);
+      const issue = latest.get(publication.id);
       const monthly = currentCover(publication.id);
       const shelfImage = publication.issues[0]?.image;
-      const cover_url = live?.cover_url || monthly?.url || (shelfImage ? (String(shelfImage).startsWith("/") ? shelfImage : CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + shelfImage) : "");
-      const items = live ? await getIssueItems(db, live.id, live.published_revision) : [];
-      for (const item of items.filter((entry) => entry.kind === "news" && entry.url)) {
+      const cover_url = issue?.cover_url || monthly?.url || (shelfImage ? (String(shelfImage).startsWith("/") ? shelfImage : CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + shelfImage) : "");
+      const items = issue ? await getIssueItems(db, issue.id, issue.published_revision) : [];
+      for (const item of items.filter((entry) => entry.featured)) {
         const reported = /Reported by (.+?), (\d{4}-\d{2}-\d{2})/.exec(item.summary || "");
-        headlines.push({ title: item.title, url: item.url, source: reported?.[1] || "", date: reported?.[2] || String(live.issue_date || "").slice(0, 10), publication_id: publication.id, publication_name: publication.name });
+        stories.push({ kind: item.kind, title: item.title, url: item.url || "", source: reported?.[1] || "", date: reported?.[2] || String(issue.issue_date || "").slice(0, 10), publication_id: publication.id, publication_name: publication.name, issue_id: issue.id });
       }
-      brands.push({ id: publication.id, name: publication.name, series: publication.series || "", cover_url, issue: live ? { id: live.id, title: live.title, issue_date: live.issue_date } : null,
+      brands.push({ id: publication.id, name: publication.name, series: publication.series || "", cover_url, issue: issue ? { id: issue.id, title: issue.title, issue_date: issue.issue_date } : null,
         items: items.slice().sort((a, b) => Number(b.featured) - Number(a.featured)).slice(0, 4).map(({ kind, title, url }) => ({ kind, title, url })) });
+      if (liveEnabled(publication.id)) {
+        anyLive = true;
+        const found = await liveHeadlines(publication.id, 8);
+        live.push(...found.items);
+        if (found.updated > updated) updated = found.updated;
+      }
     }
-    headlines.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    // The cover's main stories lead; news first, newest first.
+    stories.sort((a, b) => (a.kind === "news" ? 0 : 1) - (b.kind === "news" ? 0 : 1) || String(b.date).localeCompare(String(a.date)));
+    live.sort((a, b) => String(b.date).localeCompare(String(a.date)));
     brands.sort((a, b) => Number(!!b.issue) - Number(!!a.issue));
-    res.json({ ad: adFor([], "media"), headlines: headlines.slice(0, 12), brands });
+    res.json({ ad: adFor([], "media"), cover_stories: stories.slice(0, 12), live: { enabled: anyLive, items: live.slice(0, 20), updated }, brands });
   }));
 
   // ---- The ad slot: one labeled ad, shown first. Owner-approved ads only (ADS_PREVIEW=on shows unapproved ads on a local copy). ----

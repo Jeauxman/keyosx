@@ -394,6 +394,7 @@ async function openIssue(publicationId, issueId) {
     const { publication, current, archive, composing, generator_configured, request_status } = data;
     if (composing) api(`/api/publications/${encodeURIComponent(publicationId)}/observe`, { method: "POST", body: "{}" }).catch(() => {});
     const ad = await api(`/api/ads/next?publication=${encodeURIComponent(publicationId)}&context=issue`).then((r) => r.ad).catch(() => null);
+    const live = await api(`/api/publications/${encodeURIComponent(publicationId)}/live`).catch(() => ({ enabled: false, items: [] }));
     const guide = escapeHtml(state.config?.guideName || "Jack Rabbit");
     const items = current?.items || [];
     const picks = items.filter((item) => item.featured).slice(0, 3);
@@ -402,13 +403,18 @@ async function openIssue(publicationId, issueId) {
     const coverHtml = current?.cover_url
       ? `<img class="issue-cover" src="${escapeHtml(current.cover_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(current.title)}">`
       : `<div class="issue-cover cover-printing" role="img" aria-label="Cover is being made"><span>Cover being made…</span></div>`;
+    // Headlines: the cover's main stories first; a Live feed tab appears only when the owner has switched it on for this brand.
+    const liveOn = !!live.enabled && live.items.length > 0;
+    const startLive = !picks.length && liveOn;
+    const coverPanel = `<p class="issue-guide"><strong>${guide}:</strong> ${picks.length ? "Here are this issue's main stories. Pick one, or browse the whole issue." : "Browse this issue and pick what fits you."}</p>${picks.length ? `<div class="issue-picks">${picks.map(itemHtml).join("")}</div>` : ""}`;
+    const livePanel = liveOn ? `<ul class="live-list">${live.items.map((entry) => `<li><a href="${escapeHtml(entry.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(entry.title)}</a><span class="path-meta">${escapeHtml(entry.source)}${entry.date ? " · " + escapeHtml(entry.date) : ""}</span></li>`).join("")}</ul><p class="rack-note">Headlines from this publication's listed sources, linked to the original. Last checked ${escapeHtml(live.updated || "recently")}.</p>` : "";
+    const rollHtml = `<div class="headline-roll" role="region" aria-label="Headlines"><div class="roll-tabs" role="tablist"><button class="roll-tab${startLive ? "" : " selected"}" role="tab" aria-selected="${!startLive}" data-roll="cover">Cover stories</button>${liveOn ? `<button class="roll-tab${startLive ? " selected" : ""}" role="tab" aria-selected="${startLive}" data-roll="live">Live feed</button>` : ""}</div><div class="roll-panel" data-panel="cover"${startLive ? " hidden" : ""}>${coverPanel}</div>${liveOn ? `<div class="roll-panel" data-panel="live"${startLive ? "" : " hidden"}>${livePanel}</div>` : ""}</div>`;
     const body = current
       ? `${adHtml(ad)}${stageTrackHtml(current, items, request_status)}<div class="issue-layout">${coverHtml}
         <div class="issue-main">
           ${composing ? `<p class="issue-guide"><strong>${guide}:</strong> You looked, so this ${escapeHtml(publication.cadence || "")} issue is being composed now. ${generator_configured ? "It will be here shortly — showing the last issue meanwhile." : "No editorial agent is connected yet, so you are seeing the last issue."}</p>` : ""}${current.is_sample ? '<p><span class="badge badge-sample">Sample issue — shows the format, not real content</span></p>' : ""}
           ${mediaHtml(current)}
-          <p class="issue-guide"><strong>${guide}:</strong> ${picks.length ? "Here are three places to start. Pick one, or browse the whole issue." : "Browse this issue and pick what fits you."}</p>
-          ${picks.length ? `<div class="issue-picks">${picks.map(itemHtml).join("")}</div>` : ""}
+          ${rollHtml}
           <h4>Everything in this issue</h4>
           <div class="issue-list">${items.map(itemHtml).join("")}</div>
           <div id="issue-detail" class="issue-detail" aria-live="polite"></div>
@@ -425,6 +431,10 @@ async function openIssue(publicationId, issueId) {
       detail.querySelector("[data-ask]").addEventListener("click", () => { backdrop.remove(); askGuide(`${publication.name}: ${item.title}`); });
       detail.querySelector("[data-similar]")?.addEventListener("click", () => { detail.querySelector(".issue-similar").innerHTML = sameKind.map(itemHtml).join(""); detail.querySelectorAll("[data-pick]").forEach((b) => b.addEventListener("click", () => backdrop.querySelector(`[data-pick="${b.dataset.pick}"]`).click())); });
       detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }));
+    backdrop.querySelectorAll("[data-roll]").forEach((tab) => tab.addEventListener("click", () => {
+      backdrop.querySelectorAll("[data-roll]").forEach((other) => { const on = other === tab; other.classList.toggle("selected", on); other.setAttribute("aria-selected", String(on)); });
+      backdrop.querySelectorAll("[data-panel]").forEach((panel) => { panel.hidden = panel.dataset.panel !== tab.dataset.roll; });
     }));
     backdrop.querySelectorAll("[data-back-issue]").forEach((button) => button.addEventListener("click", () => { backdrop.remove(); openIssue(publicationId, button.dataset.backIssue); }));
 
@@ -709,6 +719,8 @@ async function bootPublic() {
     await loadWorks();
     try { state.entities = await api("/api/entities"); } catch { /* rack is optional; the catalog still works */ }
     renderPublic();
+    const deepLink = /^#open=(.+)$/.exec(location.hash); // the Media page links here: /#open=<publication id>
+    if (deepLink) openIssue(decodeURIComponent(deepLink[1]));
   } catch (error) {
     app.innerHTML = `<main class="admin-shell"><section class="login-card"><h1 style="font-size:2rem;color:var(--ink)">The kiosk could not start.</h1><p>${escapeHtml(error.message)}</p><button class="button button-primary" id="retry">Retry</button></section></main>`;
     document.querySelector("#retry").addEventListener("click", bootPublic);

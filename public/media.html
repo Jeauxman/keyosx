@@ -26,6 +26,12 @@
   .headlines a { font: 700 1.05rem/1.3 Georgia, serif; text-decoration: none; }
   .headlines a:hover { text-decoration: underline; }
   .meta { color: var(--muted); font-size: .8rem; }
+  .tabs { display: flex; gap: 6px; margin: 0 0 10px; }
+  .tab { border: 1px solid var(--rule); background: var(--card); color: var(--ink); padding: 6px 13px; border-radius: 999px; font: 700 .82rem system-ui; cursor: pointer; }
+  .tab.selected { background: var(--moss); border-color: var(--moss); color: #fff; }
+  @media (prefers-color-scheme: dark) { .tab.selected { color: #0f1a14; } }
+  [hidden] { display: none !important; }
+  .kiosk-link { font-size: .78rem; margin-left: 6px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
   .card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
   .card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: #000; display: block; }
@@ -44,10 +50,13 @@
 <div class="wrap">
   <div class="top"><a href="/">&larr; KeyOSX kiosk</a><span>Media</span></div>
   <h1>Media</h1>
-  <p class="sub">Headlines and the latest issue from every publication. Only what the editors have approved appears here.</p>
+  <p class="sub">Each publication's main stories and its latest issue. Only what the editors have approved appears here, plus a live feed where it is switched on.</p>
   <div id="ad"></div>
   <h2>Headlines</h2>
+  <div class="tabs" role="tablist" id="tabs"><button class="tab selected" role="tab" aria-selected="true" data-tab="cover">Cover stories</button><button class="tab" role="tab" aria-selected="false" data-tab="live" id="live-tab" hidden>Live feed</button></div>
   <ul class="headlines" id="headlines"><li class="quiet">Loading…</li></ul>
+  <ul class="headlines" id="live" hidden></ul>
+  <p class="meta" id="live-note" hidden></p>
   <h2>Latest from every publication</h2>
   <div class="grid" id="grid"></div>
   <footer>Headlines link to their original sources. KeyOSX shows the title, source and date only. Items marked Ad or Sponsored are advertising.</footer>
@@ -62,13 +71,31 @@ function adHtml(ad) {
   return `<aside class="ad-slot" aria-label="Advertisement"><span class="ad-label">${esc(ad.label)}</span><div class="ad-body"><strong>${esc(ad.title)}</strong>${ad.text ? `<span>${esc(ad.text)}</span>` : ""}</div><a class="cta" href="${esc(safe(ad.url))}" target="_blank" rel="noopener noreferrer${ad.sponsored ? " sponsored" : ""}">${esc(ad.cta)}</a></aside>`;
 }
 
+const storyHtml = (s) => {
+  const open = "/#open=" + encodeURIComponent(s.publication_id);
+  const link = safe(s.url) ? `<a href="${esc(safe(s.url))}" target="_blank" rel="noopener noreferrer">${esc(s.title)}</a>` : `<a href="${esc(open)}">${esc(s.title)}</a>`;
+  return `<li><span><span class="badge">${esc(KIND[s.kind] || s.kind)}</span>${link}</span><span class="meta">${esc(s.source ? s.source + " · " : "")}${esc(s.date || "")} · ${esc(s.publication_name)} <a class="kiosk-link" href="${esc(open)}">Open in the kiosk</a></span></li>`;
+};
+
 async function load() {
   const data = await fetch("/api/media").then((r) => r.json());
   document.getElementById("ad").innerHTML = adHtml(data.ad);
-  const headlines = document.getElementById("headlines");
-  headlines.innerHTML = data.headlines.length
-    ? data.headlines.map((h) => `<li><a href="${esc(safe(h.url))}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><span class="meta">${esc(h.source || "Source")}${h.date ? " · " + esc(h.date) : ""} · via ${esc(h.publication_name)}</span></li>`).join("")
-    : `<li class="empty">No approved headlines yet. They appear here once an editor approves a news item.</li>`;
+  const cover = document.getElementById("headlines");
+  cover.innerHTML = data.cover_stories.length
+    ? data.cover_stories.map(storyHtml).join("")
+    : `<li class="empty">No cover stories yet. They appear here once an editor approves an issue.</li>`;
+  const live = document.getElementById("live");
+  if (data.live.enabled && data.live.items.length) {
+    document.getElementById("live-tab").hidden = false;
+    live.innerHTML = data.live.items.map((h) => `<li><a href="${esc(safe(h.url))}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><span class="meta">${esc(h.source || "Source")}${h.date ? " · " + esc(h.date) : ""} · via ${esc(h.publication_name)}</span></li>`).join("");
+    const note = document.getElementById("live-note");
+    note.textContent = "Headlines from each publication's listed sources, linked to the original. Last checked " + (data.live.updated || "recently") + ".";
+    for (const tab of document.querySelectorAll("[data-tab]")) tab.addEventListener("click", () => {
+      const showLive = tab.dataset.tab === "live";
+      document.querySelectorAll("[data-tab]").forEach((other) => { other.classList.toggle("selected", other === tab); other.setAttribute("aria-selected", String(other === tab)); });
+      cover.hidden = showLive; live.hidden = !showLive; note.hidden = !showLive;
+    });
+  }
   document.getElementById("grid").innerHTML = data.brands.map((b) => `<article class="card">
       <img src="${esc(b.cover_url)}" alt="${esc(b.name)} cover" loading="lazy">
       <div class="body"><h3>${esc(b.name)}</h3>

@@ -264,3 +264,14 @@ td .button { min-height: 32px; padding: 6px 8px; font-size: .76rem; }
 .match-chip.selected { background: var(--moss-dark, #1f4a36); color: #fff; }
 .match-chip.make-path { background: #c2603a; color: #fff; }
 a.match-chip { text-decoration: none; display: inline-block; }
+
+/* Headline roll: cover stories first, Live feed as the second option */
+.headline-roll { margin: 0 0 1rem; }
+.roll-tabs { display: flex; gap: 6px; margin: 0 0 .6rem; }
+.roll-tab { border: 1px solid #cdbf8a; background: #fff; color: #3d3a2f; padding: 6px 12px; border-radius: 999px; font-size: .82rem; font-weight: 750; cursor: pointer; }
+.roll-tab.selected { background: #1f4a36; border-color: #1f4a36; color: #fff; }
+.roll-panel[hidden] { display: none; }
+.live-list { list-style: none; margin: 0 0 .5rem; padding: 0; display: grid; gap: .55rem; }
+.live-list li { display: grid; gap: 1px; padding-bottom: .5rem; border-bottom: 1px solid #e6dfc9; }
+.live-list a { font-weight: 700; text-decoration: none; }
+.live-list a:hover { text-decoration: underline; }
