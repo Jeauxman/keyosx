@@ -1,4 +1,29 @@
-# "Wild card refresh" for $9.99 a month (design only, not built)
+# Tiers and the live "refresh" (design only, not built)
+
+## Decided by Joe, 2026-11-04
+
+KeyOSX is a **live source**. Members can refresh any time to get new news.
+
+- **Free:** the monthly and weekly editions (the issues as they are today), with the ad first.
+- **Paid:** more frequent editions, up to **daily**. Daily is a paid option.
+- **Premium daily members:** an on-demand **refresh** at any time for new news (the earlier "wild card refresh", first floated at $9.99 a month; final prices not set).
+- **Not before December or January.** First the bugs get worked out on the free tiers. Until then there are no accounts, no payments and no paid features.
+
+## What "refresh for new news" means technically
+
+1. **Re-poll the sources.** Almanac skips its usual 24-hour freshness window for that brand and re-reads its feeds. This is free: feeds are plain RSS and cost nothing per call.
+2. **Re-supply.** The newest verified headlines are returned. A refresh with no Claude call needs no spend at all.
+3. **Optional re-pick.** If the member wants the issue re-chosen, the Claude writer picks again. This is the only costly step, so it is limited per member (for example one every 15 minutes, N a day) and still sits under the global daily cap.
+4. **Protect the sources.** A minimum gap between feed reads per brand (shared across members), so a crowd of refreshes never hammers a publisher.
+
+## Open decisions (yours, when you are ready)
+
+- **Is a daily edition private to payers, or shared?** If one payer triggers today's daily issue and everyone can then see it, free visitors get daily for free. Recommended: the daily edition is served only to paying members; free visitors keep weekly or monthly.
+- **Refresh limits per member**, and the price of each tier.
+- **Do paying members still see the ad first?** (A common choice is no ads on the top tier.)
+- **Payment provider** (Stripe suggested, test mode first) and member sign-in (email link suggested).
+
+## The earlier design notes follow.
 
 A paying member can ask for a fresh pass on demand: a re-compose of a brand's current issue or a new personal path, outside the normal schedule.
 

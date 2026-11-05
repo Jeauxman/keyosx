@@ -1562,6 +1562,16 @@
       "date": "2026-11-04",
       "by": "Joe",
       "decision": "Priority: complete the shared Almanac/agent interface and the first working CinéBon publishing cycle. Preserve the existing kiosk, connect Cloudinary assets by verified identity, create no redundant apps or databases. Feature branch only; no merge, deploy, publish or cost without approval."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "KeyOSX is a live source; members can refresh any time for new news. Free: monthly and weekly editions. Paid: daily editions. Premium daily members get on-demand refresh. Launch not before December or January, after the bugs are out; until then no accounts, payments or paid features. (docs/paid-refresh-design.md)"
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Roles: GPT makes the monthly covers (committed to git, released on the 1st, Joe approves); Claude API feeds the Almanac. The live Anthropic key is Joe's and lives in .env.almanac locally and in the host's environment when hosted. Ad first, always labeled, before any news or freebie."
     }
   ],
   "cover_assets": {
