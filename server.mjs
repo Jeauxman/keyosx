@@ -53,6 +53,7 @@ import {
   updateWork,
 } from "./db.mjs";
 import { askJackRabbit } from "./assistant.mjs";
+import { DEPTH_OPTIONS, KIND_OPTIONS, QUESTIONS, buildPath, overlap, pickAd, wordsOf } from "./pathmaker.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -234,10 +235,6 @@ async function main() {
 
   // ---- Jack Rabbit routing: find the publication (entity) whose genre fits what the visitor said. ----
   // Answers come ONLY from approved, published issue items. Nothing is generated here.
-  const STOP = new Set("the and for with from this that what where when how can want need about some any more new best good have has are was were you your our they them their there here just like get got give show tell find make would could should into over under then than also very much many idea tip app news opportunity thing things stuff".split(" "));
-  const wordsOf = (text) => (String(text || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").match(/[a-z0-9]{3,}/g) || [])
-    .map((word) => (word.length > 4 && word.endsWith("s") ? word.slice(0, -1) : word)).filter((word) => !STOP.has(word));
-  const overlap = (wanted, text) => { const have = new Set(wordsOf(text)); return wanted.filter((word) => have.has(word)).length; };
 
   const actionHits = new Map();
   const allowAction = (req, bucket, max) => {
@@ -277,6 +274,50 @@ async function main() {
     res.json({
       matches: ranked.map(({ publication, score }) => ({ id: publication.id, name: publication.name, beat: publication.beat, score })),
       items: items.slice(0, 6),
+    });
+  }));
+
+  // ---- The ad slot: one labeled ad, shown first. Owner-approved ads only (ADS_PREVIEW=on shows unapproved ads on a local copy). ----
+  const readAds = () => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, "data", "ads.json"), "utf8")).ads || []; } catch { return []; } };
+  const adFor = (publicationIds, context) => pickAd(readAds(), { publicationIds, context, preview: String(process.env.ADS_PREVIEW || "").toLowerCase() === "on" });
+  app.get("/api/ads/next", asyncRoute(async (req, res) => {
+    const id = String(req.query.publication || "");
+    res.json({ ad: adFor(id && knownPublication(id) ? [id] : [], String(req.query.context || "issue").slice(0, 20)) });
+  }));
+
+  // ---- Jack Rabbit, path maker: ask (at most two quick questions), then deliver a path of APPROVED items, ad first. ----
+  app.post("/api/jack/path", asyncRoute(async (req, res) => {
+    if (!req.is("application/json")) return res.status(415).json({ error: "JSON required." });
+    if (!allowAction(req, "path", 20)) return res.status(429).json({ error: "Too many requests. Try again shortly." });
+    const message = String(req.body?.message || "").slice(0, 300);
+    const wanted = [...new Set(wordsOf(message))];
+    const answers = req.body?.answers && typeof req.body.answers === "object" ? {
+      kinds: (Array.isArray(req.body.answers.kinds) ? req.body.answers.kinds : []).filter((id) => KIND_OPTIONS.some((option) => option.id === id)),
+      depth: DEPTH_OPTIONS.some((option) => option.id === req.body.answers.depth) ? req.body.answers.depth : "quick",
+    } : null;
+    if (!answers && !req.body?.skip) return res.json({ stage: "ask", questions: QUESTIONS });
+
+    // Which brands fit what was said? (all of them when nothing specific was said)
+    const ranked = entities.publications
+      .map((publication) => ({ publication, score: overlap(wanted, `${publication.name} ${publication.beat || ""} ${publication.tagline || ""}`) }))
+      .filter((entry) => !wanted.length || entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, wanted.length ? 4 : entities.publications.length);
+    const latest = await latestIssueByPublication(db);
+    const candidates = [];
+    for (const { publication } of ranked) {
+      const issue = latest.get(publication.id);
+      if (!issue) continue;
+      for (const item of await getIssueItems(db, issue.id, issue.published_revision)) candidates.push({ item, publication: { id: publication.id, name: publication.name }, issue_id: issue.id });
+    }
+    const { steps, short } = buildPath({ wanted, answers: answers || {}, candidates });
+    const gapPublication = ranked[0]?.publication || null;
+    res.json({
+      stage: "path",
+      intent: message,
+      ad: adFor(steps.map((step) => step.publication_id).filter((id, i, all) => all.indexOf(id) === i), "path"),
+      steps,
+      gap: short && gapPublication && wanted.length ? { publication_id: gapPublication.id, publication_name: gapPublication.name, intent: message } : null,
     });
   }));
 

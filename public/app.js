@@ -131,11 +131,35 @@ function rackHtml(rack) {
   return `<div class="rack-suggest">${items}${ask}</div>`;
 }
 
+// The ad slot: always labeled, always first. Partner ads say "Sponsored by".
+function adHtml(ad) {
+  if (!ad) return "";
+  return `<aside class="ad-slot${ad.sponsored ? " ad-sponsored" : ""}" aria-label="Advertisement"><span class="ad-label">${escapeHtml(ad.label)}</span><div class="ad-body"><strong>${escapeHtml(ad.title)}</strong>${ad.text ? `<span>${escapeHtml(ad.text)}</span>` : ""}</div><a class="button" href="${escapeHtml(ad.url)}" target="_blank" rel="noopener noreferrer${ad.sponsored ? " sponsored" : ""}">${escapeHtml(ad.cta)}</a></aside>`;
+}
+
+// Path maker: Jack asks at most two quick questions, then delivers a path of approved items.
+function pathAskHtml(message) {
+  const ask = message.pathAsk;
+  const groups = ask.questions.map((question) => `<div class="path-q"><p class="rack-note"><strong>${escapeHtml(question.text)}</strong></p><div class="match-chips">${question.options.map((option) => {
+    const chosen = question.multi ? ask.chosen[question.id].includes(option.id) : ask.chosen[question.id] === option.id;
+    return `<button class="match-chip${chosen ? " selected" : ""}" data-path-opt="${escapeHtml(question.id)}:${escapeHtml(option.id)}" aria-pressed="${chosen}">${escapeHtml(option.label)}</button>`;
+  }).join("")}</div></div>`).join("");
+  return `<div class="rack-suggest path-ask">${groups}<div class="match-chips"><button class="match-chip make-path" data-path-build>Build my path</button><button class="match-chip" data-path-skip>Skip the questions</button></div></div>`;
+}
+
+function pathHtml(path) {
+  const steps = path.steps.length
+    ? `<ol class="path-steps">${path.steps.map((step) => `<li><span class="badge">${escapeHtml(ITEM_KIND_LABELS[step.kind] || step.kind)}</span> <strong>${escapeHtml(step.title)}</strong><div class="path-meta">${escapeHtml(step.publication_name)} · ${escapeHtml(step.why)}</div><div class="match-chips"><button class="match-chip" data-rack-open="${escapeHtml(step.publication_id)}" data-issue-id="${step.issue_id}">Open in ${escapeHtml(step.publication_name)}</button>${step.url ? `<a class="match-chip" href="${escapeHtml(step.url)}" target="_blank" rel="noopener noreferrer">Go to the source</a>` : ""}</div></li>`).join("")}</ol>`
+    : `<p class="rack-note">Nothing approved fits that yet.</p>`;
+  const gap = path.gap ? `<p class="rack-note">${path.steps.length ? "That is what is ready so far." : ""} I can ask ${escapeHtml(path.gap.publication_name)}'s editor for more. It only appears after the editor approves it.</p><button class="match-chip" data-rack-ask="${escapeHtml(path.gap.publication_id)}" data-intent="${escapeHtml(path.gap.intent)}">Ask ${escapeHtml(path.gap.publication_name)}'s editor to cover this</button>` : "";
+  return `<div class="rack-suggest">${adHtml(path.ad)}${steps}${gap}</div>`;
+}
+
 function renderMessages() {
   if (!state.messages.length) {
     return `<div class="message message-guide"><strong>${escapeHtml(state.config?.guideName || "Jack Rabbit")}</strong><br>I search KeyOSX's published catalog. Ask about a specific work, or things like "what's live right now" or "what's planned next".</div>`;
   }
-  return state.messages.map((message) => `<div class="message ${message.role === "user" ? "message-user" : "message-guide"}">${message.role === "guide" ? markdownLite(message.content) : escapeHtml(message.content)}${message.rack ? rackHtml(message.rack) : ""}${message.matches?.length ? `<div class="match-chips">${message.matches.map((match) => `<button class="match-chip" data-detail-id="${match.id}">${escapeHtml(match.name)}</button>`).join("")}</div>` : ""}</div>`).join("");
+  return state.messages.map((message) => `<div class="message ${message.role === "user" ? "message-user" : "message-guide"}">${message.role === "guide" ? markdownLite(message.content) : escapeHtml(message.content)}${message.rack ? rackHtml(message.rack) : ""}${message.pathAsk ? pathAskHtml(message) : ""}${message.path ? pathHtml(message.path) : ""}${message.role === "guide" && message.rack && !message.pathAsk && !message.path ? `<div class="match-chips"><button class="match-chip make-path" data-make-path="${escapeHtml(message.rack.intent)}">Make me a path</button></div>` : ""}${message.matches?.length ? `<div class="match-chips">${message.matches.map((match) => `<button class="match-chip" data-detail-id="${match.id}">${escapeHtml(match.name)}</button>`).join("")}</div>` : ""}</div>`).join("");
 }
 
 function renderPublic() {
@@ -227,6 +251,37 @@ function bindPublicEvents() {
     renderPublic();
   });
   document.querySelectorAll("[data-detail-id]").forEach((button) => button.addEventListener("click", () => openDetail(button.dataset.detailId)));
+  document.querySelectorAll("[data-make-path]").forEach((button) => button.addEventListener("click", async () => {
+    button.disabled = true;
+    try {
+      const intent = button.dataset.makePath;
+      const result = await api("/api/jack/path", { method: "POST", body: JSON.stringify({ message: intent }) });
+      state.messages.push({ role: "guide", content: "Two quick questions, then I will build you a path.", pathAsk: { intent, questions: result.questions, chosen: { kinds: [], depth: "quick" } } });
+      renderPublic();
+    } catch (error) { button.disabled = false; showToast(error.message, true); }
+  }));
+  document.querySelectorAll("[data-path-opt]").forEach((button) => button.addEventListener("click", () => {
+    const [questionId, optionId] = button.dataset.pathOpt.split(":");
+    const ask = [...state.messages].reverse().find((m) => m.pathAsk)?.pathAsk;
+    if (!ask) return;
+    if (questionId === "kinds") ask.chosen.kinds = ask.chosen.kinds.includes(optionId) ? ask.chosen.kinds.filter((id) => id !== optionId) : [...ask.chosen.kinds, optionId];
+    else ask.chosen[questionId] = optionId;
+    renderPublic();
+  }));
+  const deliverPath = async (skip) => {
+    const message = [...state.messages].reverse().find((m) => m.pathAsk);
+    if (!message) return;
+    try {
+      const body = skip ? { message: message.pathAsk.intent, skip: true } : { message: message.pathAsk.intent, answers: message.pathAsk.chosen };
+      const result = await api("/api/jack/path", { method: "POST", body: JSON.stringify(body) });
+      message.pathAsk = null;
+      state.messages.push({ role: "guide", content: result.steps.length ? "Here is your path." : "I could not build a path from what is approved yet.", path: result });
+      renderPublic();
+      document.querySelector("#guide")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (error) { showToast(error.message, true); }
+  };
+  document.querySelectorAll("[data-path-build]").forEach((button) => button.addEventListener("click", () => deliverPath(false)));
+  document.querySelectorAll("[data-path-skip]").forEach((button) => button.addEventListener("click", () => deliverPath(true)));
   document.querySelectorAll("[data-rack-open]").forEach((button) => button.addEventListener("click", () => openIssue(button.dataset.rackOpen, button.dataset.issueId)));
   document.querySelectorAll("[data-rack-ask]").forEach((button) => button.addEventListener("click", async () => {
     button.disabled = true;
@@ -337,6 +392,7 @@ async function openIssue(publicationId, issueId) {
     const data = await api(endpoint);
     const { publication, current, archive, composing, generator_configured, request_status } = data;
     if (composing) api(`/api/publications/${encodeURIComponent(publicationId)}/observe`, { method: "POST", body: "{}" }).catch(() => {});
+    const ad = await api(`/api/ads/next?publication=${encodeURIComponent(publicationId)}&context=issue`).then((r) => r.ad).catch(() => null);
     const guide = escapeHtml(state.config?.guideName || "Jack Rabbit");
     const items = current?.items || [];
     const picks = items.filter((item) => item.featured).slice(0, 3);
@@ -346,7 +402,7 @@ async function openIssue(publicationId, issueId) {
       ? `<img class="issue-cover" src="${escapeHtml(current.cover_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(current.title)}">`
       : `<div class="issue-cover cover-printing" role="img" aria-label="Cover is being made"><span>Cover being made…</span></div>`;
     const body = current
-      ? `${stageTrackHtml(current, items, request_status)}<div class="issue-layout">${coverHtml}
+      ? `${adHtml(ad)}${stageTrackHtml(current, items, request_status)}<div class="issue-layout">${coverHtml}
         <div class="issue-main">
           ${composing ? `<p class="issue-guide"><strong>${guide}:</strong> You looked, so this ${escapeHtml(publication.cadence || "")} issue is being composed now. ${generator_configured ? "It will be here shortly — showing the last issue meanwhile." : "No editorial agent is connected yet, so you are seeing the last issue."}</p>` : ""}${current.is_sample ? '<p><span class="badge badge-sample">Sample issue — shows the format, not real content</span></p>' : ""}
           ${mediaHtml(current)}
@@ -356,7 +412,7 @@ async function openIssue(publicationId, issueId) {
           <div class="issue-list">${items.map(itemHtml).join("")}</div>
           <div id="issue-detail" class="issue-detail" aria-live="polite"></div>
         </div></div>`
-      : `<p class="issue-guide"><strong>${guide}:</strong> You looked, so ${escapeHtml(publication.name)}'s ${escapeHtml(publication.cadence || "")} issue has been requested. ${generator_configured ? "It will appear here once the editorial agent posts it and the editor approves it." : "No editorial agent is connected yet, so nothing is listed."}</p>`;
+      : `${adHtml(ad)}<p class="issue-guide"><strong>${guide}:</strong> You looked, so ${escapeHtml(publication.name)}'s ${escapeHtml(publication.cadence || "")} issue has been requested. ${generator_configured ? "It will appear here once the editorial agent posts it and the editor approves it." : "No editorial agent is connected yet, so nothing is listed."}</p>`;
     const { backdrop } = showModal(`<div class="modal-head"><div><div class="card-meta"><span>▤</span>${escapeHtml(publication.cadence || "")} · ${escapeHtml(publication.beat || "")}</div><h2>${escapeHtml(publication.name)}${current ? ` — ${escapeHtml(current.title)}` : ""}</h2></div><button class="button button-secondary icon-button" data-close-modal aria-label="Close">×</button></div>${body}${archive.length > 1 ? `<div class="detail-section"><h4>Back issues</h4><div class="issue-list">${archive.map((issue) => `<button class="issue-item" data-back-issue="${issue.id}"><strong>${escapeHtml(issue.title)}</strong><span>${escapeHtml(issue.issue_date)}</span></button>`).join("")}</div></div>` : ""}`, true);
     void shelfCover;
     const byId = new Map(items.map((item) => [String(item.id), item]));

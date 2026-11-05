@@ -1,0 +1,9 @@
+{
+  "_note": "The ad slot's inventory. An ad shows first, labeled, before an issue or a path. Kinds: 'house' (our books, apps and tools) or 'partner' (paid; always shown as 'Sponsored by <sponsor>' and linked rel=sponsored). Nothing is served until the OWNER sets approved:true and the ad has an http(s) url. 'brands' is ['*'] for everywhere or a list of publication ids. Optional 'start'/'end' (YYYY-MM-DD) for partner campaigns. Live partner ads take priority over house ads. Add Joe's books here with their real links.",
+  "ads": [
+    { "id": "house-buddytalk", "kind": "house", "category": "app", "title": "Buddy Talk", "text": "Talk it through with an AI buddy. Live beta.", "cta": "Try Buddy Talk", "url": "https://buddytalk.gaem.fun", "brands": ["*"], "approved": false },
+    { "id": "house-askjoe", "kind": "house", "category": "tool", "title": "AskJoe agent builder", "text": "Design your own AI agent with Jack Rabbit as your guide.", "cta": "Build an agent", "url": "https://askjoe.gaem.pro", "brands": ["*"], "approved": false },
+    { "id": "house-simultanism-book", "kind": "house", "category": "book", "title": "Simultanism, by Joseph Fansler", "text": "The new literacy is the disciplined articulation of intent. The Liar's Quill Press, 2026.", "cta": "Get the book", "url": "", "brands": ["*"], "approved": false, "needs": "a real link to the book" }
+  ],
+  "_example_partner": { "id": "partner-example", "kind": "partner", "sponsor": "Example Co", "category": "tool", "title": "Example Co", "text": "One line from the partner, approved by Joe.", "cta": "Visit", "url": "https://example.com", "brands": ["keyosx:publication:cinebon"], "start": "2026-12-01", "end": "2026-12-31", "approved": false }
+}
