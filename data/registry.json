@@ -354,7 +354,7 @@
       "rack_priority": "later",
       "verified": false,
       "flags": [
-        "Joe 2026-11-04: lead cover is the May/June 2024 Issue 108 cover (La Maison de l'Ambassadeur). The June 2026 cover has unfinished placeholder text and is held back."
+        "Joe 2026-11-04: lead cover is the June 2026 edition. It still shows unfinished placeholder text ('Headline 2:', 'Headline 3:', 'FICTIONAL (FICTIONAL)', 'PRICE 86'); replace it when a clean version exists. The clean May/June 2024 Issue 108 cover is the second cover."
       ],
       "registry": "publication"
     },
@@ -1574,6 +1574,11 @@
       "date": "2026-11-04",
       "by": "Joe",
       "decision": "Roles: GPT makes the monthly covers (committed to git, released on the 1st, Joe approves); Claude API feeds the Almanac. The live Anthropic key is Joe's and lives in .env.almanac locally and in the host's environment when hosted. Ad first, always labeled, before any news or freebie."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Carcassonne Monthly leads with the June 2026 edition cover (placeholder text to be fixed later); the 2024 Issue 108 cover is kept second."
     }
   ],
   "cover_assets": {
@@ -1602,7 +1607,7 @@
       "bon-voyage": "bon-voyage",
       "audacity": "audacity",
       "the-new-troubadour": "the-new-troubadour",
-      "carcassonne-monthly": "carcassonne-monthly",
+      "carcassonne-monthly": "carcassonne-monthly-june-2026",
       "almanac (agent card)": "almanac-carcassonne-edition"
     },
     "asset": {
@@ -1636,7 +1641,8 @@
       "italian-real-estate-for-sale": "Italian Real Estate For Sale: 'Turnkey. Automated. Monetizing.' acquisition-pitch poster (business-for-sale claims such as 500+ listings are Joe's own copy; not verified here)",
       "joe-fansler-author-books": "Author poster: amazon.com/author/joefansler; books 'Winners Are Just Better Losers' and 'The Life Hour' (Crow's Quill Press)",
       "joe-troubadour-travellin-tour": "Joe Troubadour 'Travellin' On Tour!' poster: new music and dates coming soon",
-      "carcassonne-monthly-june-2026": "Carcassonne Monthly 'June 2026 edition' cover (alternate, held back): it still shows placeholder text ('Headline 2:', 'Headline 3:', 'FICTIONAL (FICTIONAL)', 'PRICE 86') that must be fixed before use"
+      "carcassonne-monthly-june-2026": "Carcassonne Monthly 'June 2026 edition' cover: now the lead (Joe's choice, 2026-11-04). It still shows placeholder text ('Headline 2:', 'Headline 3:', 'FICTIONAL (FICTIONAL)', 'PRICE 86') to fix when a clean version is made",
+      "carcassonne-monthly": "Carcassonne Monthly May/June 2024 Issue 108 (La Maison de l'Ambassadeur): clean alternate, second on the shelf"
     },
     "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation.",
     "held": {
