@@ -313,3 +313,12 @@ h1 { letter-spacing: -.02em; line-height: 1.02; }
 .filler figcaption { position: absolute; left: 10px; bottom: 8px; padding: 2px 8px; border-radius: 4px; background: rgba(9, 20, 21, .78); color: #f1e4c4; font-size: .78rem; font-weight: 700; letter-spacing: .04em; }
 
 html, :root { background: #0c191a; }
+
+/* keep the Media link reachable on phones */
+.header-actions .button-quiet[href="/media.html"] { display: inline-flex; }
+
+/* admin console on the night theme: header text sits on the dark page, panels stay parchment */
+.admin-top .brand { color: #f1e4c4; }
+.admin-top .brand-subtitle { color: #b9ad8f; }
+.admin-top > div > p { color: #b9ad8f !important; }
+.login-card h1, .login-card .eyebrow { color: var(--ink); }
