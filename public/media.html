@@ -6,8 +6,11 @@
 <title>KeyOSX Media</title>
 <meta name="description" content="Headlines and the latest approved issues from every KeyOSX publication.">
 <style>
-  :root { --bg: #f4efe4; --card: #fffdf7; --ink: #1c1a15; --muted: #5f594b; --rule: #cfc6b0; --accent: #a3401f; --moss: #1f4a36; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #14130f; --card: #1d1c17; --ink: #efe9da; --muted: #a8a191; --rule: #3a372d; --accent: #e08a62; --moss: #8cc4a4; } }
+    :root { --bg: #0c191a; --card: #14282a; --ink: #f1e4c4; --muted: #b9ad8f; --rule: rgba(199, 154, 69, .35); --accent: #f4b95a; --moss: #c79a45; }
+  body { background: radial-gradient(1100px 520px at 18% -8%, #1d3d3d 0%, transparent 62%), var(--bg); }
+  .filler { position: relative; margin: 0 0 18px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(199, 154, 69, .55); background: #0c191a; }
+  .filler video { display: block; width: 100%; max-height: 300px; object-fit: cover; object-position: 60% 38%; }
+  .filler figcaption { position: absolute; left: 10px; bottom: 8px; padding: 2px 8px; border-radius: 4px; background: rgba(9, 20, 21, .78); color: #f1e4c4; font-size: .78rem; font-weight: 700; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
   a { color: inherit; }
@@ -28,8 +31,7 @@
   .meta { color: var(--muted); font-size: .8rem; }
   .tabs { display: flex; gap: 6px; margin: 0 0 10px; }
   .tab { border: 1px solid var(--rule); background: var(--card); color: var(--ink); padding: 6px 13px; border-radius: 999px; font: 700 .82rem system-ui; cursor: pointer; }
-  .tab.selected { background: var(--moss); border-color: var(--moss); color: #fff; }
-  @media (prefers-color-scheme: dark) { .tab.selected { color: #0f1a14; } }
+  .tab.selected { background: var(--moss); border-color: var(--moss); color: #0c191a; }
   [hidden] { display: none !important; }
   .kiosk-link { font-size: .78rem; margin-left: 6px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
@@ -37,8 +39,7 @@
   .card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: #000; display: block; }
   .card .body { padding: 12px 14px 14px; display: grid; gap: 6px; }
   .card h3 { margin: 0; font: 800 1.1rem/1.2 Georgia, serif; }
-  .badge { display: inline-block; padding: 1px 7px; border-radius: 999px; background: #dcebe1; color: #173728; font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-right: 6px; }
-  @media (prefers-color-scheme: dark) { .badge { background: #25382e; color: #bfe0cc; } }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 999px; background: #25382e; color: #e8d6a6; font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-right: 6px; }
   .items { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; font-size: .9rem; }
   .items a { text-decoration: none; } .items a:hover { text-decoration: underline; }
   .quiet { color: var(--muted); font-size: .85rem; }
@@ -51,6 +52,7 @@
   <div class="top"><a href="/">&larr; KeyOSX kiosk</a><span>Media</span></div>
   <h1>Media</h1>
   <p class="sub">Each publication's main stories and its latest issue. Only what the editors have approved appears here, plus a live feed where it is switched on.</p>
+  <figure class="filler"><video src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>Jack Rabbit, at the kiosk</figcaption></figure>
   <div id="ad"></div>
   <h2>Headlines</h2>
   <div class="tabs" role="tablist" id="tabs"><button class="tab selected" role="tab" aria-selected="true" data-tab="cover">Cover stories</button><button class="tab" role="tab" aria-selected="false" data-tab="live" id="live-tab" hidden>Live feed</button></div>
@@ -104,6 +106,7 @@ async function load() {
       </div></article>`).join("");
 }
 load().catch(() => { document.getElementById("headlines").innerHTML = `<li class="empty">Could not load the media page just now.</li>`; });
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('video[autoplay]').forEach((v) => { v.removeAttribute('autoplay'); v.pause(); });
 </script>
 </body>
 </html>

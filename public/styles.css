@@ -275,3 +275,41 @@ a.match-chip { text-decoration: none; display: inline-block; }
 .live-list li { display: grid; gap: 1px; padding-bottom: .5rem; border-bottom: 1px solid #e6dfc9; }
 .live-list a { font-weight: 700; text-decoration: none; }
 .live-list a:hover { text-decoration: underline; }
+
+/* ===== Night kiosk theme: brass lamplight on a dark teal newsstand, taken from the Jack Rabbit kiosk clip ===== */
+:root { --ink: #1d2a26; --ink-soft: #3a4a43; --paper: #ecdfc3; --paper-strong: #f4ead2; --clay: #b5472f; --gold: #f2b455; --moss: #3f7a6c; --moss-dark: #245247; --fog: #e4d8bb; --line: rgba(80, 58, 20, .22); --muted: #6a5f48; --night: #0c191a; --brass: #c79a45; --lamp: #f4b95a; --shadow: 0 14px 40px rgba(0, 0, 0, .35); }
+body { background: radial-gradient(1100px 520px at 18% -8%, #1d3d3d 0%, transparent 62%), #0c191a; }
+h1, .section-title, .modal-head h2, .content-card h3 { font-family: Georgia, "Times New Roman", serif; letter-spacing: -.01em; }
+h1 { letter-spacing: -.02em; line-height: 1.02; }
+.topbar { background: rgba(10, 22, 23, .94); border-bottom: 1px solid rgba(199, 154, 69, .4); }
+.topbar .brand, .topbar .button-quiet { color: #f1e4c4; }
+.brand-mark { background: var(--brass); color: #0c191a; }
+.brand-subtitle { color: #b9ad8f; }
+.topbar .button-secondary { background: transparent; color: #f1e4c4; border-color: rgba(241, 228, 196, .45); }
+.hero { background: #0c191a; }
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 38%; opacity: .78; }
+.hero::after { background: linear-gradient(90deg, rgba(9, 20, 21, .94), rgba(9, 20, 21, .55) 55%, rgba(9, 20, 21, .12)); }
+.hero h1 { color: #f6e7c2; text-shadow: 0 2px 18px rgba(0, 0, 0, .55); }
+.eyebrow { color: var(--lamp); }
+.hero-stat { border-color: rgba(199, 154, 69, .5); background: rgba(10, 22, 23, .55); }
+.hero-stat strong { color: var(--lamp); }
+.section { background: transparent; }
+.section-soft { background: #10211f; }
+.section .section-title { color: #f1e4c4; }
+.section .section-copy { color: #b9ad8f; }
+.section .eyebrow { color: var(--lamp) !important; }
+.content-card { border-color: rgba(199, 154, 69, .55); box-shadow: 0 10px 28px rgba(0, 0, 0, .4); transition: transform .18s ease-out, box-shadow .18s ease-out; }
+.content-card:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0, 0, 0, .5), 0 0 0 1px rgba(244, 185, 90, .55); }
+.footer { background: #08110f; color: #b9ad8f; border-top: 1px solid rgba(199, 154, 69, .35); }
+.modal-backdrop { background: rgba(4, 10, 10, .72); }
+.modal { border: 1px solid rgba(199, 154, 69, .6); }
+.ad-slot { border-color: var(--brass); }
+.roll-tab.selected { background: var(--moss-dark); border-color: var(--moss-dark); }
+.rack-covers img, .issue-cover { box-shadow: 0 8px 22px rgba(0, 0, 0, .45); }
+
+/* The shared filler clip */
+.filler { position: relative; margin: 0 0 14px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(199, 154, 69, .55); background: #0c191a; }
+.filler video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.filler figcaption { position: absolute; left: 10px; bottom: 8px; padding: 2px 8px; border-radius: 4px; background: rgba(9, 20, 21, .78); color: #f1e4c4; font-size: .78rem; font-weight: 700; letter-spacing: .04em; }
+
+html, :root { background: #0c191a; }

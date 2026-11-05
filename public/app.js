@@ -181,6 +181,7 @@ function renderPublic() {
     </header>
     <main id="main">
       <section id="top" class="hero">
+        <video class="hero-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
         <div class="hero-content">
           <div class="eyebrow">KeyOSX · Master living kiosk</div>
           <h1>Walk up to the kiosk. Every brand has a stall.</h1>
@@ -378,8 +379,13 @@ function stageTrackHtml(current, items, requestStatus) {
   }).join("")}</ol>`;
 }
 
+// The shared filler: Jack Rabbit at the kiosk. Every media slot that has no real media yet shows it (muted, looping, still if motion is reduced).
+function fillerHtml(caption) {
+  return `<figure class="filler"><video class="filler-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>${escapeHtml(caption)}</figcaption></figure>`;
+}
+
 function mediaHtml(current) {
-  if (!current?.media_url) return "";
+  if (!current?.media_url) return fillerHtml("Video being made…");
   const url = escapeHtml(current.media_url);
   const poster = current.media_poster_url ? ` poster="${escapeHtml(current.media_poster_url)}"` : "";
   return /\.(mp4|webm|mov)(\?|$)/i.test(current.media_url)
@@ -714,6 +720,8 @@ function bindManageEvents(backdrop) {
 }
 
 async function bootPublic() {
+  // Respect reduced motion: any autoplaying filler is paused on its first frame.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) new MutationObserver(() => document.querySelectorAll("video[autoplay]").forEach((video) => { video.removeAttribute("autoplay"); video.pause(); })).observe(document.body, { childList: true, subtree: true });
   try {
     if (!state.config) state.config = await api("/api/config");
     await loadWorks();
