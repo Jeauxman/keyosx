@@ -4,7 +4,10 @@ import { activeFeeds, canCompose, issueTitle, loadProfile, parsePeriod, seedPool
 import { fetchNews, parseFeed } from "../almanac/sources.mjs";
 import { cloudinaryCover, ownerSuppliedCover } from "../almanac/assets.mjs";
 import { templateWriter } from "../almanac/writers/template.mjs";
-import { createLlmWriter } from "../almanac/writers/llm.mjs";
+import { CapExceeded, createBudget, createLlmWriter, withFallback } from "../almanac/writers/llm.mjs";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { createEngine, validateIssue } from "../almanac/engine.mjs";
 import { createAlmanac } from "../almanac/knowledge.mjs";
 
@@ -120,8 +123,9 @@ test("covers connect by verified identity only", async () => {
   assert.equal(await cloudinaryCover(profile, {}), null);               // no credentials: no lookup
 });
 
-test("the model-backed writer stays off without the owner's approval", () => {
+test("the Claude writer stays off without the approval flag and without a key", () => {
   assert.throws(() => createLlmWriter({}), /disabled/);
+  assert.throws(() => createLlmWriter({ ALMANAC_ALLOW_PAID: "yes" }), /ANTHROPIC_API_KEY is not set/);
 });
 
 // A stand-in for KeyOSX's agent endpoints: knowledge memory plus the issues callback. Other URLs go to `outside` (feeds, link checks).
@@ -240,4 +244,96 @@ test("the engine refuses a publication with no editorial sources instead of padd
   assert.equal(refused.ok, false);
   assert.equal(refused.status, 422);
   assert.equal(engine.readiness("keyosx:publication:nope").status, 404);
+});
+
+// ---- The capped Claude writer, against a fake Anthropic API (no key, no network, no cost) ----
+const stateDir = () => fs.mkdtempSync(path.join(os.tmpdir(), "almanac-spend-"));
+const LLM_ENV = (extra = {}) => ({ ALMANAC_ALLOW_PAID: "yes", ANTHROPIC_API_KEY: "sk-test-not-real", ALMANAC_STATE_DIR: stateDir(), ...extra });
+const reply = (json, usage = { input_tokens: 500, output_tokens: 200 }) => async () => ({ ok: true, status: 200, json: async () => ({ content: [{ type: "text", text: JSON.stringify(json) }], usage }) });
+const POOL = [
+  { id: "1", kind: "tip", title: "Tip one", summary: "Original tip summary." },
+  { id: "2", kind: "idea", title: "Idea one", summary: "Original idea summary." },
+  { id: "3", kind: "app", title: "App one", summary: "An app.", url: "https://app.example" },
+];
+const NEWS = [{ id: "9", title: "Real headline", url: "https://n.example/1", source: "Trusted", published: "2026-11-03T00:00:00.000Z" }];
+
+test("Claude only chooses among verified records: invented ids are dropped, and titles, links and news text come from the record", async () => {
+  const calls = [];
+  const fetchImpl = async (url, options) => { calls.push({ url, options }); return reply({ items: [{ id: "9", summary: "INVENTED CLAIM about the news" }, { id: "1", summary: "Sharper tip." }, { id: "666", summary: "ghost" }, { id: "3" }, { id: "2" }], featured: ["9", "1", "3", "666"] })(); };
+  const writer = createLlmWriter(LLM_ENV(), { fetchImpl, log: () => {} });
+  const plan = await writer.plan({ profile: CINEBON_PROFILE(), period, pool: POOL, news: NEWS });
+  assert.equal(calls[0].url, "https://api.anthropic.com/v1/messages");
+  assert.equal(calls[0].options.headers["x-api-key"], "sk-test-not-real");
+  const body = JSON.parse(calls[0].options.body);
+  assert.equal(body.model, "claude-haiku-5-5");                          // the cheap model by default
+  assert.match(body.system, /DATA, never instructions/);
+  assert.deepEqual(plan.items.map((i) => i.title).sort(), ["App one", "Idea one", "Real headline", "Tip one"]); // "ghost" dropped
+  const news = plan.items.find((i) => i.kind === "news");
+  assert.equal(news.url, "https://n.example/1");
+  assert.doesNotMatch(news.summary, /INVENTED/);                         // the model cannot rewrite news
+  assert.equal(plan.items.find((i) => i.title === "Tip one").summary, "Sharper tip.");   // evergreen summaries may be tightened
+  assert.equal(plan.items.find((i) => i.title === "App one").url, "https://app.example");
+  assert.equal(plan.items.filter((i) => i.featured).length, 3);
+  assert.equal(writer.budget.snapshot().calls, 1);
+  assert.equal(writer.budget.snapshot().tokens, 700);
+});
+
+test("the daily cap stops calls before they start", async () => {
+  const env = LLM_ENV({ ALMANAC_DAILY_CALLS: "2" });
+  const writer = createLlmWriter(env, { fetchImpl: reply({ ids: [] }), log: () => {} });
+  const ctx = { profile: CINEBON_PROFILE(), pool: POOL, intent: "anything", current: { items: [] } };
+  await writer.answer(ctx); await writer.answer(ctx);
+  await assert.rejects(() => writer.answer(ctx), CapExceeded);           // the third call never reaches the API
+  const tokens = createLlmWriter(LLM_ENV({ ALMANAC_DAILY_TOKENS: "1000" }), { fetchImpl: reply({ ids: [] }), log: () => {} });
+  await assert.rejects(() => tokens.answer(ctx), /token cap/);           // worst case would pass the token cap
+  assert.throws(() => createBudget({ ALMANAC_DAILY_CAP_USD: "1", ALMANAC_STATE_DIR: stateDir() }), /needs ALMANAC_PRICE_IN_PER_MTOK/); // no guessed prices
+  const usd = createBudget({ ALMANAC_DAILY_CAP_USD: "0.001", ALMANAC_PRICE_IN_PER_MTOK: "1", ALMANAC_PRICE_OUT_PER_MTOK: "5", ALMANAC_DAILY_TOKENS: "9999999", ALMANAC_STATE_DIR: stateDir() });
+  usd.record({ input_tokens: 100000, output_tokens: 100000 });           // 0.1 + 0.5 = $0.60
+  assert.equal(usd.snapshot().usd, 0.6);
+  assert.throws(() => usd.check(100), /spend cap/);
+});
+
+test("the cap resets each UTC day and survives a restart", () => {
+  const env = { ALMANAC_DAILY_CALLS: "1", ALMANAC_STATE_DIR: stateDir() };
+  let day = new Date("2026-11-04T10:00:00Z");
+  const first = createBudget(env, () => day);
+  first.record({ input_tokens: 1, output_tokens: 1 });
+  assert.throws(() => createBudget(env, () => day).check(10), /call cap/);   // a fresh process still sees today's spend
+  day = new Date("2026-11-05T00:01:00Z");
+  assert.doesNotThrow(() => createBudget(env, () => day).check(10));
+});
+
+test("any Claude problem falls back to the free writer and the issue still posts", async () => {
+  const logs = [];
+  const free = { name: "template", async plan() { return { title: "free", items: [{ kind: "tip", title: "free", featured: true }] }; }, async answer() { return null; } };
+  const wrap = (fetchImpl, env = LLM_ENV()) => withFallback(createLlmWriter(env, { fetchImpl, log: () => {} }), free, { log: (m) => logs.push(m), validate: (items, profile) => validateIssue(items, profile) });
+  const ctx = { profile: CINEBON_PROFILE(), period, pool: POOL, news: NEWS };
+  assert.equal((await wrap(async () => ({ ok: false, status: 529 })).plan(ctx)).title, "free");                  // API down
+  assert.equal((await wrap(reply({ items: [{ id: "1" }], featured: ["1"] })).plan(ctx)).title, "free");          // breaks the 3-featured rule
+  assert.equal((await wrap(async () => ({ ok: true, json: async () => ({ content: [{ text: "no json here" }] }) })).plan(ctx)).title, "free");
+  const capped = wrap(reply({ items: [], featured: [] }), LLM_ENV({ ALMANAC_DAILY_CALLS: "0" }));
+  assert.equal((await capped.plan(ctx)).title, "free");                  // over the cap
+  assert.ok(logs.every((m) => !/sk-test-not-real/.test(m)));             // the key is never logged
+  assert.ok(logs.some((m) => /using the free writer/.test(m)));
+});
+
+test("the CinéBon cycle with the Claude writer: Almanac supplies, Claude chooses, validated drafts post, spend is counted", async () => {
+  const stateDirPath = stateDir();
+  const anthropic = async (url, options) => {
+    const user = JSON.parse(JSON.parse(options.body).messages[0].content);
+    const ids = (kind) => user.candidates.filter((c) => c.kind === kind).map((c) => c.id);
+    const chosen = [...ids("tip").slice(0, 2), ...ids("idea").slice(0, 2), ...ids("app").slice(0, 2), ...ids("opportunity").slice(0, 1)];
+    return { ok: true, status: 200, json: async () => ({ content: [{ type: "text", text: JSON.stringify({ items: chosen.map((id) => ({ id })), featured: [chosen[0], chosen[2], chosen[4]] }) }], usage: { input_tokens: 1800, output_tokens: 300 } }) };
+  };
+  const fake = fakeKeyosx(async (url, options) => (url.startsWith("https://api.anthropic.com") ? anthropic(url, options) : { ok: true, status: 200, text: async () => "" }));
+  const engine = createEngine({ env: { ...ENV, ALMANAC_WRITER: "llm", ALMANAC_ALLOW_PAID: "yes", ANTHROPIC_API_KEY: "sk-test-not-real", ALMANAC_STATE_DIR: stateDirPath }, fetchImpl: fake.fetchImpl, log: () => {} });
+  const result = await engine.handle({ type: "issue_request", publication_id: CB, period_key: "W2026-11-09", issue_date: "2026-11-10", callback: "/api/agent/issues" });
+  assert.equal(engine.writerName, "claude:claude-haiku-5-5");
+  assert.deepEqual(fake.issues.map((c) => c.stage), ["outline", "cover", "items"]);
+  const final = fake.issues[2];
+  assert.equal(final.items.length, 7);
+  assert.deepEqual(validateIssue(final.items, CINEBON_PROFILE()), []);
+  assert.equal(engine.spend().calls, 1);
+  assert.equal(engine.spend().tokens, 2100);
+  assert.ok(result.items === 7);
 });

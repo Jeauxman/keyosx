@@ -6,13 +6,15 @@ import { ROOT, canCompose, issueTitle, loadEntities, loadProfile, parsePeriod } 
 import { createAlmanac } from "./knowledge.mjs";
 import { resolveCover } from "./assets.mjs";
 import { templateWriter } from "./writers/template.mjs";
-import { createLlmWriter } from "./writers/llm.mjs";
+import { createLlmWriter, withFallback } from "./writers/llm.mjs";
 
 export { ROOT };
 export const ITEM_KINDS = ["news", "tip", "idea", "app", "opportunity", "other"];
 
-export function chooseWriter(env = process.env) {
-  return String(env.ALMANAC_WRITER || "template").toLowerCase() === "llm" ? createLlmWriter(env) : templateWriter;
+export function chooseWriter(env = process.env, { fetchImpl = fetch, log = console.log } = {}) {
+  if (String(env.ALMANAC_WRITER || "template").toLowerCase() !== "llm") return templateWriter;
+  // Claude first, capped; any problem falls back to the free writer so the issue still posts.
+  return withFallback(createLlmWriter(env, { fetchImpl, log }), templateWriter, { log, validate: validateIssue });
 }
 
 // The content rules from the brief, enforced before anything is posted.
@@ -36,7 +38,7 @@ export function validateIssue(items, profile) {
 function splitKnowledge(records) {
   const pool = []; const news = [];
   for (const record of records) {
-    if (record.kind === "news") news.push({ title: record.title, url: record.url, source: record.source_name, published: record.published_at ? new Date(record.published_at).toISOString() : "" });
+    if (record.kind === "news") news.push({ id: String(record.id), title: record.title, url: record.url, source: record.source_name, published: record.published_at ? new Date(record.published_at).toISOString() : "" });
     else pool.push({ id: String(record.id), kind: record.kind, title: record.title, summary: record.summary, ...(record.url ? { url: record.url } : {}) });
   }
   news.sort((x, y) => +new Date(y.published) - +new Date(x.published));
@@ -45,7 +47,7 @@ function splitKnowledge(records) {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export function createEngine({ env = process.env, fetchImpl = fetch, writer = chooseWriter(env), log = console.log, almanac = createAlmanac({ env, fetchImpl, log }) } = {}) {
+export function createEngine({ env = process.env, fetchImpl = fetch, log = console.log, writer = chooseWriter(env, { fetchImpl, log }), almanac = createAlmanac({ env, fetchImpl, log }) } = {}) {
   const origin = () => (env.KEYOSX_ORIGIN || "http://localhost:3000").replace(/\/$/, "");
   const publicOrigin = () => (env.KEYOSX_PUBLIC_ORIGIN || origin()).replace(/\/$/, "");
   const delay = Number(env.ALMANAC_STAGE_DELAY_MS ?? 1000);
@@ -119,7 +121,7 @@ export function createEngine({ env = process.env, fetchImpl = fetch, writer = ch
     return result;
   }
 
-  return { handle, readiness, composeIssue, writerName: writer.name };
+  return { handle, readiness, composeIssue, writerName: writer.name, spend: () => writer.budget?.snapshot() || null };
 }
 
 // Approved aliases printed on covers (registry.aliases in entities.json), so a cover reading MEDITERRANEO still matches Mediterraneano.

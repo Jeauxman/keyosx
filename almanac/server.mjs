@@ -14,7 +14,7 @@ http.createServer((req, res) => {
   if (req.method === "GET" && req.url === "/health") {
     const entities = loadEntities();
     const ready = entities.publications.map((p) => loadProfile(p.id, entities)).filter((profile) => canCompose(profile)).map((profile) => profile.id);
-    return send(res, 200, { ok: true, writer: engine.writerName, ready_publications: ready });
+    return send(res, 200, { ok: true, writer: engine.writerName, spend_today: engine.spend(), ready_publications: ready });
   }
   if (req.method !== "POST") return send(res, 404, { error: "not found" });
   if (!token) return send(res, 503, { error: "AGENT_API_TOKEN is not configured on the Almanac service." });

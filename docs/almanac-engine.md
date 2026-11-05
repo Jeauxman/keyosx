@@ -51,7 +51,12 @@ request is made per publication per period.
   `kx:pub:<slug>` + `kx:type:cover`, with context `kx_masthead` equal to the printed masthead or an approved alias, `kx_confidence` high, and no
   `kx:status:needs-review` / `do-not-use`. Those labels only exist after the Manus pass is applied, so until then (1) is used. If neither exists the issue
   posts without a cover. This is also the **FlintBill hand-off seam**: artwork preparation plugs in here; nothing is generated today.
-- Writers: `template` (default, no cost). `llm` is a documented stub that throws until the owner approves paid use (`ALMANAC_ALLOW_PAID=yes`) and an adapter is added.
+- Writers: `template` (default, free) and `llm` (the Claude writer, approved by Joe 2026-11-04 **with a cap**; off until `ALMANAC_WRITER=llm`,
+  `ALMANAC_ALLOW_PAID=yes` and `ANTHROPIC_API_KEY` are set in the service's own environment). Claude only **chooses by id among records Almanac already verified**
+  and may tighten evergreen summaries; titles, kinds, links and all news text come from the stored record, so it cannot invent news or links. Hard daily caps
+  (`ALMANAC_DAILY_CALLS` 40, `ALMANAC_DAILY_TOKENS` 150000, optional `ALMANAC_DAILY_CAP_USD` with your console prices) are checked before every call and survive restarts
+  (`.almanac-state/spend.json`, git-ignored). Over the cap, an API error, or an unusable answer falls back to the free writer so the issue still posts.
+  Cheap model by default (`claude-haiku-5-5`, override with `ALMANAC_MODEL`). `GET :8787/health` shows today's spend. Tested against a fake API only; not yet run with a real key.
 
 ## Adding a brand
 
@@ -81,7 +86,7 @@ revision 4, a draft, while revision 3 stayed published.
 ## Not done yet
 
 - Media stage (audio/video) and generated artwork (FlintBill): the seam exists, nothing is generated.
-- Model-backed writing and per-item source records inside issue revisions.
+- Per-item source records inside issue revisions; a real-key run of the Claude writer.
 - Other brands' profiles and seeds (CinéBon is the proof; each brand needs its own sources).
 - Jack Rabbit supplying from Almanac knowledge directly (it still answers only from approved issue items).
 - Hosting for the service and any deploy: needs your approval.
