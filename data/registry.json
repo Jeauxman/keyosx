@@ -124,11 +124,11 @@
       "entity_type": "publication",
       "focus": "Art, music, storytelling and culture",
       "catalog_slug": null,
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
       "flags": [
-        "Rack has 'The Troubadour Quarterly' (id troubadour-quarterly), whose cover masthead I read at low resolution. Confirm whether this is the same title, a rename, or two titles."
+        "Joe supplied a clear cover with the masthead THE NEW TROUBADOUR (Vol. 1 No. 1, Spring 2025). The rack also has 'The Troubadour Quarterly' (read at low resolution earlier). OPEN: same title, a rename, or two titles?"
       ],
       "registry": "publication"
     },
@@ -184,7 +184,7 @@
       "entity_type": "publication",
       "focus": "Courage, independent living and ideas",
       "catalog_slug": null,
-      "status": "candidate",
+      "status": "on-rack",
       "rack_priority": "start",
       "verified": false,
       "flags": [],
@@ -1462,6 +1462,22 @@
         "Joe 2026-11-04: WSHIT is the radio show with many shit talkers. WSHIT Radio poster supplied; the original brand poster lists Morning Shit Gazette, NOIZE, Au Contraire, Almanac, Troubadour."
       ],
       "family": "wshit-media"
+    },
+    {
+      "n": 98,
+      "id": "keyosx:publication:think",
+      "name": "THINK",
+      "class": "added-from-covers",
+      "entity_type": "publication",
+      "registry": "publication",
+      "focus": "Ideas, wisdom and perspective",
+      "catalog_slug": null,
+      "status": "on-rack",
+      "rack_priority": "start",
+      "verified": false,
+      "flags": [
+        "Cover supplied by Joe 2026-11-04."
+      ]
     }
   ],
   "known_issue_names": [
@@ -1569,7 +1585,11 @@
       "retrofuturism": "retrofuturism",
       "pride-mediterraneo": "pride-mediterraneo",
       "wshit": "wshit-radio",
-      "daily-shit": "daily-shit-001"
+      "daily-shit": "daily-shit-001",
+      "think": "think",
+      "bon-voyage": "bon-voyage",
+      "audacity": "audacity",
+      "the-new-troubadour": "the-new-troubadour"
     },
     "asset": {
       "homelink-local-south-france": "HomeLink Local South France banner",
@@ -1590,7 +1610,13 @@
       "hostelles-banner": "Hostelles banner",
       "hostelles-poster": "Hostelles poster",
       "salt": "SALT cover (alternate to Zout, held back on the Zout / Salt Journal card)",
-      "eat-stay-love-carcassonne": "Earlier Eat Stay Love promo (alternate)"
+      "eat-stay-love-carcassonne": "Earlier Eat Stay Love promo (alternate)",
+      "without-god-all-things-possible": "'Without God all things are possible': typographic statement poster (a work or slogan; kind not confirmed)",
+      "global-connect-enterprises": "Global Connect Enterprises logo",
+      "global-entrepreneur": "Global Entrepreneur poster (Joe Fansler, founder and strategist)",
+      "american-real-estate-and-mortgage": "American Real Estate & Mortgage logo",
+      "carcassonne-ideas-and-freedom": "Joe at desk, 'Ideas Build Freedom' (brand photo)",
+      "international-ai-enterprise": "International AI Enterprise poster (Europe and America)"
     },
     "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation.",
     "held": {

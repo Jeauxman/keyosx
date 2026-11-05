@@ -760,6 +760,90 @@
         }
       ],
       "family": "wshit-media"
+    },
+    {
+      "id": "keyosx:publication:think",
+      "name": "THINK",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "Question everything.",
+      "beat": "Ideas, wisdom and perspective: first principles, Stoicism in practice, the art of thinking.",
+      "cadence": "monthly",
+      "series": "Thought",
+      "issues": [
+        {
+          "title": "Vol. 01 · Issue 01",
+          "image": "/covers/think.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:bon-voyage",
+      "name": "bon voyage",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "Travel far. Live well.",
+      "beat": "Road trips, open skies and destinations that call: travel on your own terms.",
+      "cadence": "monthly",
+      "series": "Travel",
+      "issues": [
+        {
+          "title": "May / June 2024",
+          "image": "/covers/bon-voyage.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:audacity",
+      "name": "Audacity",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "The courage to live on your own terms.",
+      "beat": "Reinvention, presence and what comes next: style, story and a more fulfilled way forward.",
+      "cadence": "monthly",
+      "series": "Life",
+      "issues": [
+        {
+          "title": "Vol. 12 · Issue 7 · Jul 2024",
+          "image": "/covers/audacity.webp",
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "keyosx:publication:the-new-troubadour",
+      "name": "The New Troubadour",
+      "type": "publication",
+      "editorial_agent": "keyosx:agent:almanac",
+      "related": [],
+      "integration_status": "unverified",
+      "requires_approval": true,
+      "beat_status": "inferred",
+      "tagline": "AI publisher of the village square.",
+      "beat": "People, stories, music, film, ideas and places for a more creative tomorrow.",
+      "cadence": "quarterly",
+      "series": "Storytelling",
+      "issues": [
+        {
+          "title": "Vol. 1 · No. 1 · Spring 2025",
+          "image": "/covers/the-new-troubadour.webp",
+          "status": "proposed"
+        }
+      ]
     }
   ],
   "agents": [
