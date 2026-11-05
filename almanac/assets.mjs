@@ -7,7 +7,7 @@
 // If neither exists the engine posts the issue without a cover; it never posts a cover it could not verify.
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, slugOf } from "./profiles.mjs";
+import { ROOT, loadEntities, slugOf } from "./profiles.mjs";
 import { currentCover } from "../coverplan.mjs";
 
 const norm = (text) => String(text || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
@@ -44,6 +44,16 @@ export async function cloudinaryCover(profile, { cloud = process.env.CLOUDINARY_
   return best ? { url: best.secure_url, identity: profile.id, verified_by: "cloudinary-labels", source: best.public_id } : null;
 }
 
+// Last resort: the cover the rack itself shows for this publication (the lead image in data/entities.json, which Joe's team filed by its printed masthead).
+// It may be a site file (/covers/...) or a Cloudinary image.
+const CLOUDINARY_BASE = "https://res.cloudinary.com/dmsdspzbo/image/upload/";
+export function rackLeadCover(publicationId, publicOrigin, entities = loadEntities()) {
+  const image = entities.publications.find((p) => p.id === publicationId)?.issues?.[0]?.image;
+  if (!image) return null;
+  const url = String(image).startsWith("/") ? `${publicOrigin.replace(/\/$/, "")}${image}` : `${CLOUDINARY_BASE}f_auto,q_auto,w_600/${image}`;
+  return { url, identity: publicationId, verified_by: "rack-lead (the cover shown on the rack)", source: String(image) };
+}
+
 export async function resolveCover(profile, { publicOrigin, aliases = [], now = new Date(), ...cloudinaryOptions } = {}) {
   // 0. This month's cover from the git plan (data/covers.json): approved by the owner and released on or before today.
   const monthly = currentCover(profile.id, { now });
@@ -52,5 +62,5 @@ export async function resolveCover(profile, { publicOrigin, aliases = [], now = 
     const labelled = await cloudinaryCover(profile, { aliases, ...cloudinaryOptions });
     if (labelled) return labelled;
   } catch { /* fall through to the owner-supplied cover */ }
-  return ownerSuppliedCover(profile.id, publicOrigin);
+  return ownerSuppliedCover(profile.id, publicOrigin) || rackLeadCover(profile.id, publicOrigin);
 }

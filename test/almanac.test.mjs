@@ -106,6 +106,17 @@ test("feed headlines decode HTML entities, numeric and named", () => {
   assert.equal(parseFeed(xml)[0].title, "Watch ‘The Greatest’ & more — Q&A");
 });
 
+test("a brand with no supplied cover file falls back to the cover its rack card shows", async () => {
+  const { rackLeadCover, resolveCover } = await import("../almanac/assets.mjs");
+  const profile = loadProfile("keyosx:publication:basil-leaf-chronicles");
+  const cover = await resolveCover(profile, { publicOrigin: "relative-test" });
+  assert.match(cover.url, /^https:\/\/res\.cloudinary\.com\/dmsdspzbo\/image\/upload\//);        // Basil Leaf's rack cover lives on Cloudinary
+  assert.equal(cover.verified_by, "rack-lead (the cover shown on the rack)");
+  const local = rackLeadCover("keyosx:publication:noize", "http://k.test");
+  assert.equal(local.url, "http://k.test/covers/noize.webp");                                          // a site file keeps its path
+  assert.equal(rackLeadCover("keyosx:publication:nope", "http://k.test"), null);
+});
+
 test("covers connect by verified identity only", async () => {
   const owner = ownerSuppliedCover(CB, "http://localhost:3000");
   assert.equal(owner.url, "http://localhost:3000/covers/cinebon.webp");
