@@ -327,6 +327,16 @@
       "requires_approval": true,
       "issues": [
         {
+          "title": "May/June 2024 · Issue 108",
+          "image": "/covers/carcassonne-monthly.webp",
+          "status": "proposed"
+        },
+        {
+          "title": "June 2026 edition (placeholder text to fix)",
+          "image": "/covers/carcassonne-monthly-june-2026.webp",
+          "status": "proposed"
+        },
+        {
           "title": "Special Edition 2026",
           "image": "v1782237395/ChatGPT_Image_Jun_23_2026_11_28_04_AM_niqyhd",
           "status": "proposed"
@@ -397,6 +407,11 @@
       "integration_status": "unverified",
       "requires_approval": true,
       "issues": [
+        {
+          "title": "Summer 2025 · Issue 01",
+          "image": "/covers/troubadour-quarterly.webp",
+          "status": "proposed"
+        },
         {
           "title": "Thoughts on life and meaning",
           "image": "/covers/joe-troubadour.webp",
@@ -874,7 +889,8 @@
         "verified-cover-lookup"
       ],
       "integration_status": "unverified",
-      "requires_approval": true
+      "requires_approval": true,
+      "cover": "/covers/almanac-carcassonne-edition.webp"
     },
     {
       "id": "keyosx:agent:flintbill",

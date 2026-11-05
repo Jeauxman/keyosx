@@ -353,7 +353,9 @@
       "status": "on-rack",
       "rack_priority": "later",
       "verified": false,
-      "flags": [],
+      "flags": [
+        "Joe 2026-11-04: lead cover is the May/June 2024 Issue 108 cover (La Maison de l'Ambassadeur). The June 2026 cover has unfinished placeholder text and is held back."
+      ],
       "registry": "publication"
     },
     {
@@ -1581,7 +1583,7 @@
       "cinebon": "cinebon",
       "au-contraire": "au-contraire-the-move",
       "eat-stay-love-carcassonne": "eat-stay-love-carcassonne-poster",
-      "troubadour-quarterly": "joe-troubadour",
+      "troubadour-quarterly": "troubadour-quarterly",
       "dolce-far-niente": "dolce-far-niente",
       "lern": "lern",
       "heroes": "heroes",
@@ -1599,7 +1601,9 @@
       "think": "think",
       "bon-voyage": "bon-voyage",
       "audacity": "audacity",
-      "the-new-troubadour": "the-new-troubadour"
+      "the-new-troubadour": "the-new-troubadour",
+      "carcassonne-monthly": "carcassonne-monthly",
+      "almanac (agent card)": "almanac-carcassonne-edition"
     },
     "asset": {
       "homelink-local-south-france": "HomeLink Local South France banner",
@@ -1626,13 +1630,20 @@
       "global-entrepreneur": "Global Entrepreneur poster (Joe Fansler, founder and strategist)",
       "american-real-estate-and-mortgage": "American Real Estate & Mortgage logo",
       "carcassonne-ideas-and-freedom": "Joe at desk, 'Ideas Build Freedom' (brand photo)",
-      "international-ai-enterprise": "International AI Enterprise poster (Europe and America)"
+      "international-ai-enterprise": "International AI Enterprise poster (Europe and America)",
+      "gods-create-painting": "'Make No Mistake, Gods Create': painted version (crowned face); the earlier crown typographic version is gods-create",
+      "joe3000": "JOE3000 brand poster: Building Intelligent Businesses",
+      "italian-real-estate-for-sale": "Italian Real Estate For Sale: 'Turnkey. Automated. Monetizing.' acquisition-pitch poster (business-for-sale claims such as 500+ listings are Joe's own copy; not verified here)",
+      "joe-fansler-author-books": "Author poster: amazon.com/author/joefansler; books 'Winners Are Just Better Losers' and 'The Life Hour' (Crow's Quill Press)",
+      "joe-troubadour-travellin-tour": "Joe Troubadour 'Travellin' On Tour!' poster: new music and dates coming soon",
+      "carcassonne-monthly-june-2026": "Carcassonne Monthly 'June 2026 edition' cover (alternate, held back): it still shows placeholder text ('Headline 2:', 'Headline 3:', 'FICTIONAL (FICTIONAL)', 'PRICE 86') that must be fixed before use"
     },
     "_hostelles": "Joe's Hostelles art describes it as 'a global network of safe, beautiful places for women, by women', part of the ME+DÍA family of brands. Treated as a brand, off the rack, pending Joe's confirmation.",
     "held": {
       "daily-shit (old cover)": "Replaced by daily-shit-001. File kept, not displayed.",
       "morning-shit-press": "Old art, replaced; new Morning Shit cover still to be sent as a file."
-    }
+    },
+    "_duplicates": "International AI Enterprise poster was supplied twice (identical file); stored once as international-ai-enterprise."
   },
   "families": {
     "wshit-media": {
