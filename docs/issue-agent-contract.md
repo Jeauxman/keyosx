@@ -59,7 +59,7 @@ cumulative snapshot and each its own draft revision. Add `"stage"` to the body:
 
 Approving a later revision also covers earlier ones. Visitors never see unapproved content, only the *names* of stages awaiting
 approval ("awaiting editor"); the open cover refreshes itself every 15 seconds. Omitting `stage` behaves as `items`, so one-shot agents still work.
-`scripts/mock-generator.mjs` posts all four stages a few seconds apart as a reference.
+`almanac/engine.mjs` is the reference implementation (see `docs/almanac-engine.md`); it posts outline, cover and items, and a media stage when a writer supplies one.
 
 ### Visitor requests (Jack Rabbit -> the publication's agent)
 

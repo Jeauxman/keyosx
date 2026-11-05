@@ -66,7 +66,7 @@ KeyOSX side: `ISSUE_GENERATOR_URL` = the agent's public webhook URL; it must be 
 ## 7. How to test before going live
 
 1. Run KeyOSX locally (needs MySQL; see `README.md`) with `AGENT_API_TOKEN` and `ISSUE_GENERATOR_URL` set.
-2. `scripts/mock-generator.mjs` is a stand-in agent: read it as the minimal reference implementation.
+2. `almanac/` is the working implementation of this brief (see `docs/almanac-engine.md`): `almanac/engine.mjs` is the publication agent, `almanac/knowledge.mjs` is Almanac.
 3. Open the CinéBon cover on a fresh week (or clear the `issue_requests` row) and watch: request -> your agent -> draft in the admin "Issues awaiting approval" panel -> approve -> visible on the cover.
 4. Kill the agent mid-run and confirm KeyOSX retries (request goes `failed`, then retries after the backoff).
 

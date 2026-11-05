@@ -1234,7 +1234,8 @@
       "verified": false,
       "flags": [
         "Joe 2026-11-04: Daily Shit is the magazine, a WSHIT Media publication. New cover supplied (Vol. 1 No. 001); the first cover was replaced."
-      ]
+      ],
+      "family": "wshit-media"
     },
     {
       "n": 84,
@@ -1250,7 +1251,8 @@
       "verified": false,
       "flags": [
         "Joe 2026-11-04: Morning Shit is the podcast (confirmed name; the old 'Morning Shit Press' and 'Gazette' variants are retired). Cover not yet received as a file. Permanent id keeps the old slug."
-      ]
+      ],
+      "family": "wshit-media"
     },
     {
       "n": 85,
@@ -1458,7 +1460,8 @@
       "verified": false,
       "flags": [
         "Joe 2026-11-04: WSHIT is the radio show with many shit talkers. WSHIT Radio poster supplied; the original brand poster lists Morning Shit Gazette, NOIZE, Au Contraire, Almanac, Troubadour."
-      ]
+      ],
+      "family": "wshit-media"
     }
   ],
   "known_issue_names": [
@@ -1523,6 +1526,26 @@
       "date": "2026-11-04",
       "by": "Joe",
       "decision": "Names: Morning Shit = podcast, Daily Shit = media (magazine), WSHIT = radio. 'Morning Shit Press' and 'Gazette' are not used."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Build ONE shared Almanac engine, not separate duplicate systems. Each brand stays its own independent entity with its own editorial knowledge, identity, capabilities and publishing rules (profiles)."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "The kiosk shows one cover per publication. Opening it enters that publication's Living Edition: current content, Jack Rabbit's recommendations, opportunities and archived editions."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Terms: Emergent Publishing is the underlying process; Living Editions is the experience. Observation requests composition, but only owner-approved editions are published. Content develops progressively from outline through articles, artwork, audio and video as appropriate."
+    },
+    {
+      "date": "2026-11-04",
+      "by": "Joe",
+      "decision": "Priority: complete the shared Almanac/agent interface and the first working CinéBon publishing cycle. Preserve the existing kiosk, connect Cloudinary assets by verified identity, create no redundant apps or databases. Feature branch only; no merge, deploy, publish or cost without approval."
     }
   ],
   "cover_assets": {
@@ -1573,6 +1596,17 @@
     "held": {
       "daily-shit (old cover)": "Replaced by daily-shit-001. File kept, not displayed.",
       "morning-shit-press": "Old art, replaced; new Morning Shit cover still to be sent as a file."
+    }
+  },
+  "families": {
+    "wshit-media": {
+      "name": "WSHIT Media",
+      "members": {
+        "keyosx:publication:wshit": "WSHIT Radio (audio channel)",
+        "keyosx:publication:daily-shit": "Daily Shit (magazine)",
+        "keyosx:publication:morning-shit-press": "Morning Shit (podcast; id keeps the old slug; not on the rack until its cover arrives)"
+      },
+      "note": "Three distinct entities under one media family (Joe, 2026-11-04)."
     }
   }
 }

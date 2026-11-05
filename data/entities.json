@@ -284,7 +284,7 @@
       "type": "publication",
       "workSlug": null,
       "tagline": "Film and entertainment features.",
-      "editorial_agent": null,
+      "editorial_agent": "keyosx:agent:almanac",
       "related": [
         "keyosx:publication:noize"
       ],
@@ -733,7 +733,8 @@
           "image": "/covers/wshit.webp",
           "status": "proposed"
         }
-      ]
+      ],
+      "family": "wshit-media"
     },
     {
       "id": "keyosx:publication:daily-shit",
@@ -757,7 +758,8 @@
           "image": "/covers/daily-shit-001.webp",
           "status": "proposed"
         }
-      ]
+      ],
+      "family": "wshit-media"
     }
   ],
   "agents": [
@@ -783,7 +785,9 @@
       "capabilities": [
         "local-content",
         "editorial-queue",
-        "retrieval-chat"
+        "retrieval-chat",
+        "compose-issues",
+        "verified-cover-lookup"
       ],
       "integration_status": "unverified",
       "requires_approval": true

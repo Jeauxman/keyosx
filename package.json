@@ -14,7 +14,8 @@
     "seed": "node scripts/seed.mjs",
     "test": "node --test test/*.test.mjs",
     "smoke-test": "node scripts/smoke-test.mjs",
-    "check": "node --check server.mjs && node --check scripts/seed.mjs"
+    "check": "node --check server.mjs && node --check scripts/seed.mjs && node --check almanac/engine.mjs && node --check almanac/server.mjs",
+    "almanac": "node --env-file=.env almanac/server.mjs"
   },
   "dependencies": {
     "express": "^4.21.2",

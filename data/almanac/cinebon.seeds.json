@@ -1,0 +1,29 @@
+{
+  "_note": "Evergreen editorial seed pool for CinéBon, written by Claude on 2026-11-04 for owner review. These are tips, ideas, real apps (homepage links only) and generic opportunities. There is NO news here: news only ever comes from a live, retrieved source (see profile feeds). The engine rotates through the pool by period so weekly issues differ. Edit freely.",
+  "items": [
+    { "id": "tip-sound-off", "kind": "tip", "title": "Watch the first ten minutes with the sound off", "summary": "It shows how a director frames, lights and cuts a scene before dialogue does the work. Then rewind and watch it with sound." },
+    { "id": "tip-one-line-log", "kind": "tip", "title": "Keep a one-line log of every film you watch", "summary": "Write the date, the title and one sentence on how it felt. After a month you can see your own taste." },
+    { "id": "tip-read-the-source", "kind": "tip", "title": "Read the source, then watch the film", "summary": "Pick a film adapted from a book, play or short story and read that first. What the film keeps and drops shows its point of view." },
+    { "id": "tip-subtitles-on", "kind": "tip", "title": "Turn subtitles on, even in your own language", "summary": "They catch lines a busy sound mix buries, and you notice how the dialogue is written." },
+    { "id": "tip-commentary", "kind": "tip", "title": "Rewatch a favorite with the commentary track", "summary": "Where a director or critic commentary exists, it is one of the cheapest film-school lessons going." },
+    { "id": "tip-cooling-off", "kind": "tip", "title": "Wait a day before you rate a film", "summary": "First reactions run hot or cold. A day later you remember what actually stayed with you." },
+
+    { "id": "idea-silent-night", "kind": "idea", "title": "Host a silent film night with live music", "summary": "Choose a silent feature whose rights are clear, project it on a wall and have a friend play piano or run a live-scored playlist." },
+    { "id": "idea-director-season", "kind": "idea", "title": "Run a five-film director season with friends", "summary": "Pick one director, watch five of their films in release order over five weeks, and compare how the work changes." },
+    { "id": "idea-monthly-club", "kind": "idea", "title": "Start a one-film-a-month club", "summary": "Each member takes a month to choose the film. Keep it to one film and one hour of talk so it lasts." },
+    { "id": "idea-genre-swap", "kind": "idea", "title": "Swap genres for a week", "summary": "Everyone picks a film from the genre they usually avoid for someone else. Rate it after, not before." },
+    { "id": "idea-themed-double", "kind": "idea", "title": "Build a double bill around one theme", "summary": "Pair an older film and a newer one on the same subject, like heists or road trips, and talk about what changed." },
+    { "id": "idea-film-and-dinner", "kind": "idea", "title": "Cook a dish from the film's country", "summary": "Watch a film from one country and cook something from its cuisine to go with it. Subtitles and supper make a good night." },
+
+    { "id": "app-letterboxd", "kind": "app", "title": "Letterboxd", "summary": "A social film diary: log what you watch, rate and review it, make lists and follow other film lovers.", "url": "https://letterboxd.com" },
+    { "id": "app-justwatch", "kind": "app", "title": "JustWatch", "summary": "Search a title to see which streaming services carry it in your country.", "url": "https://www.justwatch.com" },
+    { "id": "app-mubi", "kind": "app", "title": "MUBI", "summary": "A curated streaming service and film community built around a rotating selection of films.", "url": "https://mubi.com" },
+    { "id": "app-criterion-channel", "kind": "app", "title": "The Criterion Channel", "summary": "A streaming library of classic and contemporary films arranged in themed collections.", "url": "https://www.criterionchannel.com" },
+    { "id": "app-kanopy", "kind": "app", "title": "Kanopy", "summary": "Streams films through participating public libraries and universities, so you may be able to watch with a library login.", "url": "https://www.kanopy.com" },
+    { "id": "app-imdb", "kind": "app", "title": "IMDb", "summary": "A large searchable database of films, cast and crew, handy for finding who made what.", "url": "https://www.imdb.com" },
+
+    { "id": "opp-volunteer-festival", "kind": "opportunity", "title": "Volunteer at a film festival near you", "summary": "Festivals rely on volunteers for ushering, ticketing and guest support, and it often comes with free screenings. Check the festival's own site for how to apply." },
+    { "id": "opp-local-cineclub", "kind": "opportunity", "title": "Join, or start, a local cine-club", "summary": "Many towns have a film society. If yours does not, a library, café or community hall may host one." },
+    { "id": "opp-submit-short", "kind": "opportunity", "title": "Submit a short film to an open call", "summary": "Many festivals take shorts through open calls. Read each festival's own rules and fees before you submit." }
+  ]
+}

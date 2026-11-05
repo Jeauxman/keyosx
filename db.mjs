@@ -55,6 +55,27 @@ export const TIMELINE_EVENT_TYPES = [
 ];
 
 const SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS knowledge_records (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    brand VARCHAR(160) NOT NULL,
+    record_key CHAR(40) NOT NULL,
+    kind ENUM('news','tip','idea','app','opportunity','other') NOT NULL DEFAULT 'other',
+    title VARCHAR(300) NOT NULL,
+    summary TEXT,
+    url VARCHAR(500) NOT NULL DEFAULT '',
+    source_name VARCHAR(160) NOT NULL DEFAULT '',
+    source_type VARCHAR(40) NOT NULL DEFAULT '',
+    published_at DATE NULL,
+    topics VARCHAR(300) NOT NULL DEFAULT '',
+    verified TINYINT(1) NOT NULL DEFAULT 0,
+    verification TEXT,
+    status ENUM('active','outdated','rejected') NOT NULL DEFAULT 'active',
+    content_hash CHAR(40) NOT NULL,
+    retrieved_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_checked_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_knowledge_brand_key (brand, record_key),
+    KEY idx_knowledge_brand_status (brand, status, kind)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
   `CREATE TABLE IF NOT EXISTS agent_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     from_agent VARCHAR(160) NOT NULL,
@@ -950,3 +971,76 @@ export async function listAgentRequests(db) {
   return rows;
 }
 
+
+// ---- Almanac knowledge memory: what the shared engine has discovered and verified, with sources and history ----
+// Records are scoped to a brand (publication id) so each brand keeps its own knowledge profile. Re-saving an unchanged record only
+// refreshes last_checked_at; a changed record is updated and reactivated. Nothing here is published to visitors by itself.
+import { createHash } from "node:crypto";
+const KNOWLEDGE_KINDS = ["news", "tip", "idea", "app", "opportunity", "other"];
+const knowledgeKey = (record) => createHash("sha1").update(String(record.url || "").trim().toLowerCase() || String(record.title || "").trim().toLowerCase()).digest("hex");
+const knowledgeHash = (record) => createHash("sha1").update([record.kind, record.title, record.summary || "", record.url || ""].join("\u0001")).digest("hex");
+
+export async function saveKnowledge(db, brand, records) {
+  const counts = { inserted: 0, changed: 0, unchanged: 0, skipped: 0 };
+  for (const record of (Array.isArray(records) ? records : []).slice(0, 200)) {
+    const title = String(record?.title || "").trim().slice(0, 300);
+    if (!brand || !title) { counts.skipped++; continue; }
+    const row = {
+      brand: String(brand).slice(0, 160),
+      record_key: knowledgeKey({ ...record, title }),
+      kind: KNOWLEDGE_KINDS.includes(record.kind) ? record.kind : "other",
+      title,
+      summary: String(record.summary || "").slice(0, 2000),
+      url: safeUrl(record.url),
+      source_name: String(record.source_name || "").slice(0, 160),
+      source_type: String(record.source_type || "").slice(0, 40),
+      published_at: /^\d{4}-\d{2}-\d{2}/.test(String(record.published_at || "")) ? String(record.published_at).slice(0, 10) : null,
+      topics: Array.isArray(record.topics) ? record.topics.join(",").slice(0, 300) : String(record.topics || "").slice(0, 300),
+      verified: record.verified ? 1 : 0,
+      verification: typeof record.verification === "string" ? record.verification.slice(0, 2000) : JSON.stringify(record.verification || {}).slice(0, 2000),
+      status: ["active", "outdated", "rejected"].includes(record.status) ? record.status : "active",
+    };
+    row.content_hash = knowledgeHash(row);
+    const [existing] = await db.execute("SELECT id, content_hash, status FROM knowledge_records WHERE brand = :brand AND record_key = :record_key", { brand: row.brand, record_key: row.record_key });
+    if (!existing.length) {
+      await db.execute(
+        "INSERT INTO knowledge_records (brand, record_key, kind, title, summary, url, source_name, source_type, published_at, topics, verified, verification, status, content_hash) VALUES (:brand, :record_key, :kind, :title, :summary, :url, :source_name, :source_type, :published_at, :topics, :verified, :verification, :status, :content_hash)",
+        row
+      );
+      counts.inserted++;
+    } else if (existing[0].content_hash === row.content_hash && existing[0].status === row.status) {
+      await db.execute("UPDATE knowledge_records SET last_checked_at = NOW() WHERE id = :id", { id: existing[0].id });
+      counts.unchanged++;
+    } else {
+      await db.execute(
+        "UPDATE knowledge_records SET kind = :kind, title = :title, summary = :summary, url = :url, source_name = :source_name, source_type = :source_type, published_at = :published_at, topics = :topics, verified = :verified, verification = :verification, status = :status, content_hash = :content_hash, last_checked_at = NOW() WHERE id = :id",
+        { ...row, id: existing[0].id }
+      );
+      counts.changed++;
+    }
+  }
+  return counts;
+}
+
+export async function listKnowledge(db, { brand, status = "active", verified = null, kinds = null, limit = 100 } = {}) {
+  const clauses = ["brand = :brand"];
+  const params = { brand };
+  if (status) { clauses.push("status = :status"); params.status = status; }
+  if (verified !== null) { clauses.push("verified = :verified"); params.verified = verified ? 1 : 0; }
+  const wanted = Array.isArray(kinds) ? kinds.filter((kind) => KNOWLEDGE_KINDS.includes(kind)) : [];
+  if (wanted.length) clauses.push("kind IN (" + wanted.map((kind) => "'" + kind + "'").join(",") + ")");
+  const [rows] = await db.execute(
+    "SELECT id, brand, kind, title, summary, url, source_name, source_type, published_at, topics, verified, verification, status, retrieved_at, last_checked_at FROM knowledge_records WHERE " + clauses.join(" AND ") + " ORDER BY published_at IS NULL, published_at DESC, id LIMIT " + Math.min(Number(limit) || 100, 500),
+    params
+  );
+  return rows;
+}
+
+export async function setKnowledgeStatus(db, id, status, note = "") {
+  if (!["active", "outdated", "rejected"].includes(status)) throw new Error("bad status");
+  const [result] = await db.execute(
+    "UPDATE knowledge_records SET status = :status, verification = CONCAT(COALESCE(verification, ''), :note), last_checked_at = NOW() WHERE id = :id",
+    { id: Number(id), status, note: note ? "\n" + String(note).slice(0, 300) : "" }
+  );
+  return result.affectedRows;
+}

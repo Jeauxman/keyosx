@@ -25,6 +25,9 @@ import {
   getWorkDetail,
   getIssueItems,
   claimComposition,
+  listKnowledge,
+  saveKnowledge,
+  setKnowledgeStatus,
   createAgentRequest,
   getAgentRequest,
   listAgentRequests,
@@ -333,6 +336,31 @@ async function main() {
     const claimed = await claimComposition(db, publication.id, period.key);
     if (claimed) dispatchComposition(publication, period);
     res.json({ requested: claimed });
+  }));
+
+  // ---- Almanac knowledge memory (bearer token or administrator). One database: the Almanac service stores what it knows here. ----
+  const agentOk = (req) => {
+    const bearer = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+    return (agentToken && bearer.length === agentToken.length && crypto.timingSafeEqual(Buffer.from(bearer), Buffer.from(agentToken))) || isAdmin(req);
+  };
+  app.post("/api/agent/knowledge", asyncRoute(async (req, res) => {
+    if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+    const brand = String(req.body?.brand || "");
+    if (!knownPublication(brand)) return res.status(400).json({ error: "Unknown brand (publication id)." });
+    res.status(201).json(await saveKnowledge(db, brand, req.body?.records));
+  }));
+  app.get("/api/agent/knowledge", asyncRoute(async (req, res) => {
+    if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+    const brand = String(req.query.brand || "");
+    if (!knownPublication(brand)) return res.status(400).json({ error: "Unknown brand (publication id)." });
+    const verified = req.query.verified === undefined ? null : req.query.verified === "1";
+    const kinds = req.query.kinds ? String(req.query.kinds).split(",") : null;
+    res.json({ records: await listKnowledge(db, { brand, status: String(req.query.status ?? "active") || null, verified, kinds, limit: req.query.limit }) });
+  }));
+  app.post("/api/agent/knowledge/status", asyncRoute(async (req, res) => {
+    if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+    try { res.json({ updated: await setKnowledgeStatus(db, req.body?.id, String(req.body?.status || ""), req.body?.note) }); }
+    catch (error) { res.status(400).json({ error: error.message }); }
   }));
 
   // Editorial agents post a new issue (cover + opportunity list) on their cadence. Bearer token, or administrator session.

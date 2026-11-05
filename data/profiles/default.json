@@ -1,0 +1,21 @@
+{
+  "_note": "Defaults every publication's editorial profile inherits. A per-publication file in this folder (named by the id's last segment, e.g. cinebon.json) overrides any key. The shared Almanac engine reads these; there is one engine, many profiles.",
+  "voice": "Plain, specific, friendly. Short titles. One to three sentence summaries. No hype.",
+  "issue": {
+    "mix": { "tip": 2, "idea": 2, "app": 2, "opportunity": 1 },
+    "news_max": 3,
+    "news_max_age_days": 21,
+    "featured_kinds": ["news", "tip", "idea", "app", "opportunity"],
+    "featured_count": 3
+  },
+  "stages": ["outline", "cover", "items"],
+  "rules": {
+    "news_needs_source_url": true,
+    "app_needs_url": true,
+    "never_send_is_sample": true,
+    "agents_cannot_publish": true,
+    "owner_approval_required": true
+  },
+  "cover": { "policy": "verified-existing", "generate_new": false },
+  "sources": { "seeds": null, "feeds": [] }
+}
