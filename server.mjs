@@ -151,6 +151,7 @@ async function main() {
   // ALMANAC_INLINE=on runs the shared Almanac inside this one Node app (one hosted app instead of two). It answers the same webhook at
   // /api/almanac/webhook and defaults the URLs to this app's own loopback address.
   const almanacInline = String(process.env.ALMANAC_INLINE || "").toLowerCase() === "on";
+  let inlineEngine = null; // set below when ALMANAC_INLINE=on: the Almanac is called in-process, never over the network
   if (almanacInline) {
     process.env.KEYOSX_ORIGIN ||= `http://127.0.0.1:${port}`;
     process.env.ISSUE_GENERATOR_URL ||= `http://127.0.0.1:${port}/api/almanac/webhook`;
@@ -233,6 +234,14 @@ async function main() {
   }));
 
   async function dispatchComposition(publication, period) {
+    if (inlineEngine) {
+      const job = { type: "issue_request", publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), callback: "/api/agent/issues" };
+      const ready = inlineEngine.readiness(publication.id);
+      if (!ready.ok) { await setRequestStatus(db, publication.id, period.key, "failed", ready.reason).catch(() => {}); return; }
+      await setRequestStatus(db, publication.id, period.key, "running", "", "queued").catch(() => {});
+      inlineEngine.handle(job).catch(async (error) => { console.error("[almanac] job failed:", error.message); await setRequestStatus(db, publication.id, period.key, "failed", error.message).catch(() => {}); });
+      return;
+    }
     try {
       const response = await fetch(generatorUrl, {
         method: "POST",
@@ -390,6 +399,14 @@ async function main() {
     const issues = await listIssues(db, publication.id);
     const live = issues[0] && issues[0].issue_date >= period.start ? issues[0] : null;
     const current_issue = live ? { title: live.title, issue_date: live.issue_date, items: (await getIssueItems(db, live.id, live.published_revision)).map(({ kind, title, summary, url, featured }) => ({ kind, title, summary, url, featured: !!featured })) } : null;
+    if (inlineEngine) {
+      const job = { type: "visitor_request", request_id: requestId, from: "keyosx:agent:jack-rabbit", publication_id: publication.id, name: publication.name, beat: publication.beat, cadence: publication.cadence, period_key: period.key, issue_date: new Date().toISOString().slice(0, 10), intent, current_issue, callback: "/api/agent/issues" };
+      const ready = inlineEngine.readiness(publication.id);
+      if (!ready.ok) { await setAgentRequestStatus(db, requestId, "failed", { error: ready.reason }).catch(() => {}); return; }
+      await setAgentRequestStatus(db, requestId, "sent", { onlyFrom: "queued" }).catch(() => {});
+      inlineEngine.handle(job).catch(async (error) => { console.error("[almanac] request failed:", error.message); await setAgentRequestStatus(db, requestId, "failed", { error: error.message }).catch(() => {}); });
+      return;
+    }
     try {
       const response = await fetch(generatorUrl, {
         method: "POST",
@@ -467,6 +484,69 @@ async function main() {
     catch (error) { res.status(400).json({ error: error.message }); }
   }));
 
+  // The one place an agent's issue is accepted (HTTP route and the in-process Almanac both use it). Always a draft unless an administrator asks.
+  async function acceptIssue(body, createdBy, publish) {
+    const publication = knownPublication(String(body?.publication_id || ""));
+    if (!publication) throw new Error("Unknown publication_id.");
+    const result = await upsertIssue(db, { ...body, created_by: createdBy }, { publish });
+    const when = /^\d{4}-\d{2}-\d{2}$/.test(String(body.issue_date)) ? new Date(body.issue_date + "T00:00:00Z") : new Date();
+    await setRequestStatus(db, publication.id, issuePeriod(publication.cadence, when).key, "completed").catch(() => {});
+    // A draft that answers a visitor request links back to it (still a draft; the owner approves it like any revision).
+    const requestId = Number(body?.request_id);
+    if (requestId) {
+      const linked = await getAgentRequest(db, requestId);
+      if (linked && linked.to_entity === publication.id) await setAgentRequestStatus(db, requestId, "answered", { issue_id: result.id }).catch(() => {});
+    }
+    return result;
+  }
+
+  // ALMANAC_INLINE=on: the shared Almanac runs inside this app. Hosts such as Hostinger do not let an app call its own address, so the engine
+  // talks to KeyOSX through this in-process fetch (same endpoints, same rules, no network). Feeds and link checks still use the real fetch.
+  if (almanacInline) {
+    const INLINE_BASE = "http://inline.invalid";
+    const internalFetch = async (url, options = {}) => {
+      if (!String(url).startsWith(INLINE_BASE)) return fetch(url, options);
+      const target = new URL(url);
+      const method = String(options.method || "GET").toUpperCase();
+      const reply = (status, data) => ({ ok: status >= 200 && status < 300, status, json: async () => data, text: async () => JSON.stringify(data) });
+      try {
+        const body = options.body ? JSON.parse(options.body) : {};
+        if (method === "POST" && target.pathname === "/api/agent/issues") return reply(201, await acceptIssue(body, "agent", false));
+        if (method === "POST" && target.pathname === "/api/agent/knowledge") {
+          if (!knownPublication(String(body.brand || ""))) return reply(400, { error: "Unknown brand (publication id)." });
+          return reply(201, await saveKnowledge(db, body.brand, body.records));
+        }
+        if (method === "GET" && target.pathname === "/api/agent/knowledge") {
+          const q = target.searchParams;
+          const brand = String(q.get("brand") || "");
+          if (!knownPublication(brand)) return reply(400, { error: "Unknown brand (publication id)." });
+          const verified = q.get("verified") === null ? null : q.get("verified") === "1";
+          return reply(200, { records: await listKnowledge(db, { brand, status: String(q.get("status") ?? "active") || null, verified, kinds: q.get("kinds") ? q.get("kinds").split(",") : null, limit: q.get("limit") }) });
+        }
+        if (method === "POST" && target.pathname === "/api/agent/knowledge/status") return reply(200, { updated: await setKnowledgeStatus(db, body.id, String(body.status || ""), body.note) });
+      } catch (error) { return reply(400, { error: error.message }); }
+      return reply(404, { error: "not found" });
+    };
+    const { createEngine } = await import("./almanac/engine.mjs");
+    // Covers go out as site paths (/covers/...), so no host name is ever trusted or guessed.
+    inlineEngine = createEngine({ env: { ...process.env, KEYOSX_ORIGIN: INLINE_BASE, KEYOSX_PUBLIC_ORIGIN: "relative" }, fetchImpl: internalFetch });
+    // The same webhook the stand-alone service has, for tools outside the app. Bearer token or administrator only.
+    app.post("/api/almanac/webhook", (req, res) => {
+      if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+      const job = req.body || {};
+      if (!job.publication_id || !job.period_key) return res.status(400).json({ error: "publication_id and period_key are required" });
+      const ready = inlineEngine.readiness(job.publication_id);
+      if (!ready.ok) return res.status(ready.status).json({ error: ready.reason });
+      res.status(202).json({ accepted: true });
+      inlineEngine.handle(job).catch((error) => console.error("[almanac] job failed:", error.message));
+    });
+    app.get("/api/almanac/health", (req, res) => {
+      if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
+      res.json({ ok: true, mode: "inline", writer: inlineEngine.writerName, spend_today: inlineEngine.spend() });
+    });
+    console.log("[KeyOSX] The Almanac is running inside this app (ALMANAC_INLINE=on, in-process).");
+  }
+
   // Editorial agents post a new issue (cover + opportunity list) on their cadence. Bearer token, or administrator session.
   app.post("/api/agent/issues", asyncRoute(async (req, res) => {
     const bearer = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
@@ -475,17 +555,7 @@ async function main() {
     if (!knownPublication(String(req.body?.publication_id || ""))) return res.status(400).json({ error: "Unknown publication_id." });
     try {
       // Agents can never publish. Only an administrator session may publish directly, and only on explicit request.
-      const publish = !tokenOk && isAdmin(req) && req.body?.status === "published";
-      const publication = knownPublication(String(req.body.publication_id));
-      const result = await upsertIssue(db, { ...req.body, created_by: tokenOk ? "agent" : "admin" }, { publish });
-      const when = /^\d{4}-\d{2}-\d{2}$/.test(String(req.body.issue_date)) ? new Date(req.body.issue_date + "T00:00:00Z") : new Date();
-      await setRequestStatus(db, publication.id, issuePeriod(publication.cadence, when).key, "completed").catch(() => {});
-      // A draft that answers a visitor request links back to it (still a draft; the owner approves it like any revision).
-      const requestId = Number(req.body?.request_id);
-      if (requestId) {
-        const linked = await getAgentRequest(db, requestId);
-        if (linked && linked.to_entity === publication.id) await setAgentRequestStatus(db, requestId, "answered", { issue_id: result.id }).catch(() => {});
-      }
+      const result = await acceptIssue(req.body, tokenOk ? "agent" : "admin", !tokenOk && isAdmin(req) && req.body?.status === "published");
       res.status(201).json(result);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -660,25 +730,6 @@ async function main() {
     console.error("[KeyOSX] Unhandled request error:", error);
     res.status(500).json({ error: "An unexpected error occurred." });
   });
-
-  if (almanacInline) {
-    const { createEngine } = await import("./almanac/engine.mjs");
-    const engine = createEngine();
-    app.post("/api/almanac/webhook", (req, res) => {
-      if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
-      const job = req.body || {};
-      if (!job.publication_id || !job.period_key) return res.status(400).json({ error: "publication_id and period_key are required" });
-      const ready = engine.readiness(job.publication_id);
-      if (!ready.ok) return res.status(ready.status).json({ error: ready.reason });
-      res.status(202).json({ accepted: true });
-      engine.handle(job).catch((error) => console.error("[almanac] job failed:", error.message));
-    });
-    app.get("/api/almanac/health", (req, res) => {
-      if (!agentOk(req)) return res.status(401).json({ error: "An agent token or administrator sign-in is required." });
-      res.json({ ok: true, writer: engine.writerName, spend_today: engine.spend() });
-    });
-    console.log("[KeyOSX] The Almanac is running inside this app (ALMANAC_INLINE=on).");
-  }
 
   app.listen(port, () => {
     console.log(`[KeyOSX] Living kiosk listening on http://localhost:${port}`);

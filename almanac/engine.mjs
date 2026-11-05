@@ -49,7 +49,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function createEngine({ env = process.env, fetchImpl = fetch, log = console.log, writer = chooseWriter(env, { fetchImpl, log }), almanac = createAlmanac({ env, fetchImpl, log }) } = {}) {
   const origin = () => (env.KEYOSX_ORIGIN || "http://localhost:3000").replace(/\/$/, "");
-  const publicOrigin = () => (env.KEYOSX_PUBLIC_ORIGIN || origin()).replace(/\/$/, "");
+  const publicOrigin = () => (env.KEYOSX_PUBLIC_ORIGIN === "relative" ? "" : (env.KEYOSX_PUBLIC_ORIGIN || origin()).replace(/\/$/, ""));
   const delay = Number(env.ALMANAC_STAGE_DELAY_MS ?? 1000);
   const done = new Map(); // one composition per publication+period+type per process; KeyOSX also requests once per period
 

@@ -757,6 +757,8 @@ export const ISSUE_ITEM_KINDS = ["news", "tip", "idea", "app", "opportunity", "o
 export const ISSUE_STAGES = ["outline", "cover", "items", "media"];
 
 const safeUrl = (value) => (/^https?:\/\//.test(String(value || "")) ? String(value).slice(0, 500) : "");
+// Covers and media may also be this site's own files: /covers/... or /media/... (letters, digits, dot, dash, underscore, slash; no ..).
+const safeAsset = (value) => (/^\/(covers|media)\/[A-Za-z0-9._\/-]{1,200}$/.test(String(value || "")) && !String(value).includes("..") ? String(value) : safeUrl(value));
 
 // Records a new REVISION of an issue inside one transaction. Earlier revisions and their items are never
 // overwritten. Only a trusted caller (administrator or the seed script) may pass publish:true; editorial-agent
@@ -768,10 +770,10 @@ export async function upsertIssue(db, input, { publish = false } = {}) {
   if (!publication_id || !title) throw new Error("publication_id and title are required.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(issue_date)) throw new Error("issue_date must be YYYY-MM-DD.");
   const items = Array.isArray(input.items) ? input.items.slice(0, 60) : [];
-  const cover_url = safeUrl(input.cover_url);
+  const cover_url = safeAsset(input.cover_url);
   const stage = ISSUE_STAGES.includes(input.stage) ? input.stage : "items";
-  const media_url = safeUrl(input.media_url);
-  const media_poster_url = safeUrl(input.media_poster_url);
+  const media_url = safeAsset(input.media_url);
+  const media_poster_url = safeAsset(input.media_poster_url);
   if (stage === "media" && !media_url) throw new Error("A media-stage revision needs an http(s) media_url.");
   if (stage === "cover" && !cover_url) throw new Error("A cover-stage revision needs an http(s) cover_url.");
   const created_by = String(input.created_by || "").slice(0, 120);

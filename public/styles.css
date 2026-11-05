@@ -337,3 +337,8 @@ html, :root { background: #0c191a; }
 
 .jack-banner { margin: 10px 0 12px; }
 .jack-banner video { aspect-ratio: 16 / 9; max-height: 230px; object-position: 30% 38%; }
+
+/* Sound toggle on the video clips (they start muted, as browsers require; one click turns the sound on) */
+.sound-toggle { position: absolute; right: 10px; bottom: 10px; z-index: 4; min-height: 34px; padding: 5px 12px; border: 1px solid rgba(241, 228, 196, .6); border-radius: 999px; background: rgba(9, 20, 21, .82); color: #f1e4c4; font-size: .8rem; font-weight: 750; cursor: pointer; }
+.sound-toggle:hover, .sound-toggle:focus-visible { background: #c79a45; color: #0c191a; }
+.hero .sound-toggle { top: 14px; bottom: auto; }

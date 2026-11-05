@@ -339,3 +339,10 @@ test("the CinéBon cycle with the Claude writer: Almanac supplies, Claude choose
   assert.equal(engine.spend().tokens, 2100);
   assert.ok(result.items === 7);
 });
+
+test("in-process mode sends covers as site paths, so no host name is ever needed or trusted", async () => {
+  const fake = fakeKeyosx(async () => ({ ok: true, status: 200, text: async () => "" }));
+  const engine = createEngine({ env: { ...ENV, KEYOSX_PUBLIC_ORIGIN: "relative" }, fetchImpl: fake.fetchImpl, log: () => {} });
+  await engine.handle({ type: "issue_request", publication_id: CB, period_key: "W2026-11-16", issue_date: "2026-11-17", callback: "/api/agent/issues" });
+  assert.equal(fake.issues[1].cover_url, "/covers/cinebon.webp");
+});

@@ -159,7 +159,7 @@ function pathHtml(path) {
 
 // Jack's own clip ("Follow the rabbit. Come back with something."). Optional: if the file is not deployed the banner simply disappears.
 function jackBannerHtml() {
-  return `<figure class="filler jack-banner"><video data-optional src="/media/follow-jack.mp4#t=0.3" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at his desk, looking out over Carcassonne"></video><figcaption>Jack takes you there, and brings you back.</figcaption></figure>`;
+  return `<figure class="filler jack-banner"><video data-optional src="/media/follow-jack.mp4#t=0.3" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at his desk, looking out over Carcassonne"></video><figcaption>Jack takes you there, and brings you back.</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>`;
 }
 
 // ---- Jack Rabbit's trail: kept on this device only ----
@@ -225,6 +225,7 @@ function renderPublic() {
     <main id="main">
       <section id="top" class="hero">
         <video class="hero-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+        <button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button>
         <div class="hero-content">
           <div class="eyebrow">KeyOSX · Master living kiosk</div>
           <h1>Walk up to the kiosk. Every brand has a stall.</h1>
@@ -434,7 +435,7 @@ function stageTrackHtml(current, items, requestStatus) {
 
 // The shared filler: Jack Rabbit at the kiosk. Every media slot that has no real media yet shows it (muted, looping, still if motion is reduced).
 function fillerHtml(caption) {
-  return `<figure class="filler"><video class="filler-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>${escapeHtml(caption)}</figcaption></figure>`;
+  return `<figure class="filler"><video class="filler-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>${escapeHtml(caption)}</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>`;
 }
 
 function mediaHtml(current) {
@@ -778,6 +779,16 @@ function bindManageEvents(backdrop) {
 }
 
 async function bootPublic() {
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest && event.target.closest("[data-sound]");
+    if (!button) return;
+    const video = button.closest(".hero, .filler")?.querySelector("video");
+    if (!video) return;
+    const turningOn = video.muted;
+    document.querySelectorAll("video").forEach((other) => { other.muted = true; });
+    document.querySelectorAll("[data-sound]").forEach((other) => { other.textContent = "🔇 Sound off"; other.setAttribute("aria-pressed", "false"); });
+    if (turningOn) { video.muted = false; video.volume = 0.8; video.play().catch(() => {}); button.textContent = "🔊 Sound on"; button.setAttribute("aria-pressed", "true"); }
+  });
   document.addEventListener("error", (event) => { if (event.target?.tagName === "VIDEO" && "optional" in event.target.dataset) event.target.closest("figure")?.remove(); }, true);
   state.trails = loadTrails();
   // Respect reduced motion: any autoplaying filler is paused on its first frame.

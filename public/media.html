@@ -10,6 +10,7 @@
   body { background: radial-gradient(1100px 520px at 18% -8%, #1d3d3d 0%, transparent 62%), var(--bg); }
   .filler { position: relative; margin: 0 0 18px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(199, 154, 69, .55); background: #0c191a; }
   .filler video { display: block; width: 100%; max-height: 300px; object-fit: cover; object-position: 60% 38%; }
+  .sound-toggle { position: absolute; right: 10px; bottom: 10px; z-index: 4; padding: 5px 12px; border: 1px solid rgba(241, 228, 196, .6); border-radius: 999px; background: rgba(9, 20, 21, .82); color: #f1e4c4; font: 750 .8rem system-ui; cursor: pointer; }
   .filler figcaption { position: absolute; left: 10px; bottom: 8px; padding: 2px 8px; border-radius: 4px; background: rgba(9, 20, 21, .78); color: #f1e4c4; font-size: .78rem; font-weight: 700; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -52,7 +53,7 @@
   <div class="top"><a href="/">&larr; KeyOSX kiosk</a><span>Media</span></div>
   <h1>Media</h1>
   <p class="sub">Each publication's main stories and its latest issue. Only what the editors have approved appears here, plus a live feed where it is switched on.</p>
-  <figure class="filler"><video src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>Jack Rabbit, at the kiosk</figcaption></figure>
+  <figure class="filler"><video src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>Jack Rabbit, at the kiosk</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>
   <div id="ad"></div>
   <h2>Headlines</h2>
   <div class="tabs" role="tablist" id="tabs"><button class="tab selected" role="tab" aria-selected="true" data-tab="cover">Cover stories</button><button class="tab" role="tab" aria-selected="false" data-tab="live" id="live-tab" hidden>Live feed</button></div>
@@ -107,6 +108,16 @@ async function load() {
 }
 load().catch(() => { document.getElementById("headlines").innerHTML = `<li class="empty">Could not load the media page just now.</li>`; });
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('video[autoplay]').forEach((v) => { v.removeAttribute('autoplay'); v.pause(); });
+document.addEventListener("click", (event) => {
+  const button = event.target.closest && event.target.closest("[data-sound]");
+  if (!button) return;
+  const video = button.closest(".hero, .filler")?.querySelector("video");
+  if (!video) return;
+  const turningOn = video.muted;
+  document.querySelectorAll("video").forEach((other) => { other.muted = true; });
+  document.querySelectorAll("[data-sound]").forEach((other) => { other.textContent = "🔇 Sound off"; other.setAttribute("aria-pressed", "false"); });
+  if (turningOn) { video.muted = false; video.volume = 0.8; video.play().catch(() => {}); button.textContent = "🔊 Sound on"; button.setAttribute("aria-pressed", "true"); }
+});
 </script>
 </body>
 </html>

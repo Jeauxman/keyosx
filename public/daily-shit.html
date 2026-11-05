@@ -52,6 +52,7 @@
   .filler { position: relative; margin: 0; border: 2px solid var(--rule); background: #000; }
   .filler video { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 60% 40%; }
   .filler figcaption { position: absolute; left: 8px; bottom: 8px; padding: 2px 8px; background: #000c; color: #fff; font: 700 .78rem system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+  .sound-toggle { position: absolute; right: 8px; top: 8px; z-index: 4; padding: 4px 10px; border: 1px solid #fff9; background: #000c; color: #fff; font: 700 .75rem system-ui, sans-serif; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -80,7 +81,7 @@
     <section class="unit podcast" aria-labelledby="pod">
       <div class="kicker">The podcast</div>
       <h2 id="pod">Morning Shit</h2>
-      <figure class="filler"><video src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>Cover coming</figcaption></figure>
+      <figure class="filler"><video src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>Cover coming</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>
       <p>The morning show that reads the paper out loud. Joe is making the new cover.</p>
       <div class="status"><strong>Episodes</strong>No episodes are recorded or published yet.</div>
     </section>
@@ -93,5 +94,17 @@
   </section>
   <footer>WSHIT, Daily Shit and Morning Shit are satire. Names, claims and companies are invented for comedy and are not reporting.</footer>
 </div>
+<script>
+document.addEventListener("click", (event) => {
+  const button = event.target.closest && event.target.closest("[data-sound]");
+  if (!button) return;
+  const video = button.closest(".hero, .filler")?.querySelector("video");
+  if (!video) return;
+  const turningOn = video.muted;
+  document.querySelectorAll("video").forEach((other) => { other.muted = true; });
+  document.querySelectorAll("[data-sound]").forEach((other) => { other.textContent = "🔇 Sound off"; other.setAttribute("aria-pressed", "false"); });
+  if (turningOn) { video.muted = false; video.volume = 0.8; video.play().catch(() => {}); button.textContent = "🔊 Sound on"; button.setAttribute("aria-pressed", "true"); }
+});
+</script>
 </body>
 </html>
