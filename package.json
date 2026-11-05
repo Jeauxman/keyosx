@@ -14,8 +14,9 @@
     "seed": "node scripts/seed.mjs",
     "test": "node --test test/*.test.mjs",
     "smoke-test": "node scripts/smoke-test.mjs",
-    "check": "node --check server.mjs && node --check scripts/seed.mjs && node --check almanac/engine.mjs && node --check almanac/server.mjs",
-    "almanac": "node --env-file=.env --env-file-if-exists=.env.almanac almanac/server.mjs"
+    "check": "node --check server.mjs && node --check scripts/seed.mjs && node --check almanac/engine.mjs && node --check almanac/server.mjs && node scripts/check-covers.mjs",
+    "almanac": "node --env-file=.env --env-file-if-exists=.env.almanac almanac/server.mjs",
+    "check:covers": "node scripts/check-covers.mjs"
   },
   "dependencies": {
     "express": "^4.21.2",

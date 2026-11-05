@@ -96,7 +96,7 @@ function publicationCard(publication) {
   const agent = state.entities.agents.find((item) => item.id === publication.editorial_agent);
   const related = (publication.related || []).map((id) => state.entities.publications.find((item) => item.id === id)).filter(Boolean);
   return `<article class="content-card rack-card">
-    <div class="rack-covers">${publication.issues.slice(0, 1).map((issue) => `<figure><button class="cover-open" data-open-issue="${escapeHtml(publication.id)}" ${issue.issue_id ? `data-issue-id="${issue.issue_id}"` : ""} aria-label="Open ${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"></button><figcaption>${escapeHtml(issue.title)}<br><em>${escapeHtml(issue.is_sample ? "Sample issue" : issue.status === "published" ? "Current issue" : "Proposed cover")}</em></figcaption></figure>`).join("")}</div>
+    <div class="rack-covers">${publication.issues.slice(0, 1).map((issue) => `<figure><button class="cover-open" data-open-issue="${escapeHtml(publication.id)}" ${issue.issue_id ? `data-issue-id="${issue.issue_id}"` : ""} aria-label="Open ${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"><img loading="lazy" src="${escapeHtml(issue.image_url)}" alt="${escapeHtml(publication.name)} — ${escapeHtml(issue.title)}"></button><figcaption>${escapeHtml(issue.title)}<br><em>${escapeHtml(issue.is_sample ? "Sample issue" : issue.status === "published" ? "Current issue" : issue.status === "released" ? "This month's cover" : "Proposed cover")}</em></figcaption></figure>`).join("")}</div>
     <div class="beat-line"><strong>${escapeHtml(publication.cadence || "")}</strong> · ${escapeHtml(publication.beat || "")}${publication.beat_status === "inferred" ? ' <span class="badge badge-sample">Genre inferred</span>' : ""}</div>
     <div class="card-meta"><span>▤</span>${escapeHtml(publication.series || "Publication")} series ${integrationBadge(publication)}</div>
     <h3>${escapeHtml(publication.name)}</h3>
@@ -173,6 +173,7 @@ function renderPublic() {
           <span class="brand-mark">KX</span><span><span class="brand-title">${escapeHtml(state.config.brandName)}</span><span class="brand-subtitle">Living kiosk</span></span>
         </a>
         <div class="header-actions">
+          <a class="button button-quiet" href="/media.html">Media</a>
           <a class="button button-quiet" href="#guide">Ask ${escapeHtml(state.config.guideName)}</a>
           <button class="button button-secondary" id="admin-link">Administrator</button>
         </div>

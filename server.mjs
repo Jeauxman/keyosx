@@ -53,6 +53,7 @@ import {
   updateWork,
 } from "./db.mjs";
 import { askJackRabbit } from "./assistant.mjs";
+import { currentCover } from "./coverplan.mjs";
 import { DEPTH_OPTIONS, KIND_OPTIONS, QUESTIONS, buildPath, overlap, pickAd, wordsOf } from "./pathmaker.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -181,6 +182,9 @@ async function main() {
     const publications = entities.publications.map((publication) => {
       const live = latest.get(publication.id);
       const shelf = publication.issues.map((issue) => ({ title: issue.title, status: issue.status || "proposed", image_url: String(issue.image).startsWith("/") ? issue.image : CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + issue.image }));
+      // This month's owner-approved cover (data/covers.json, released on the 1st) leads the shelf.
+      const monthly = currentCover(publication.id);
+      if (monthly) shelf.unshift({ title: `${monthly.period} cover`, status: "released", image_url: monthly.url });
       // A posted issue from the editorial agent always leads the shelf as the current cover.
       const issues = live && live.cover_url ? [{ title: live.title, status: "published", image_url: live.cover_url, issue_id: live.id, issue_date: live.issue_date, is_sample: !!live.is_sample }, ...shelf] : shelf;
       return { ...link(publication), issues, current_issue_id: live?.id ?? null };
@@ -275,6 +279,28 @@ async function main() {
       matches: ranked.map(({ publication, score }) => ({ id: publication.id, name: publication.name, beat: publication.beat, score })),
       items: items.slice(0, 6),
     });
+  }));
+
+  // ---- Media page: headlines and the latest APPROVED issue of every publication. Nothing unapproved is ever returned. ----
+  app.get("/api/media", asyncRoute(async (req, res) => {
+    const latest = await latestIssueByPublication(db);
+    const brands = []; const headlines = [];
+    for (const publication of entities.publications) {
+      const live = latest.get(publication.id);
+      const monthly = currentCover(publication.id);
+      const shelfImage = publication.issues[0]?.image;
+      const cover_url = live?.cover_url || monthly?.url || (shelfImage ? (String(shelfImage).startsWith("/") ? shelfImage : CLOUDINARY_BASE + "f_auto,q_auto,w_480/" + shelfImage) : "");
+      const items = live ? await getIssueItems(db, live.id, live.published_revision) : [];
+      for (const item of items.filter((entry) => entry.kind === "news" && entry.url)) {
+        const reported = /Reported by (.+?), (\d{4}-\d{2}-\d{2})/.exec(item.summary || "");
+        headlines.push({ title: item.title, url: item.url, source: reported?.[1] || "", date: reported?.[2] || String(live.issue_date || "").slice(0, 10), publication_id: publication.id, publication_name: publication.name });
+      }
+      brands.push({ id: publication.id, name: publication.name, series: publication.series || "", cover_url, issue: live ? { id: live.id, title: live.title, issue_date: live.issue_date } : null,
+        items: items.slice().sort((a, b) => Number(b.featured) - Number(a.featured)).slice(0, 4).map(({ kind, title, url }) => ({ kind, title, url })) });
+    }
+    headlines.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    brands.sort((a, b) => Number(!!b.issue) - Number(!!a.issue));
+    res.json({ ad: adFor([], "media"), headlines: headlines.slice(0, 12), brands });
   }));
 
   // ---- The ad slot: one labeled ad, shown first. Owner-approved ads only (ADS_PREVIEW=on shows unapproved ads on a local copy). ----

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KeyOSX Media</title>
+<meta name="description" content="Headlines and the latest approved issues from every KeyOSX publication.">
+<style>
+  :root { --bg: #f4efe4; --card: #fffdf7; --ink: #1c1a15; --muted: #5f594b; --rule: #cfc6b0; --accent: #a3401f; --moss: #1f4a36; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #14130f; --card: #1d1c17; --ink: #efe9da; --muted: #a8a191; --rule: #3a372d; --accent: #e08a62; --moss: #8cc4a4; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px 48px; }
+  .top { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: .85rem; }
+  .top a { text-decoration: none; font-weight: 650; }
+  h1 { font: 800 clamp(1.8rem, 5vw, 2.8rem)/1.1 Georgia, serif; margin: 22px 0 4px; }
+  .sub { margin: 0 0 18px; color: var(--muted); }
+  .ad-slot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 22px; padding: 10px 12px; border: 1px solid #cdbf8a; background: #fbf6e3; color: #1c1a15; border-radius: 8px; }
+  .ad-slot .ad-label { padding: 2px 7px; border-radius: 4px; background: #5a4a14; color: #fff; font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .ad-slot .ad-body { flex: 1 1 200px; display: grid; gap: 2px; font-size: .9rem; }
+  .ad-slot a.cta { padding: 6px 12px; border-radius: 6px; background: #1c1a15; color: #fff; text-decoration: none; font-weight: 700; font-size: .85rem; }
+  h2 { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 26px 0 10px; }
+  .headlines { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+  .headlines li { padding: 11px 0; border-bottom: 1px solid var(--rule); display: grid; gap: 2px; }
+  .headlines a { font: 700 1.05rem/1.3 Georgia, serif; text-decoration: none; }
+  .headlines a:hover { text-decoration: underline; }
+  .meta { color: var(--muted); font-size: .8rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+  .card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: #000; display: block; }
+  .card .body { padding: 12px 14px 14px; display: grid; gap: 6px; }
+  .card h3 { margin: 0; font: 800 1.1rem/1.2 Georgia, serif; }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 999px; background: #dcebe1; color: #173728; font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-right: 6px; }
+  @media (prefers-color-scheme: dark) { .badge { background: #25382e; color: #bfe0cc; } }
+  .items { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; font-size: .9rem; }
+  .items a { text-decoration: none; } .items a:hover { text-decoration: underline; }
+  .quiet { color: var(--muted); font-size: .85rem; }
+  .empty { padding: 18px; border: 1px dashed var(--rule); border-radius: 8px; color: var(--muted); }
+  footer { margin-top: 32px; color: var(--muted); font-size: .8rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a href="/">&larr; KeyOSX kiosk</a><span>Media</span></div>
+  <h1>Media</h1>
+  <p class="sub">Headlines and the latest issue from every publication. Only what the editors have approved appears here.</p>
+  <div id="ad"></div>
+  <h2>Headlines</h2>
+  <ul class="headlines" id="headlines"><li class="quiet">Loading…</li></ul>
+  <h2>Latest from every publication</h2>
+  <div class="grid" id="grid"></div>
+  <footer>Headlines link to their original sources. KeyOSX shows the title, source and date only. Items marked Ad or Sponsored are advertising.</footer>
+</div>
+<script>
+const KIND = { news: "News", tip: "Tip", idea: "Idea", app: "App", opportunity: "Opportunity", other: "More" };
+const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const safe = (url) => (/^https?:\/\//.test(url || "") ? url : "");
+
+function adHtml(ad) {
+  if (!ad) return "";
+  return `<aside class="ad-slot" aria-label="Advertisement"><span class="ad-label">${esc(ad.label)}</span><div class="ad-body"><strong>${esc(ad.title)}</strong>${ad.text ? `<span>${esc(ad.text)}</span>` : ""}</div><a class="cta" href="${esc(safe(ad.url))}" target="_blank" rel="noopener noreferrer${ad.sponsored ? " sponsored" : ""}">${esc(ad.cta)}</a></aside>`;
+}
+
+async function load() {
+  const data = await fetch("/api/media").then((r) => r.json());
+  document.getElementById("ad").innerHTML = adHtml(data.ad);
+  const headlines = document.getElementById("headlines");
+  headlines.innerHTML = data.headlines.length
+    ? data.headlines.map((h) => `<li><a href="${esc(safe(h.url))}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><span class="meta">${esc(h.source || "Source")}${h.date ? " · " + esc(h.date) : ""} · via ${esc(h.publication_name)}</span></li>`).join("")
+    : `<li class="empty">No approved headlines yet. They appear here once an editor approves a news item.</li>`;
+  document.getElementById("grid").innerHTML = data.brands.map((b) => `<article class="card">
+      <img src="${esc(b.cover_url)}" alt="${esc(b.name)} cover" loading="lazy">
+      <div class="body"><h3>${esc(b.name)}</h3>
+      <div class="meta">${esc(b.series || "")}${b.issue ? " · " + esc(b.issue.title) : ""}</div>
+      ${b.items.length ? `<ul class="items">${b.items.map((i) => `<li><span class="badge">${esc(KIND[i.kind] || i.kind)}</span>${safe(i.url) ? `<a href="${esc(safe(i.url))}" target="_blank" rel="noopener noreferrer">${esc(i.title)}</a>` : esc(i.title)}</li>`).join("")}</ul>` : `<div class="quiet">${b.issue ? "Nothing to show." : "First issue not approved yet."}</div>`}
+      </div></article>`).join("");
+}
+load().catch(() => { document.getElementById("headlines").innerHTML = `<li class="empty">Could not load the media page just now.</li>`; });
+</script>
+</body>
+</html>

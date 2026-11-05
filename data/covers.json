@@ -1,0 +1,5 @@
+{
+  "_note": "Monthly cover plan, kept in git. One entry per publication per month. File: public/covers/<slug>/<YYYY-MM>.webp (portrait, under 400 KB). A cover is used only when approved:true AND today >= release (normally the 1st of the month); it then stays current until the next month's approved cover is released. made_by records who produced it (gpt, joe, ...). masthead must read the publication's name (or an approved alias). Run: npm run check:covers. See docs/monthly-covers.md.",
+  "_example": { "publication": "keyosx:publication:cinebon", "period": "2026-12", "file": "cinebon/2026-12.webp", "release": "2026-12-01", "masthead": "CinéBon", "made_by": "gpt", "approved": false },
+  "covers": []
+}

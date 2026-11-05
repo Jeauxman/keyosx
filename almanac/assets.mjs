@@ -8,6 +8,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT, slugOf } from "./profiles.mjs";
+import { currentCover } from "../coverplan.mjs";
 
 const norm = (text) => String(text || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 
@@ -43,7 +44,10 @@ export async function cloudinaryCover(profile, { cloud = process.env.CLOUDINARY_
   return best ? { url: best.secure_url, identity: profile.id, verified_by: "cloudinary-labels", source: best.public_id } : null;
 }
 
-export async function resolveCover(profile, { publicOrigin, aliases = [], ...cloudinaryOptions } = {}) {
+export async function resolveCover(profile, { publicOrigin, aliases = [], now = new Date(), ...cloudinaryOptions } = {}) {
+  // 0. This month's cover from the git plan (data/covers.json): approved by the owner and released on or before today.
+  const monthly = currentCover(profile.id, { now });
+  if (monthly) return { url: `${publicOrigin.replace(/\/$/, "")}${monthly.url}`, identity: profile.id, verified_by: "monthly-plan (owner-approved)", source: monthly.file };
   try {
     const labelled = await cloudinaryCover(profile, { aliases, ...cloudinaryOptions });
     if (labelled) return labelled;
