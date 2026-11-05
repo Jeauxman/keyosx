@@ -159,7 +159,7 @@ function pathHtml(path) {
 
 // Jack's own clip ("Follow the rabbit. Come back with something."). Optional: if the file is not deployed the banner simply disappears.
 function jackBannerHtml() {
-  return `<figure class="filler jack-banner"><video data-optional src="/media/follow-jack.mp4#t=0.3" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at his desk, looking out over Carcassonne"></video><figcaption>Jack takes you there, and brings you back.</figcaption><button class="sound-toggle" type="button" data-sound data-first="1" aria-pressed="false">🔊 Hear Jack's welcome</button></figure>`;
+  return `<figure class="filler jack-banner"><video data-optional src="/media/follow-jack.mp4#t=0.3" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at his desk, looking out over Carcassonne"></video><figcaption>Jack takes you there, and brings you back.</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>`;
 }
 
 // ---- Jack Rabbit's trail: kept on this device only ----
