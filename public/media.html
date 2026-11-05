@@ -11,6 +11,7 @@
   .filler { position: relative; margin: 0 0 18px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(199, 154, 69, .55); background: #0c191a; }
   .filler video { display: block; width: 100%; max-height: 300px; object-fit: cover; object-position: 60% 38%; }
   .sound-toggle { position: absolute; right: 10px; bottom: 10px; z-index: 4; padding: 5px 12px; border: 1px solid rgba(241, 228, 196, .6); border-radius: 999px; background: rgba(9, 20, 21, .82); color: #f1e4c4; font: 750 .8rem system-ui; cursor: pointer; }
+  .sound-toggle[data-first] { background: #f4b95a; color: #0c191a; border-color: #f4b95a; font-size: .9rem; padding: 8px 16px; }
   .filler figcaption { position: absolute; left: 10px; bottom: 8px; padding: 2px 8px; border-radius: 4px; background: rgba(9, 20, 21, .78); color: #f1e4c4; font-size: .78rem; font-weight: 700; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -53,7 +54,7 @@
   <div class="top"><a href="/">&larr; KeyOSX kiosk</a><span>Media</span></div>
   <h1>Media</h1>
   <p class="sub">Each publication's main stories and its latest issue. Only what the editors have approved appears here, plus a live feed where it is switched on.</p>
-  <figure class="filler"><video src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>Jack Rabbit, at the kiosk</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>
+  <figure class="filler"><video src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>Jack Rabbit, at the kiosk</figcaption><button class="sound-toggle" type="button" data-sound data-first="1" aria-pressed="false">🔊 Hear Jack's welcome</button></figure>
   <div id="ad"></div>
   <h2>Headlines</h2>
   <div class="tabs" role="tablist" id="tabs"><button class="tab selected" role="tab" aria-selected="true" data-tab="cover">Cover stories</button><button class="tab" role="tab" aria-selected="false" data-tab="live" id="live-tab" hidden>Live feed</button></div>
@@ -113,11 +114,34 @@ document.addEventListener("click", (event) => {
   if (!button) return;
   const video = button.closest(".hero, .filler")?.querySelector("video");
   if (!video) return;
+  const key = "keyosx.heard." + String(video.getAttribute("src") || "").split("#")[0];
+  let heard = false; try { heard = localStorage.getItem(key) === "1"; } catch { /* storage blocked */ }
   const turningOn = video.muted;
   document.querySelectorAll("video").forEach((other) => { other.muted = true; });
-  document.querySelectorAll("[data-sound]").forEach((other) => { other.textContent = "🔇 Sound off"; other.setAttribute("aria-pressed", "false"); });
-  if (turningOn) { video.muted = false; video.volume = 0.8; video.play().catch(() => {}); button.textContent = "🔊 Sound on"; button.setAttribute("aria-pressed", "true"); }
+  document.querySelectorAll('[data-sound][aria-pressed="true"]').forEach((other) => { other.textContent = "🔇 Sound off"; other.setAttribute("aria-pressed", "false"); });
+  if (!turningOn) return;
+  video.muted = false; video.volume = 0.85;
+  button.removeAttribute("data-first");
+  if (!heard) {
+    // The welcome: play it once from the start, with sound. Afterwards the clip goes back to its quiet loop.
+    video.loop = false; video.currentTime = 0;
+    try { localStorage.setItem(key, "1"); } catch { /* not remembered */ }
+    video.addEventListener("ended", () => { video.loop = true; video.muted = true; video.currentTime = 0; video.play().catch(() => {}); button.textContent = "🔇 Sound off"; button.setAttribute("aria-pressed", "false"); }, { once: true });
+  }
+  video.play().catch(() => {});
+  button.textContent = "🔊 Sound on"; button.setAttribute("aria-pressed", "true");
 });
+// Anyone who has already heard the welcome sees the small toggle instead of the invitation.
+function refreshSoundLabels() {
+  document.querySelectorAll("[data-sound][data-first]").forEach((button) => {
+    const video = button.closest(".hero, .filler")?.querySelector("video");
+    if (!video) return;
+    let heard = false; try { heard = localStorage.getItem("keyosx.heard." + String(video.getAttribute("src") || "").split("#")[0]) === "1"; } catch { /* storage blocked */ }
+    if (heard && video.muted) { button.removeAttribute("data-first"); button.textContent = "🔇 Sound off"; }
+  });
+}
+refreshSoundLabels();
+new MutationObserver(refreshSoundLabels).observe(document.body, { childList: true, subtree: true });
 </script>
 </body>
 </html>

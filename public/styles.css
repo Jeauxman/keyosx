@@ -342,3 +342,8 @@ html, :root { background: #0c191a; }
 .sound-toggle { position: absolute; right: 10px; bottom: 10px; z-index: 4; min-height: 34px; padding: 5px 12px; border: 1px solid rgba(241, 228, 196, .6); border-radius: 999px; background: rgba(9, 20, 21, .82); color: #f1e4c4; font-size: .8rem; font-weight: 750; cursor: pointer; }
 .sound-toggle:hover, .sound-toggle:focus-visible { background: #c79a45; color: #0c191a; }
 .hero .sound-toggle { top: 14px; bottom: auto; }
+
+/* First visit: the sound button is an invitation to the welcome, not a small switch */
+.sound-toggle[data-first] { background: #f4b95a; color: #0c191a; border-color: #f4b95a; font-size: .9rem; padding: 8px 16px; box-shadow: 0 0 0 0 rgba(244, 185, 90, .6); animation: welcome-pulse 2.2s ease-out infinite; }
+@keyframes welcome-pulse { 70% { box-shadow: 0 0 0 12px rgba(244, 185, 90, 0); } 100% { box-shadow: 0 0 0 0 rgba(244, 185, 90, 0); } }
+@media (prefers-reduced-motion: reduce) { .sound-toggle[data-first] { animation: none; } }

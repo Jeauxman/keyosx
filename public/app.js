@@ -159,7 +159,7 @@ function pathHtml(path) {
 
 // Jack's own clip ("Follow the rabbit. Come back with something."). Optional: if the file is not deployed the banner simply disappears.
 function jackBannerHtml() {
-  return `<figure class="filler jack-banner"><video data-optional src="/media/follow-jack.mp4#t=0.3" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at his desk, looking out over Carcassonne"></video><figcaption>Jack takes you there, and brings you back.</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>`;
+  return `<figure class="filler jack-banner"><video data-optional src="/media/follow-jack.mp4#t=0.3" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at his desk, looking out over Carcassonne"></video><figcaption>Jack takes you there, and brings you back.</figcaption><button class="sound-toggle" type="button" data-sound data-first="1" aria-pressed="false">🔊 Hear Jack's welcome</button></figure>`;
 }
 
 // ---- Jack Rabbit's trail: kept on this device only ----
@@ -225,7 +225,7 @@ function renderPublic() {
     <main id="main">
       <section id="top" class="hero">
         <video class="hero-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
-        <button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button>
+        <button class="sound-toggle" type="button" data-sound data-first="1" aria-pressed="false">🔊 Hear Jack's welcome</button>
         <div class="hero-content">
           <div class="eyebrow">KeyOSX · Master living kiosk</div>
           <h1>Walk up to the kiosk. Every brand has a stall.</h1>
@@ -435,7 +435,7 @@ function stageTrackHtml(current, items, requestStatus) {
 
 // The shared filler: Jack Rabbit at the kiosk. Every media slot that has no real media yet shows it (muted, looping, still if motion is reduced).
 function fillerHtml(caption) {
-  return `<figure class="filler"><video class="filler-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>${escapeHtml(caption)}</figcaption><button class="sound-toggle" type="button" data-sound aria-pressed="false">🔇 Sound off</button></figure>`;
+  return `<figure class="filler"><video class="filler-video" src="/media/keyosx-kiosk-filler.mp4#t=0.1" autoplay muted loop playsinline preload="metadata" aria-label="Jack Rabbit at the kiosk"></video><figcaption>${escapeHtml(caption)}</figcaption><button class="sound-toggle" type="button" data-sound data-first="1" aria-pressed="false">🔊 Hear Jack's welcome</button></figure>`;
 }
 
 function mediaHtml(current) {
@@ -784,11 +784,34 @@ async function bootPublic() {
     if (!button) return;
     const video = button.closest(".hero, .filler")?.querySelector("video");
     if (!video) return;
+    const key = "keyosx.heard." + String(video.getAttribute("src") || "").split("#")[0];
+    let heard = false; try { heard = localStorage.getItem(key) === "1"; } catch { /* storage blocked */ }
     const turningOn = video.muted;
     document.querySelectorAll("video").forEach((other) => { other.muted = true; });
-    document.querySelectorAll("[data-sound]").forEach((other) => { other.textContent = "🔇 Sound off"; other.setAttribute("aria-pressed", "false"); });
-    if (turningOn) { video.muted = false; video.volume = 0.8; video.play().catch(() => {}); button.textContent = "🔊 Sound on"; button.setAttribute("aria-pressed", "true"); }
+    document.querySelectorAll('[data-sound][aria-pressed="true"]').forEach((other) => { other.textContent = "🔇 Sound off"; other.setAttribute("aria-pressed", "false"); });
+    if (!turningOn) return;
+    video.muted = false; video.volume = 0.85;
+    button.removeAttribute("data-first");
+    if (!heard) {
+      // The welcome: play it once from the start, with sound. Afterwards the clip goes back to its quiet loop.
+      video.loop = false; video.currentTime = 0;
+      try { localStorage.setItem(key, "1"); } catch { /* not remembered */ }
+      video.addEventListener("ended", () => { video.loop = true; video.muted = true; video.currentTime = 0; video.play().catch(() => {}); button.textContent = "🔇 Sound off"; button.setAttribute("aria-pressed", "false"); }, { once: true });
+    }
+    video.play().catch(() => {});
+    button.textContent = "🔊 Sound on"; button.setAttribute("aria-pressed", "true");
   });
+  // Anyone who has already heard the welcome sees the small toggle instead of the invitation.
+  function refreshSoundLabels() {
+    document.querySelectorAll("[data-sound][data-first]").forEach((button) => {
+      const video = button.closest(".hero, .filler")?.querySelector("video");
+      if (!video) return;
+      let heard = false; try { heard = localStorage.getItem("keyosx.heard." + String(video.getAttribute("src") || "").split("#")[0]) === "1"; } catch { /* storage blocked */ }
+      if (heard && video.muted) { button.removeAttribute("data-first"); button.textContent = "🔇 Sound off"; }
+    });
+  }
+  refreshSoundLabels();
+  new MutationObserver(refreshSoundLabels).observe(document.body, { childList: true, subtree: true });
   document.addEventListener("error", (event) => { if (event.target?.tagName === "VIDEO" && "optional" in event.target.dataset) event.target.closest("figure")?.remove(); }, true);
   state.trails = loadTrails();
   // Respect reduced motion: any autoplaying filler is paused on its first frame.
