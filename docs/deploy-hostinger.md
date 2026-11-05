@@ -1,6 +1,14 @@
-# Deploying KeyOSX to Hostinger (plan, nothing is deployed)
+# Deploying KeyOSX to Hostinger
 
-Status on 2026-11-04: **nothing has been deployed, pushed to production or changed on Hostinger.** This is the plan and the checklist. Joe approves each stage.
+**Status, 2026-11-05: DEPLOYED to keyosx.com.** Joe approved replacing the live site. Build `01a1a96c-679c-7088-b784-1f693cdb4c75` (commit `3ef43e3`, bundle `keyosx-deploy-bundle-3ef43e3.zip`) completed in 8.7 s and the app restarted. Public checks passed: home, media page, 29 rack covers, catalog 83 works, the local test admin password is refused. Not pushed to GitHub.
+
+**Corrections to the original plan (found by looking at the live site read-only):** the live keyosx.com was **not a different site**. It was the earlier build of this same Express app (`main` at `02255be`, deployed 2026-09-13 as `keyosx-deploy.zip`, Node 22, entry `server.mjs`). A database (`u498008058_keyosx`) and the 8 environment variables (NODE_ENV, DB_*, ADMIN_PASSWORD, ADMIN_SESSION_SECRET) already existed, so nothing new was created. The new code upgraded the old database layout in place when tested locally: 6 new tables added, all existing data untouched.
+
+**Rollback:** in hPanel → Deployments, switch back to the previous build `01a099cf-bc5c-7169-ba09-ceb78cd501ce`, or redeploy `keyosx-ROLLBACK-previous-main-02255be.zip` (built from `main`). The new tables can stay; the old code ignores them.
+
+**Still to do (Joe, in hPanel):** add the Almanac variables (`ALMANAC_INLINE=on`, `AGENT_API_TOKEN`) so issues compose; optionally the Claude variables. Until then the kiosk, media page, path maker, trail and covers work, but covers do not compose new issues. Click **Export backup** in the live admin console to snapshot the upgraded database. Approve ads in `data/ads.json` when ready.
+
+(The sections below are the original plan, kept for reference.)
 
 ## 1. How it gets there: git is the source of truth
 
@@ -14,8 +22,8 @@ Claude prepares the code and this plan. Claude is **not** connected to Hostinger
 ## 2. What is live now (from your hPanel screenshots)
 
 - Site `keyosx.com`, Business Web Hosting, created 2026-07-17, Codex connected as agent.
-- The live homepage is **a different site** ("Books, courses, and consulting — direct from the source."). Deploying KeyOSX there **replaces it**. Decide that before anything else.
-- Database: **None**. KeyOSX needs MySQL.
+- ~~The live homepage is a different site~~ **Correction:** it was the earlier build of this same app (see the status above).
+- ~~Database: None~~ **Correction:** the live site already had a database and its environment variables (the hPanel card only said "None" for a separate connection field).
 - The 2026-10-27 scan flagged `proxy-addr 2.0.7`, `body-parser 1.20.8`, `qs 6.16.0`. KeyOSX already carries the patched versions (`proxy-addr 2.0.8`, `body-parser 1.20.9`, `qs 6.17.1`; `npm audit` reports 0).
 
 **Recommendation:** deploy first to a **staging** website (a second Hostinger site or a subdomain such as `staging.keyosx.com`), check it, then point `keyosx.com` at it or deploy the same commit there.
