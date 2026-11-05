@@ -358,3 +358,22 @@ test("in-process mode sends covers as site paths, so no host name is ever needed
   await engine.handle({ type: "issue_request", publication_id: CB, period_key: "W2026-11-16", issue_date: "2026-11-17", callback: "/api/agent/issues" });
   assert.equal(fake.issues[1].cover_url, "/covers/cinebon.webp");
 });
+
+test("two requests for the same brand and period that arrive together make one composition, and a failure can be retried", async () => {
+  const fake = fakeKeyosx(async () => ({ ok: true, status: 200, text: async () => "" }));
+  const engine = createEngine({ env: ENV, fetchImpl: fake.fetchImpl, log: () => {} });
+  const job = { type: "issue_request", publication_id: CB, period_key: "W2026-11-23", issue_date: "2026-11-24", callback: "/api/agent/issues" };
+  const [a, b] = await Promise.all([engine.handle(job), engine.handle(job)]);   // started side by side
+  assert.deepEqual(fake.issues.map((c) => c.stage), ["outline", "cover", "items"]); // posted once, not twice
+  assert.deepEqual(a, b);
+
+  let fail = true;
+  const flaky = fakeKeyosx(async () => ({ ok: true, status: 200, text: async () => "" }));
+  const base = flaky.fetchImpl;
+  const retrying = createEngine({ env: ENV, fetchImpl: async (url, options) => { if (fail && String(url).endsWith("/api/agent/issues")) return { ok: false, status: 500 }; return base(url, options); }, log: () => {} });
+  const job2 = { ...job, period_key: "W2026-11-30", issue_date: "2026-12-01" };
+  await assert.rejects(() => retrying.handle(job2), /rejected/);
+  fail = false;
+  const again = await retrying.handle(job2);                                  // not stuck: the failure was forgotten
+  assert.ok(again.items > 0);
+});

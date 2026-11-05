@@ -115,10 +115,12 @@ export function createEngine({ env = process.env, fetchImpl = fetch, log = conso
     const ready = readiness(job.publication_id);
     if (!ready.ok) throw new Error(ready.reason);
     const key = [job.type || "issue_request", job.publication_id, job.period_key, job.request_id || ""].join("|");
-    if (done.has(key)) { log(`[almanac] already handled ${key}`); return done.get(key); }
-    const result = job.type === "visitor_request" ? await answerRequest(job, ready.profile) : await composeIssue(job, ready.profile);
-    done.set(key, result);
-    return result;
+    // Remember the job the moment it starts, not when it ends: two requests for the same brand and period that arrive together
+    // (a visitor and a tool, say) share ONE composition and one model call instead of racing.
+    if (done.has(key)) { log(`[almanac] already handled or running: ${key}`); return done.get(key); }
+    const running = (async () => (job.type === "visitor_request" ? answerRequest(job, ready.profile) : composeIssue(job, ready.profile)))();
+    done.set(key, running);
+    try { return await running; } catch (error) { done.delete(key); throw error; } // a failed job may be retried
   }
 
   return { handle, readiness, composeIssue, writerName: writer.name, spend: () => writer.budget?.snapshot() || null };
