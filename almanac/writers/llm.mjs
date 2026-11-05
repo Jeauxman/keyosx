@@ -90,7 +90,8 @@ export function createLlmWriter(env = process.env, { fetchImpl = fetch, log = co
     name: `claude:${model}`,
     budget,
 
-    async plan({ profile, period, pool, news }) {
+    async plan({ profile, period, pool, news: allNews }) {
+      const news = allNews.slice(0, 15);                              // newest first; keeps the prompt (and the bill) small
       const mix = profile.issue.mix || {};
       const newsMax = profile.issue.news_max ?? 3;
       const total = Object.values(mix).reduce((sum, n) => sum + n, 0) + newsMax;
