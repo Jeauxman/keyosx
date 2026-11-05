@@ -64,9 +64,8 @@ request is made per publication per period.
 2. Its evergreen pool in `data/almanac/<name>.seeds.json`, and/or feeds in the profile. Without either, the engine will not compose for it.
 3. Set the entity's `editorial_agent` to `keyosx:agent:almanac`. No new service, no new database.
 
-Only **CinéBon** is configured. Its four candidate feeds (Letterboxd Journal, IndieWire, Film Comment, The Guardian Film) were reachable on 2026-11-04 and are
-**off by default**: set `ALMANAC_FEEDS=on` or `enabled: true` once you approve third-party links. Feeds supply a title, link, source and date only; no article
-text is copied and the summary says who reported it and when.
+Only **CinéBon** is configured. Its four feeds (Letterboxd Journal, IndieWire, Film Comment, The Guardian Film) were switched **on by Joe on 2026-11-04**, and CinéBon is listed in
+`data/live-feed.json`, so its **Live feed** tab is public. Feeds supply a title, link, source and date only; no article text is copied and the summary says who reported it and when.
 
 ## Run it locally
 

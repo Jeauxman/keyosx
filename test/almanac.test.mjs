@@ -28,10 +28,12 @@ test("only publications with real sources can be composed", () => {
   assert.equal(canCompose(loadProfile("keyosx:publication:noize")), false); // no seeds, no feeds: the engine refuses instead of inventing
 });
 
-test("feeds are off unless enabled in the profile or switched on for the service", () => {
+test("a feed counts only when it is enabled in the profile or switched on for the service", () => {
   const profile = loadProfile(CB);
-  assert.equal(activeFeeds(profile, {}).length, 0);
-  assert.equal(activeFeeds(profile, { ALMANAC_FEEDS: "on" }).length, 4);
+  assert.equal(activeFeeds(profile, {}).length, 4);                                            // Joe switched CinéBon's four feeds on
+  const off = { ...profile, sources: { ...profile.sources, feeds: profile.sources.feeds.map((feed) => ({ ...feed, enabled: false })) } };
+  assert.equal(activeFeeds(off, {}).length, 0);                                                 // an disabled feed is skipped
+  assert.equal(activeFeeds(off, { ALMANAC_FEEDS: "on" }).length, 4);                            // the service-wide switch still works
 });
 
 test("period keys parse and titles read naturally", () => {

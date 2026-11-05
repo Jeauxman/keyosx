@@ -1,5 +1,5 @@
 {
-  "_note": "CinéBon editorial profile (genre confirmed by Joe: weekly film and cinephile news, tips, ideas, apps). Feeds are listed but DISABLED until the owner approves third-party links; set ALMANAC_FEEDS=on (or enabled:true) to turn them on. All four feeds were reachable on 2026-11-04.",
+  "_note": "CinéBon editorial profile (genre confirmed by Joe: weekly film and cinephile news, tips, ideas, apps). Its four feeds were switched ON by Joe on 2026-11-04 (headline, link, source and date only; no article text is copied). Set enabled:false on a feed to switch it off.",
   "identity": {
     "name": "CinéBon",
     "masthead": "CinéBon",
@@ -8,20 +8,50 @@
   },
   "voice": "Warm, curious and concrete, like a friend who runs a film club. Practical first. Never gossip, never claims about real people beyond what a cited source states.",
   "issue": {
-    "mix": { "tip": 2, "idea": 2, "app": 2, "opportunity": 1 },
+    "mix": {
+      "tip": 2,
+      "idea": 2,
+      "app": 2,
+      "opportunity": 1
+    },
     "news_max": 3,
     "news_max_age_days": 21,
-    "featured_kinds": ["news", "tip", "idea", "app"],
+    "featured_kinds": [
+      "news",
+      "tip",
+      "idea",
+      "app"
+    ],
     "featured_count": 3
   },
   "sources": {
     "seeds": "cinebon",
     "feeds": [
-      { "name": "Letterboxd Journal", "url": "https://letterboxd.com/journal/rss/", "enabled": false },
-      { "name": "IndieWire", "url": "https://www.indiewire.com/feed/", "enabled": false },
-      { "name": "Film Comment", "url": "https://www.filmcomment.com/feed/", "enabled": false },
-      { "name": "The Guardian, Film", "url": "https://www.theguardian.com/film/rss", "enabled": false }
+      {
+        "name": "Letterboxd Journal",
+        "url": "https://letterboxd.com/journal/rss/",
+        "enabled": true
+      },
+      {
+        "name": "IndieWire",
+        "url": "https://www.indiewire.com/feed/",
+        "enabled": true
+      },
+      {
+        "name": "Film Comment",
+        "url": "https://www.filmcomment.com/feed/",
+        "enabled": true
+      },
+      {
+        "name": "The Guardian, Film",
+        "url": "https://www.theguardian.com/film/rss",
+        "enabled": true
+      }
     ]
   },
-  "cover": { "policy": "verified-existing", "generate_new": false, "style_note": "Masthead must read CinéBon. Portrait about 3:4. No studio posters or real people's likenesses in generated art." }
+  "cover": {
+    "policy": "verified-existing",
+    "generate_new": false,
+    "style_note": "Masthead must read CinéBon. Portrait about 3:4. No studio posters or real people's likenesses in generated art."
+  }
 }

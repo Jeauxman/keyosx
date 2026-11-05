@@ -1,4 +1,6 @@
 {
   "_note": "Brands whose VERIFIED live headlines may be shown publicly (a Live feed tab beside Cover stories). Empty by default: Joe adds a publication id here to switch it on. It shows only what Almanac has verified from the brand's listed sources: title, source, date and a link to the original. LIVE_FEED=on shows it for every brand on a local copy only. It is only as fresh as Almanac's last research (see docs/paid-refresh-design.md for on-demand refresh).",
-  "public": []
+  "public": [
+    "keyosx:publication:cinebon"
+  ]
 }
